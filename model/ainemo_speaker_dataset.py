@@ -39,8 +39,8 @@ def check_image_file_header(filename):
             raise ValueError('Invalid magic number %d in MNIST file %s' % (magic, f.name))
         if rows != 28 or cols != 28:
             raise ValueError(
-                    'Invalid MNIST file %s: Expected 28x28 images, found %dx%d' %
-                    (f.name, rows, cols))
+                'Invalid MNIST file %s: Expected 28x28 images, found %dx%d' %
+                (f.name, rows, cols))
 
 
 def check_labels_file_header(filename):
@@ -70,16 +70,17 @@ def download(directory, filename):
     return filepath
 
 
-def dataset(directory, images_file, labels_file):
-    """Download and parse MNIST dataset."""
+def dataset(audio_files, labels):
+    '''
+    :param audio_files: a list of audio file names
+    :param labels: the label of each file
+    :return: data set
+    '''
 
-    images_file = download(directory, images_file)
-    labels_file = download(directory, labels_file)
+    dataset = tf.data.Dataset.from_tensor_slices(
+        (audio_files, labels))
 
-    check_image_file_header(images_file)
-    check_labels_file_header(labels_file)
-
-    def decode_image(image):
+    def decode_audio(audio_file):
         # Normalize from [0, 255] to [0.0, 1.0]
         image = tf.decode_raw(image, tf.uint8)
         image = tf.cast(image, tf.float32)

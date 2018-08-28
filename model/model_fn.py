@@ -12,7 +12,7 @@ def _attention(inputs):
     with tf.variable_scope("attention"):
         w = tf.get_variable("hidden", tf.zeros_initializer(inputs.shape[-1:]))
         # batch_size, time_steps
-        logits = tf.nn.tanh(tf.tensordot(w, inputs, axes=[0, 2]))
+        logits = tf.tensordot(w, tf.nn.tanh(inputs), axes=[0, 2])
         p = tf.nn.softmax(logits)
         # batch_size, time_steps,1
         p = tf.expand_dims(p, -1)
