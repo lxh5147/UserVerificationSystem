@@ -17,64 +17,69 @@ import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
 import numpy as np
+import os
 
 
-def load_wav_file(filename):
-    """Loads an audio file and returns a float PCM-encoded array of samples.
-    Args:
-      filename: Path to the .wav file to load.
-    Returns:
-      Numpy array holding the sample data as floats between -1.0 and 1.0.
-    """
+def _preprocess_wav(wav_input_filename_placeholder,
+                    wav_output_filename_placeholder):
+    wav_loader = io_ops.read_file(wav_input_filename_placeholder)
+    audio, sample_rate = contrib_audio.decode_wav(wav_loader)
+    # TODO: further preprocess; even consider feature extraction
+    wav_encoder = contrib_audio.encode_wav(audio, sample_rate)
+    wav_saver = io_ops.write_file(wav_output_filename_placeholder, wav_encoder)
+    return wav_saver
+
+
+def _preprocess_wav_files(directory,
+                          output_directory):
     with tf.Session(graph=tf.Graph()) as sess:
-        wav_filename_placeholder = tf.placeholder(tf.string, [])
-        wav_loader = io_ops.read_file(wav_filename_placeholder)
-        wav_decoder = contrib_audio.decode_wav(wav_loader, desired_channels=1)
-        return sess.run(
-            wav_decoder,
-            feed_dict={wav_filename_placeholder: filename}).audio.flatten()
+
+        wav_input_filename_placeholder = tf.placeholder(tf.string, [])
+        wav_output_filename_placeholder = tf.placeholder(tf.string, [])
+        wav_saver = _preprocess_wav(wav_input_filename_placeholder,
+                                    wav_output_filename_placeholder)
+
+        for folder, _, files in os.walk(directory):
+            for filename in files:
+                if filename.endswith('.wav'):
+                    wav_input_filename = os.path.join(folder, filename)
+                    wav_output_filename = os.path.join(output_directory, filename)
+                    sess.run(
+                        wav_saver,
+                        feed_dict={
+                            wav_input_filename_placeholder: wav_input_filename,
+                            wav_output_filename_placeholder: wav_output_filename
+                        })
 
 
-def save_wav_file(filename, wav_data, sample_rate):
-    """Saves audio sample data to a .wav audio file.
-    Args:
-      filename: Path to save the file to.
-      wav_data: 2D array of float PCM-encoded audio data.
-      sample_rate: Samples per second to encode in the file.
-    """
-    with tf.Session(graph=tf.Graph()) as sess:
-        wav_filename_placeholder = tf.placeholder(tf.string, [])
-        sample_rate_placeholder = tf.placeholder(tf.int32, [])
-        wav_data_placeholder = tf.placeholder(tf.float32, [None, 1])
-        wav_encoder = contrib_audio.encode_wav(wav_data_placeholder,
-                                               sample_rate_placeholder)
-        wav_saver = io_ops.write_file(wav_filename_placeholder, wav_encoder)
-        sess.run(
-            wav_saver,
-            feed_dict={
-                wav_filename_placeholder: filename,
-                sample_rate_placeholder: sample_rate,
-                wav_data_placeholder: np.reshape(wav_data, (-1, 1))
-            })
-
-
-def dataset(wav_files, labels,
+def dataset(wav_files,
+            labels,
+            desired_samples,
             window_size_samples,
             window_stride_samples,
+            desired_channels=1,
             magnitude_squared=True,
             dct_coefficient_count=40):
     '''
     :param wav_files: a list of audio file names
     :param labels: the label of each file
+    :param desired_samples: how many number of samples to load from a wav file.
+    :param window_size_samples: how wide the input window is in samples
+    :param window_stride_samples:how widely apart the center of adjacent sample windows should be
+    :param magnitude_squared: Whether to return the squared magnitude or just the
+      magnitude. Using squared magnitude can avoid extra calculations.
+    :param dct_coefficient_count: How many output channels to produce per time slice.
     :return: data set
     '''
 
-    dataset = tf.data.Dataset.from_tensor_slices(
+    raw_dataset = tf.data.Dataset.from_tensor_slices(
         (wav_files, labels))
 
-    def decode(wav_file):
+    def decode(wav_file, _):
         wav_loader = io_ops.read_file(wav_file)
-        audio, sample_rate = contrib_audio.decode_wav(wav_loader, desired_channels=1)
+        audio, sample_rate = contrib_audio.decode_wav(wav_loader,
+                                                      desired_samples=desired_samples,
+                                                      desired_channels=desired_channels)
         spectrogram = contrib_audio.audio_spectrogram(
             audio,
             window_size=window_size_samples,
@@ -88,20 +93,6 @@ def dataset(wav_files, labels,
 
         # TODO: use delta features?
 
-        return feat
+        return (feat, _)
 
-    def decode_label(label):
-        label = tf.decode_raw(label, tf.uint8)  # tf.string -> [tf.uint8]
-        label = tf.reshape(label, [])  # label is a scalar
-        return tf.to_int32(label)
-
-    images = tf.data.FixedLengthRecordDataset(images_file, 28 * 28, header_bytes=16)
-    images = images.map(decode_image)
-    labels = tf.data.FixedLengthRecordDataset(labels_file, 1, header_bytes=8).map(decode_label)
-    return tf.data.Dataset.zip((images, labels))
-
-
-def train(directory):
-    """tf.data.Dataset object for MNIST training data."""
-    return dataset(directory, 'train-images-idx3-ubyte',
-                   'train-labels-idx1-ubyte')
+    return raw_dataset.map(decode)
