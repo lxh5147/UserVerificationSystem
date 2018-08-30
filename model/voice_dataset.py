@@ -22,7 +22,6 @@ def dataset(wav_files,
             desired_samples,
             window_size_samples,
             window_stride_samples,
-            desired_channels=1,
             magnitude_squared=True,
             dct_coefficient_count=40):
     '''
@@ -44,7 +43,7 @@ def dataset(wav_files,
         wav_loader = io_ops.read_file(wav_file)
         audio, sample_rate = contrib_audio.decode_wav(wav_loader,
                                                       desired_samples=desired_samples,
-                                                      desired_channels=desired_channels)
+                                                      desired_channels=1)
         spectrogram = contrib_audio.audio_spectrogram(
             audio,
             window_size=window_size_samples,

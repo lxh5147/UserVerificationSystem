@@ -107,7 +107,6 @@ def main(_):
         desired_samples=desired_samples,
         window_size_samples=window_size_samples,
         window_stride_samples=window_stride_samples,
-        desired_channels=FLAGS.desired_channels,
         magnitude_squared=FLAGS.magnitude_squared,
         dct_coefficient_count=FLAGS.dct_coefficient_count
     )
