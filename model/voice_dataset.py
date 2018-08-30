@@ -16,41 +16,6 @@
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
-import numpy as np
-import os
-
-
-def _preprocess_wav(wav_input_filename_placeholder,
-                    wav_output_filename_placeholder):
-    wav_loader = io_ops.read_file(wav_input_filename_placeholder)
-    audio, sample_rate = contrib_audio.decode_wav(wav_loader)
-    # TODO: further preprocess; even consider feature extraction
-    wav_encoder = contrib_audio.encode_wav(audio, sample_rate)
-    wav_saver = io_ops.write_file(wav_output_filename_placeholder, wav_encoder)
-    return wav_saver
-
-
-def _preprocess_wav_files(directory,
-                          output_directory):
-    with tf.Session(graph=tf.Graph()) as sess:
-
-        wav_input_filename_placeholder = tf.placeholder(tf.string, [])
-        wav_output_filename_placeholder = tf.placeholder(tf.string, [])
-        wav_saver = _preprocess_wav(wav_input_filename_placeholder,
-                                    wav_output_filename_placeholder)
-
-        for folder, _, files in os.walk(directory):
-            for filename in files:
-                if filename.endswith('.wav'):
-                    wav_input_filename = os.path.join(folder, filename)
-                    wav_output_filename = os.path.join(output_directory, filename)
-                    sess.run(
-                        wav_saver,
-                        feed_dict={
-                            wav_input_filename_placeholder: wav_input_filename,
-                            wav_output_filename_placeholder: wav_output_filename
-                        })
-
 
 def dataset(wav_files,
             labels,
