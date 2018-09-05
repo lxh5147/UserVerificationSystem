@@ -22,6 +22,7 @@ def dataset(wav_files,
             desired_samples,
             window_size_samples,
             window_stride_samples,
+            desired_channels=1,
             magnitude_squared=True,
             dct_coefficient_count=40):
     '''
@@ -35,7 +36,6 @@ def dataset(wav_files,
     :param dct_coefficient_count: How many output channels to produce per time slice.
     :return: data set
     '''
-
     raw_dataset = tf.data.Dataset.from_tensor_slices(
         (wav_files, labels))
 
@@ -43,20 +43,22 @@ def dataset(wav_files,
         wav_loader = io_ops.read_file(wav_file)
         audio, sample_rate = contrib_audio.decode_wav(wav_loader,
                                                       desired_samples=desired_samples,
-                                                      desired_channels=1)
+                                                      desired_channels=desired_channels)
         spectrogram = contrib_audio.audio_spectrogram(
             audio,
             window_size=window_size_samples,
             stride=window_stride_samples,
             magnitude_squared=magnitude_squared)
 
-        feat = contrib_audio.mfcc(
+        feat  = contrib_audio.mfcc(
             spectrogram,
             sample_rate,
             dct_coefficient_count=dct_coefficient_count)
 
         # TODO: use delta features?
-
-        return (feat, _)
+        # )
+        feat=tf.squeeze(feat)
+        return (feat,_)
 
     return raw_dataset.map(decode)
+

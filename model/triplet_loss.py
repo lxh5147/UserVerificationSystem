@@ -128,7 +128,7 @@ def batch_all_triplet_loss(labels, embeddings, margin, squared=False):
 
     # shape (batch_size, batch_size, 1)
     anchor_positive_dist = tf.expand_dims(pairwise_dist, 2)
-    assert anchor_positive_dist.shape[2] == 1, "{}".format(anchor_positive_dist.shape)
+    # assert anchor_positive_dist.shape[2] == 1, "{}".format(anchor_positive_dist.shape)
     # shape (batch_size, 1, batch_size)
     anchor_negative_dist = tf.expand_dims(pairwise_dist, 1)
 
@@ -155,10 +155,7 @@ def batch_all_triplet_loss(labels, embeddings, margin, squared=False):
 
     # Get final mean triplet loss over the positive valid triplets
     triplet_loss = tf.reduce_sum(triplet_loss) / (num_positive_triplets + 1e-16)
-
     return triplet_loss, fraction_positive_triplets
-
-
 def batch_hard_triplet_loss(labels, embeddings, margin, squared=False):
     """Build the triplet loss over a batch of embeddings.
     For each anchor, we get the hardest positive and hardest negative to form a triplet.
@@ -171,6 +168,7 @@ def batch_hard_triplet_loss(labels, embeddings, margin, squared=False):
     Returns:
         triplet_loss: scalar tensor containing the triplet loss
     """
+
     # Get the pairwise distance matrix
     pairwise_dist = _pairwise_distances(embeddings, squared=squared)
 
