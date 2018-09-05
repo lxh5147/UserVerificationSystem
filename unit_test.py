@@ -4,6 +4,7 @@ import tensorflow as tf
 import train
 from model import triplet_loss
 
+
 def get_entry_np(t, indices_d1, indices_d2, batch_size):
     """Naive numpy implementation"""
     result = np.zeros(batch_size)
@@ -19,8 +20,8 @@ class Test(unittest.TestCase):
             # sample input
             batch_size, d1, d2 = map(int, np.random.randint(low=2, high=100, size=3))
             test_input = np.random.random([batch_size, d1, d2])
-            test_indices_d1 = np.random.randint(low=0, high=d1-1, size=[batch_size])
-            test_indices_d2 = np.random.randint(low=0, high=d2-1, size=[batch_size])
+            test_indices_d1 = np.random.randint(low=0, high=d1 - 1, size=[batch_size])
+            test_indices_d2 = np.random.randint(low=0, high=d2 - 1, size=[batch_size])
             # evaluate the numpy version
             test_result = get_entry_np(test_input, test_indices_d1, test_indices_d2, batch_size)
             # evaluate the tensorflow version
@@ -45,6 +46,7 @@ class Test(unittest.TestCase):
 
             Here, loss should be = 0
         '''
+
 
 if __name__ == '__main__':
     unittest.main()

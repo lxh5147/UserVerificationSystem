@@ -6,6 +6,7 @@ import sys
 import os
 
 FLAGS = None
+
 def get_labels(labels_file):
     with open(labels_file) as f:
         lines = f.read().splitlines()
@@ -22,6 +23,7 @@ def get_labels(labels_file):
             label_ids.append(cur_id)
     return label_ids
 
+
 def get_wav_files(directory):
     files = []
     for r, d, f in os.walk(directory):
@@ -31,7 +33,7 @@ def get_wav_files(directory):
 
 
 def input_fn(wav_files,
-             labels,
+             labels_file,
              batch_size,
              desired_samples,
              window_size_samples,
@@ -40,31 +42,33 @@ def input_fn(wav_files,
              magnitude_squared=True,
              dct_coefficient_count=40,
              is_training=True):
-   # labels = get_labels(labels_file)
+    labels = get_labels(labels_file)
 
     dataset = get_dataset(wav_files,
                           labels,
                           desired_samples,
                           window_size_samples,
                           window_stride_samples,
-                          desired_channels,
                           magnitude_squared,
                           dct_coefficient_count
                           )
+
     # Shuffle, repeat, and batch the examples.
     if is_training:
         dataset = dataset.shuffle(buffer_size=1000).repeat().batch(batch_size)
 
     features, labels = dataset.make_one_shot_iterator().get_next()
-
     return features, labels
 
 
-def create_model(model_dir=None,config=None,params=None,warm_start_from=None):
+def create_model(model_dir=None,
+                 config=None,
+                 params=None,
+                 warm_start_from=None):
     return tf.estimator.Estimator(model_fn,
                                   model_dir=model_dir,
                                   config=config,
-                                  params=params
+                                  params=params,
                                   # warm_start_from=warm_start_from
                                   )
 
@@ -88,42 +92,33 @@ def main(_):
             'pool_size': FLAGS.pool_size,
             'pool_strides': FLAGS.pool_strides,
             'embedding_size': FLAGS.embedding_size,
-            'triplet_strategy':FLAGS.triplet_strategy,
-            'margin' :FLAGS.margin,
-            'squared':FLAGS.squared,
-            'learning_rate':FLAGS.learning_rate
+            'triplet_strategy': FLAGS.triplet_strategy,
+            'margin': FLAGS.margin,
+            'squared': FLAGS.squared,
+            'learning_rate': FLAGS.learning_rate
         })
 
     # Define the input function for training
     train_wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    #['./data\\train\\10043504830011533633946092-0.wav', './data\\train\\10043504830011533633946092-1.wav',
-    #  './data\\train\\10043504830011533633946092-2.wav', './data\\train\\10043504830021533697756254-0.wav',
-    # './data\\train\\10043504830021533697756254-1.wav', './data\\train\\10043504830021533697756254-2.wav',
-    #                                                 ......
-    #  './data\\train\\143730491535534499818-1.wav', './data\\train\\143730491535534499818-2.wav']
-    train_labels = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
-    #[0, 0, 0, 1, 1, 1, 2, 2, 2,
-    #          ......
-    # 33, 33, 33, 34, 34, 34]
+    train_labels_file = os.path.join(FLAGS.data_dir, 'train_labels')
     desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
-    #16000
     window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
-    #480
     window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
-    #160
-    train_input_fn =lambda:input_fn(
+    train_input_fn = lambda: input_fn(
         wav_files=train_wav_files,
-        labels=train_labels,
-        batch_size=FLAGS.batch_size,
+        labels_file=train_labels_file,
         desired_samples=desired_samples,
         window_size_samples=window_size_samples,
         window_stride_samples=window_stride_samples,
-        desired_channels=FLAGS.desired_channels,
         magnitude_squared=FLAGS.magnitude_squared,
-        dct_coefficient_count=FLAGS.dct_coefficient_count
+        dct_coefficient_count=FLAGS.dct_coefficient_count,
+        batch_size=FLAGS.batch_size,
+        desired_channels=FLAGS.desired_channels
     )
+
     # model Model
     model.train(train_input_fn, steps=FLAGS.num_steps)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
