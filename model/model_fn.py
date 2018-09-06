@@ -24,9 +24,13 @@ def _attention(inputs):
 
 def _encoder(inputs,
              num_filters,
-             blocks=3, kernel_size=3,
-             use_batch_norm=True, is_training=True,
-             pool_size=2, pool_strides=2, embedding_size=128):
+             blocks=3,
+             kernel_size=3,
+             use_batch_norm=True,
+             is_training=True,
+             pool_size=2,
+             pool_strides=2,
+             embedding_size=128):
     # inputs: batch_size, time steps, channel
     output = inputs
     with tf.variable_scope("encoder"):
