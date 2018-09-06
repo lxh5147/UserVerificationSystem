@@ -17,8 +17,8 @@ def _attention(inputs):
         # batch_size, time_steps,1
         p = tf.expand_dims(p, -1)
         # batch_size, dim
-        # p*w element wise production
-        a = tf.reduce_sum(p * w, axis=1)
+        # p*inputs element wise production
+        a = tf.reduce_sum(p * inputs, axis=1)
         return a
 
 
