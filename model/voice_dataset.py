@@ -17,6 +17,7 @@ import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
 
+
 def dataset(wav_files,
             labels,
             desired_samples,
@@ -56,7 +57,7 @@ def dataset(wav_files,
             dct_coefficient_count=dct_coefficient_count)
 
         # TODO: use delta features?
-        # )
+        # from 1, time_steps, dct_coefficient_count to time steps, dct_coefficient_count
         feat = tf.squeeze(feat)
         return (feat, _)
 

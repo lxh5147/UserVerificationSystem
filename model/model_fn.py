@@ -21,6 +21,7 @@ def _attention(inputs):
         a = tf.reduce_sum(p * w, axis=1)
         return a
 
+
 def _encoder(inputs,
              num_filters,
              blocks=3, kernel_size=3,
@@ -44,6 +45,7 @@ def _encoder(inputs,
             output = tf.layers.dense(output, embedding_size)
 
     return output
+
 
 def model_fn(features, labels, mode, params):
     """Model function for tf.estimator
