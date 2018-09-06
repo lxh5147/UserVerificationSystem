@@ -34,7 +34,7 @@ def get_wav_files(directory):
 
 
 def input_fn(wav_files,
-             labels_file,
+             labels,
              batch_size,
              desired_samples,
              window_size_samples,
@@ -43,7 +43,6 @@ def input_fn(wav_files,
              dct_coefficient_count=40,
              is_training=True,
              buffer_size=1000):
-    labels = get_labels(labels_file)
 
     dataset = get_dataset(wav_files,
                           labels,
@@ -98,13 +97,14 @@ def main(_):
 
     # Define the input function for training
     train_wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    train_labels_file = os.path.join(FLAGS.data_dir, 'train_labels')
+    train_labels = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+
     desired_samples = from_ms_to_samples(FLAGS.sample_rate,FLAGS.desired_ms)
     window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
     window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
     train_input_fn = lambda: input_fn(
         wav_files=train_wav_files,
-        labels_file=train_labels_file,
+        labels=train_labels,
         desired_samples = desired_samples,
         window_size_samples=window_size_samples,
         window_stride_samples=window_stride_samples,
