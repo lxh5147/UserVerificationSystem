@@ -56,7 +56,8 @@ def dataset(wav_files,
             dct_coefficient_count=dct_coefficient_count)
 
         # TODO: use delta features?
-
+        # )
+        feat = tf.squeeze(feat)
         return (feat, _)
 
     return raw_dataset.map(decode)
