@@ -21,7 +21,6 @@ def _attention(inputs):
         a = tf.reduce_sum(p * inputs, axis=1)
         return a
 
-
 def _encoder(inputs,
              num_filters,
              blocks=3,

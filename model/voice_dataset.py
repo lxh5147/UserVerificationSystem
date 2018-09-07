@@ -43,8 +43,19 @@ def dataset(wav_files,
     def decode(wav_file, _):
         wav_loader = io_ops.read_file(wav_file)
         audio, sample_rate = contrib_audio.decode_wav(wav_loader,
-                                                      desired_samples=desired_samples,
                                                       desired_channels=1)
+
+        # choose a random clip with desired_samples from the audio
+        all_samples = tf.shape(audio)[0]
+        audio = tf.cond(tf.less(all_samples, desired_samples),
+                        true_fn=lambda: tf.pad(tensor=audio,
+                                               paddings=[[0, desired_samples - all_samples], [0, 0]],
+                                               constant_values=-1),
+                        false_fn=lambda: tf.random_crop(value=audio, size=[desired_samples, 1])
+                        )
+        # update the static shape information of an audio tensor
+        audio.set_shape([desired_samples, 1])
+
         spectrogram = contrib_audio.audio_spectrogram(
             audio,
             window_size=window_size_samples,
