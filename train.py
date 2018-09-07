@@ -91,7 +91,8 @@ def main(_):
             'triplet_strategy': FLAGS.triplet_strategy,
             'margin': FLAGS.margin,
             'squared': FLAGS.squared,
-            'learning_rate': FLAGS.learning_rate
+            'learning_rate': FLAGS.learning_rate,
+            'l2_weight': FLAGS.l2_weight,
         })
 
     # Define the input function for training
@@ -223,5 +224,10 @@ if __name__ == '__main__':
         type=float,
         default=0.01,
         help='learning_rate')
+    parser.add_argument(
+        '--l2_weight',
+        type=float,
+        default=0.1,
+        help='Weight of L2 regularization.', )
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
