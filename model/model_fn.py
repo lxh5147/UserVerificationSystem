@@ -108,6 +108,7 @@ def model_fn(features, labels, mode, params):
                                                global_step=global_step,
                                                decay_rate=lr_decay_rate,
                                                decay_steps=lr_decay_steps)
+    tf.summary.scalar('learning_rate', learning_rate)
     optimizer = tf.train.AdamOptimizer(learning_rate)
 
     # Add a dependency to update the moving mean and variance for batch normalization
