@@ -8,13 +8,14 @@ from model.cross_entropy_loss import cross_entropy_loss
 
 
 def _get_encoder(encoder_name):
-    assert  encoder_name in ['cnn','resnet']
-    if encoder_name=='cnn':
+    assert encoder_name in ['cnn', 'resnet']
+    if encoder_name == 'cnn':
         from model.encoder_cnn import encoder as encoder_cnn
         return encoder_cnn
-    elif encoder_name =='resnet':
+    elif encoder_name == 'resnet':
         from model.encoder_resnet import encoder as encoder_resnet
         return encoder_resnet
+
 
 def model_fn(features, labels, mode, params):
     """Model function for tf.estimator
@@ -32,9 +33,9 @@ def model_fn(features, labels, mode, params):
     encoder = _get_encoder(params['encoder'])
 
     embeddings = encoder(inputs,
-                             params=params,
-                             is_training=is_training,
-                             )
+                         params=params,
+                         is_training=is_training,
+                         )
     embedding_mean_norm = tf.reduce_mean(tf.norm(embeddings, axis=1))
     tf.summary.scalar("embedding_mean_norm", embedding_mean_norm)
 
@@ -99,8 +100,15 @@ def model_fn(features, labels, mode, params):
         loss += loss_reg
 
     # Define training step that minimizes the loss with the Adam optimizer
-    optimizer = tf.train.AdamOptimizer(params['learning_rate'])
     global_step = tf.train.get_global_step()
+    lr_decay_rate = params['learning_rate_decay_rate']
+    lr_decay_steps = params['learning_rate_decay_steps']
+    lr_start = params['learning_rate']
+    learning_rate = tf.train.exponential_decay(learning_rate=lr_start,
+                                               global_step=global_step,
+                                               decay_rate=lr_decay_rate,
+                                               decay_steps=lr_decay_steps)
+    optimizer = tf.train.AdamOptimizer(learning_rate)
 
     # Add a dependency to update the moving mean and variance for batch normalization
     with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):

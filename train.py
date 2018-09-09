@@ -96,6 +96,8 @@ def main(_):
             'margin': FLAGS.margin,
             'squared': FLAGS.squared,
             'learning_rate': FLAGS.learning_rate,
+            'learning_rate_decay_rate': FLAGS.learning_rate_decay_rate,
+            'learning_rate_decay_steps':FLAGS.learning_rate_decay_steps,
             'l2_regularization_weight': FLAGS.l2_regularization_weight,
             'triplet_loss_weight': FLAGS.triplet_loss_weight,
             'cross_entropy_loss_weight': FLAGS.cross_entropy_loss_weight,
@@ -162,7 +164,7 @@ if __name__ == '__main__':
         '--sample_rate',
         type=int,
         default=16000,
-        help='Expected sample rate of the wavs', )
+        help='Sample rate of the wavs', )
     parser.add_argument(
         '--window_size_ms',
         type=float,
@@ -219,6 +221,16 @@ if __name__ == '__main__':
         default=0.01,
         help='learning_rate')
     parser.add_argument(
+        '--learning_rate_decay_rate',
+        type=float,
+        default=0.96,
+        help='Learning rate decay rate.')
+    parser.add_argument(
+        '--learning_rate_decay_steps',
+        type=int,
+        default=1000,
+        help='Decay the learning rate after every those steps.')
+    parser.add_argument(
         '--l2_regularization_weight',
         type=float,
         default=0.00001,
@@ -238,6 +250,8 @@ if __name__ == '__main__':
         type=str,
         default='resnet',
         help='Encoder that encodes a wav to a vector. Use cnn or resnet')
+
+
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
