@@ -82,15 +82,15 @@ def main(_):
     train_wav_files = _get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
     train_labels, train_label_ids = _get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
 
+    train_num_classes = len(train_label_ids)
+    filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = _create_model(
         model_dir=FLAGS.model_dir,
         params={
-            'num_filters': FLAGS.num_filters,
+            'filters': filters,
             'blocks': FLAGS.blocks,
             'kernel_size': FLAGS.kernel_size,
-            'use_batch_norm': FLAGS.use_batch_norm,
-            'pool_size': FLAGS.pool_size,
-            'pool_strides': FLAGS.pool_strides,
+            'strides': FLAGS.strides,
             'embedding_size': FLAGS.embedding_size,
             'triplet_strategy': FLAGS.triplet_strategy,
             'margin': FLAGS.margin,
@@ -99,7 +99,8 @@ def main(_):
             'l2_regularization_weight': FLAGS.l2_regularization_weight,
             'triplet_loss_weight': FLAGS.triplet_loss_weight,
             'cross_entropy_loss_weight': FLAGS.cross_entropy_loss_weight,
-            'num_classes': len(train_label_ids),
+            'num_classes': train_num_classes,
+            'encoder':FLAGS.encoder
         })
 
     desired_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
@@ -133,10 +134,10 @@ if __name__ == '__main__':
         default='./data',
         help='model_dir')
     parser.add_argument(
-        '--num_filters',
-        type=int,
-        default=5,
-        help='num_filters')
+        '--filters',
+        type=str,
+        default='64,128,256,512',
+        help='filters')
     parser.add_argument(
         '--blocks',
         type=int,
@@ -148,20 +149,10 @@ if __name__ == '__main__':
         default=3,
         help='kernel_size')
     parser.add_argument(
-        '--use_batch_norm',
-        type=bool,
-        default=True,
-        help='use_batch_norm')
-    parser.add_argument(
-        '--pool_size',
+        '--strides',
         type=int,
         default=2,
-        help='pool_size')
-    parser.add_argument(
-        '--pool_strides',
-        type=int,
-        default=2,
-        help='pool_strides')
+        help='strides of conv')
     parser.add_argument(
         '--embedding_size',
         type=int,
@@ -231,17 +222,22 @@ if __name__ == '__main__':
         '--l2_regularization_weight',
         type=float,
         default=0.00001,
-        help='Weight of L2 regularization.', )
+        help='Weight of L2 regularization.')
     parser.add_argument(
         '--triplet_loss_weight',
         type=float,
         default=1.,
-        help='Weight of triplet loss.', )
+        help='Weight of triplet loss.')
     parser.add_argument(
         '--cross_entropy_loss_weight',
         type=float,
         default=1.,
-        help='Weight of cross entropy loss.', )
+        help='Weight of cross entropy loss.')
+    parser.add_argument(
+        '--encoder',
+        type=str,
+        default='resnet',
+        help='Encoder that encodes a wav to a vector. Use cnn or resnet')
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)

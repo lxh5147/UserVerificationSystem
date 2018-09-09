@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 def attention(inputs):
     # input: batch_size, time_steps, dim
     # output: batch_size, dim

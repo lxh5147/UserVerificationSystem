@@ -5,8 +5,16 @@ import tensorflow as tf
 from model.triplet_loss import batch_all_triplet_loss
 from model.triplet_loss import batch_hard_triplet_loss
 from model.cross_entropy_loss import cross_entropy_loss
-from model.encoder import encoder
 
+
+def _get_encoder(encoder_name):
+    assert  encoder_name in ['cnn','resnet']
+    if encoder_name=='cnn':
+        from model.encoder_cnn import encoder as encoder_cnn
+        return encoder_cnn
+    elif encoder_name =='resnet':
+        from model.encoder_resnet import encoder as encoder_resnet
+        return encoder_resnet
 
 def model_fn(features, labels, mode, params):
     """Model function for tf.estimator
@@ -21,21 +29,12 @@ def model_fn(features, labels, mode, params):
     is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
     inputs = features
-    # -----------------------------------------------------------
-    # MODEL: define the layers of the model
-    with tf.variable_scope('model'):
-        # Compute the embeddings with the model
+    encoder = _get_encoder(params['encoder'])
 
-        embeddings = encoder(inputs,
-                             num_filters=params['num_filters'],
-                             blocks=params['blocks'],
-                             kernel_size=params['kernel_size'],
-                             use_batch_norm=params['use_batch_norm'],
+    embeddings = encoder(inputs,
+                             params=params,
                              is_training=is_training,
-                             pool_size=params['pool_size'],
-                             pool_strides=params['pool_strides'],
-                             embedding_size=params['embedding_size'])
-
+                             )
     embedding_mean_norm = tf.reduce_mean(tf.norm(embeddings, axis=1))
     tf.summary.scalar("embedding_mean_norm", embedding_mean_norm)
 
@@ -102,11 +101,9 @@ def model_fn(features, labels, mode, params):
     # Define training step that minimizes the loss with the Adam optimizer
     optimizer = tf.train.AdamOptimizer(params['learning_rate'])
     global_step = tf.train.get_global_step()
-    if params['use_batch_norm']:
-        # Add a dependency to update the moving mean and variance for batch normalization
-        with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
-            train_op = optimizer.minimize(loss, global_step=global_step)
-    else:
+
+    # Add a dependency to update the moving mean and variance for batch normalization
+    with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
         train_op = optimizer.minimize(loss, global_step=global_step)
 
     return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
