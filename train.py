@@ -22,7 +22,7 @@ def _get_labels(labels_file):
             cur_id = len(ids)
             ids[line] = cur_id
             label_ids.append(cur_id)
-    return label_ids
+    return label_ids, ids
 
 
 def _get_wav_files(directory):
@@ -78,6 +78,10 @@ def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
 
+    # Define the input function for training
+    train_wav_files = _get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
+    train_labels, train_label_ids = _get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+
     model = _create_model(
         model_dir=FLAGS.model_dir,
         params={
@@ -92,12 +96,11 @@ def main(_):
             'margin': FLAGS.margin,
             'squared': FLAGS.squared,
             'learning_rate': FLAGS.learning_rate,
-            'l2_weight': FLAGS.l2_weight,
+            'l2_regularization_weight': FLAGS.l2_regularization_weight,
+            'triplet_loss_weight': FLAGS.triplet_loss_weight,
+            'cross_entropy_loss_weight': FLAGS.cross_entropy_loss_weight,
+            'num_classes': len(train_label_ids),
         })
-
-    # Define the input function for training
-    train_wav_files = _get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    train_labels = _get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
 
     desired_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
     window_size_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
@@ -225,9 +228,20 @@ if __name__ == '__main__':
         default=0.01,
         help='learning_rate')
     parser.add_argument(
-        '--l2_weight',
+        '--l2_regularization_weight',
         type=float,
-        default=0.1,
+        default=0.00001,
         help='Weight of L2 regularization.', )
+    parser.add_argument(
+        '--triplet_loss_weight',
+        type=float,
+        default=1.,
+        help='Weight of triplet loss.', )
+    parser.add_argument(
+        '--cross_entropy_loss_weight',
+        type=float,
+        default=1.,
+        help='Weight of cross entropy loss.', )
+
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
