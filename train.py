@@ -248,10 +248,8 @@ if __name__ == '__main__':
     parser.add_argument(
         '--encoder',
         type=str,
-        default='resnet',
+        default='cnn',
         help='Encoder that encodes a wav to a vector. Use cnn or resnet')
-
-
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
