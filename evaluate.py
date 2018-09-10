@@ -4,7 +4,7 @@ from model.model_fn import create_model
 import argparse
 import sys
 import os
-from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings
+from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings,get_enrollments
 
 FLAGS = None
 
@@ -161,12 +161,6 @@ eval_folder:
 '''
 
 
-def _get_enrollments(enrollment_config):
-    with open(enrollment_config) as f:
-        enrollments = f.read().splitlines()
-    return enrollments
-
-
 def _get_groups(group_config_file):
     with open(group_config_file) as f:
         lines = f.read().splitlines()
@@ -237,7 +231,7 @@ def main(_):
     wav_files = [os.path.join(FLAGS.data_dir, 'eval', wav_file) for wav_file in wav_files]
 
     groups = _get_groups(os.path.join(FLAGS.data_dir, 'groups_config'))
-    enrollments = _get_enrollments(os.path.join(FLAGS.data_dir, 'enrollment_config'))
+    enrollments = get_enrollments(os.path.join(FLAGS.data_dir, 'enrollment_config'))
     to_be_verified = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'verification_config'))
     to_be_identified = _get_to_be_identified(os.path.join(FLAGS.data_dir, 'identification_config'))
     wav_file_id_to_index = _get_file_id_to_index(wav_files)

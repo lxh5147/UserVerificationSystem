@@ -74,3 +74,10 @@ def get_embeddings(model,
 
     embeddings_normed = l2_norm(embeddings)
     return embeddings_normed
+
+
+def get_enrollments(enrollment_config):
+    with open(enrollment_config) as f:
+        enrollments = f.read().splitlines()
+    return enrollments
+

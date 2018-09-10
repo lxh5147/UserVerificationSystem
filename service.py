@@ -4,13 +4,13 @@ from model.model_fn import create_model
 import argparse
 import sys
 import os
-from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings
+from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
 import json
 import base64
 import wave
 from shutil import rmtree
 import uuid
-
+import numpy as np
 FLAGS = None
 
 
@@ -20,6 +20,7 @@ def _write_pcm16_wav(output_file, audio, sample_rate=16000):
         writer.setsampwidth(2)
         writer.setframerate(sample_rate)
         writer.writeframes(audio)
+
 
 def _parse_environ(environ):
     request_body_encoded = environ['wsgi.input'].read(int(environ.get('CONTENT_LENGTH', 0)))
@@ -50,11 +51,63 @@ def _delete_user(device_id, user_id):
     if os.path.exists(user_root_path):
         rmtree(user_root_path)
 
+
 def _save_pcm_stream(device_id, user_id, stream):
     user_root_path = _get_user_root_path(device_id, user_id)
     uniq_filename = uuid.uuid4().hex[:6].upper()
-    output_filepath = os.path.join(user_root_path,uniq_filename +'.wav')
-    _write_pcm16_wav(output_filepath, stream, sample_rate=16000)
+    output_file = os.path.join(user_root_path, uniq_filename + '.wav')
+    _write_pcm16_wav(output_file, stream, sample_rate=16000)
+    return output_file
+
+
+def _get_enrollment_wav_files(device_id, user_id):
+    user_root_path = _get_user_root_path(device_id, user_id)
+    enrollment_config = os.path.join(user_root_path, 'enrollment_config')
+    if os._exists(enrollment_config):
+        return [os.path.join(user_root_path,i) for i in get_enrollments(enrollment_config)]
+    else:
+        return []
+
+def _update_enrollment_config(device_id,user_id,wav_files):
+    user_root_path = _get_user_root_path(device_id, user_id)
+    enrollment_config = os.path.join(user_root_path, 'enrollment_config')
+    with open(enrollment_config,'w') as fw:
+        fw.writelines(wav_files)
+
+
+def _enroll_user(model,
+                 device_id,
+                 user_id,
+                 streams,
+                 desired_ms,
+                 window_size_ms,
+                 window_stride_ms,
+                 sample_rate,
+                 magnitude_squared,
+                 dct_coefficient_count,
+                 batch_size):
+    _ensure_user_root_path(device_id, user_id)
+    wav_files_exist = _get_enrollment_wav_files(device_id, user_id)
+    wav_files =[]
+    for stream in streams:
+        output_file = _save_pcm_stream(device_id, user_id, stream)
+        wav_files.append(output_file)
+    # compute and save embeddings
+    embeddings = get_embeddings(model,
+                   wav_files,
+                   desired_ms,
+                   window_size_ms,
+                   window_stride_ms,
+                   sample_rate,
+                   magnitude_squared,
+                   dct_coefficient_count,
+                   batch_size)
+    for i , wav_file in enumerate(wav_files):
+        embedding_file = wav_file + '.npy'
+        np.save(embedding_file,embeddings[i])
+    # update config
+    wav_files_exist.extend(wav_files)
+    _update_enrollment_config(device_id,user_id,wav_files)
 
 def main(_):
     # We want to see all the logging messages for this tutorial.
