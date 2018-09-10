@@ -126,6 +126,8 @@ def input_fn(wav_files,
     # Shuffle, repeat, and batch the examples.
     if is_training:
         voice_dataset = voice_dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
+    else:
+        voice_dataset = voice_dataset.batch(batch_size)
 
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
     return features, labels
