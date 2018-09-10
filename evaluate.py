@@ -65,15 +65,33 @@ def _fa_fr_verfication(to_be_verified, sims, true_a, true_r, threshold=0.7):
     return fa, fr
 
 
-def _correct_identification(to_be_identified, identification_sim, label_ids):
+def _correct_identification(to_be_identified, sims, label_ids):
     correct = []
-    for i, j in enumerate(identification_sim):
+    for i, j in enumerate(sims):
         embedding_index = to_be_identified[i][0]
         true_id = label_ids[embedding_index]
         sim, id = j
         if true_id == id:
             correct.append(embedding_index)
     return correct
+
+
+def _eer(to_be_verified, verification_sim, true_v_a, true_v_r):
+    fa_rates = []
+    fr_rates = []
+    gap = []
+    for threshold in [0.01 * i - 1.0 for i in range(200)]:
+        fa, fr = _fa_fr_verfication(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
+        fa_rate = len(fa) / len(true_v_r)
+        fr_rate = len(fr) / len(true_v_a)
+        fa_rates.append(fa_rate)
+        fr_rates.append(fr_rate)
+        gap.append(abs(fa_rate - fr_rate))
+
+    min_pos = gap.index(min(gap))
+    eer = (fa_rates[min_pos] + fr_rates[min_pos]) / 2
+    eer_thres = 0.01 * min_pos - 1.0
+    return eer, eer_thres
 
 
 def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_be_identified, member_groups):
@@ -113,12 +131,13 @@ def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_
         identification_sim.append((sim, id))
 
     # verification performance
-    fr = []  # false reject
-    fa = []  # false accept
-    for i, sim in enumerate(verification_sim):
-        embedding_index = to_be_verified[0]
+    eer, eer_thres = _eer(to_be_verified, verification_sim, true_v_a, true_v_r)
 
     # identification performance
+    correct_identified = _correct_identification(to_be_identified, identification_sim, label_ids)
+    acc = len(correct_identified) / len(to_be_identified)
+
+    return (eer, eer_thres), acc
 
 
 def main(_):
