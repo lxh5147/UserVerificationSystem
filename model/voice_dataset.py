@@ -12,7 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """tf.data.Dataset interface to the Voice dataset."""
-
+import os
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
@@ -73,3 +73,59 @@ def dataset(wav_files,
         return (feat, _)
 
     return raw_dataset.map(decode)
+
+
+def from_ms_to_samples(sample_rate, duration_ms):
+    return int(sample_rate * duration_ms / 1000)
+
+
+def get_labels(labels_file):
+    with open(labels_file) as f:
+        lines = f.read().splitlines()
+    # map a line to an ID
+    ids = {}
+    label_ids = []
+    for line in lines:
+        if line in ids:
+            cur_id = ids[line]
+            label_ids.append(cur_id)
+        else:
+            cur_id = len(ids)
+            ids[line] = cur_id
+            label_ids.append(cur_id)
+    return label_ids, ids
+
+
+def get_wav_files(directory):
+    files = []
+    for r, d, f in os.walk(directory):
+        for file in f:
+            files.append(os.path.join(r, file))
+    return files
+
+
+def input_fn(wav_files,
+             labels,
+             batch_size,
+             desired_samples,
+             window_size_samples,
+             window_stride_samples,
+             magnitude_squared=True,
+             dct_coefficient_count=40,
+             is_training=True,
+             buffer_size=1000):
+    voice_dataset = dataset(wav_files,
+                            labels,
+                            desired_samples,
+                            window_size_samples,
+                            window_stride_samples,
+                            magnitude_squared,
+                            dct_coefficient_count
+                            )
+
+    # Shuffle, repeat, and batch the examples.
+    if is_training:
+        voice_dataset = voice_dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
+
+    features, labels = voice_dataset.make_one_shot_iterator().get_next()
+    return features, labels

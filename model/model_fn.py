@@ -116,3 +116,13 @@ def model_fn(features, labels, mode, params):
         train_op = optimizer.minimize(loss, global_step=global_step)
 
     return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
+
+
+def create_model(model_dir=None,
+                 config=None,
+                 params=None):
+    return tf.estimator.Estimator(model_fn,
+                                  model_dir=model_dir,
+                                  config=config,
+                                  params=params,
+                                  )

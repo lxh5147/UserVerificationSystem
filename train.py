@@ -1,6 +1,6 @@
 import tensorflow as tf
-from model.voice_dataset import dataset as get_dataset
-from model.model_fn import model_fn
+from model.voice_dataset import input_fn, get_wav_files, get_labels, from_ms_to_samples
+from model.model_fn import create_model
 import argparse
 import sys
 import os
@@ -8,83 +8,17 @@ import os
 FLAGS = None
 
 
-def _get_labels(labels_file):
-    with open(labels_file) as f:
-        lines = f.read().splitlines()
-    # map a line to an ID
-    ids = {}
-    label_ids = []
-    for line in lines:
-        if line in ids:
-            cur_id = ids[line]
-            label_ids.append(cur_id)
-        else:
-            cur_id = len(ids)
-            ids[line] = cur_id
-            label_ids.append(cur_id)
-    return label_ids, ids
-
-
-def _get_wav_files(directory):
-    files = []
-    for r, d, f in os.walk(directory):
-        for file in f:
-            files.append(os.path.join(r, file))
-    return files
-
-
-def _input_fn(wav_files,
-              labels,
-              batch_size,
-              desired_samples,
-              window_size_samples,
-              window_stride_samples,
-              magnitude_squared=True,
-              dct_coefficient_count=40,
-              is_training=True,
-              buffer_size=1000):
-    dataset = get_dataset(wav_files,
-                          labels,
-                          desired_samples,
-                          window_size_samples,
-                          window_stride_samples,
-                          magnitude_squared,
-                          dct_coefficient_count
-                          )
-
-    # Shuffle, repeat, and batch the examples.
-    if is_training:
-        dataset = dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
-
-    features, labels = dataset.make_one_shot_iterator().get_next()
-    return features, labels
-
-
-def _create_model(model_dir=None,
-                  config=None,
-                  params=None):
-    return tf.estimator.Estimator(model_fn,
-                                  model_dir=model_dir,
-                                  config=config,
-                                  params=params,
-                                  )
-
-
-def _from_ms_to_samples(sample_rate, duration_ms):
-    return int(sample_rate * duration_ms / 1000)
-
-
 def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # Define the input function for training
-    train_wav_files = _get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    train_labels, train_label_ids = _get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+    train_wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
+    train_labels, train_label_ids = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
 
     train_num_classes = len(train_label_ids)
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
-    model = _create_model(
+    model = create_model(
         model_dir=FLAGS.model_dir,
         params={
             'filters': filters,
@@ -105,10 +39,10 @@ def main(_):
             'encoder': FLAGS.encoder
         })
 
-    desired_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
-    window_size_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
-    window_stride_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
-    train_input_fn = lambda: _input_fn(
+    desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
+    window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
+    window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
+    train_input_fn = lambda: input_fn(
         wav_files=train_wav_files,
         labels=train_labels,
         desired_samples=desired_samples,
