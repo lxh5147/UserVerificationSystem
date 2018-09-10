@@ -97,12 +97,12 @@ def main(_):
             'squared': FLAGS.squared,
             'learning_rate': FLAGS.learning_rate,
             'learning_rate_decay_rate': FLAGS.learning_rate_decay_rate,
-            'learning_rate_decay_steps':FLAGS.learning_rate_decay_steps,
+            'learning_rate_decay_steps': FLAGS.learning_rate_decay_steps,
             'l2_regularization_weight': FLAGS.l2_regularization_weight,
             'triplet_loss_weight': FLAGS.triplet_loss_weight,
             'cross_entropy_loss_weight': FLAGS.cross_entropy_loss_weight,
             'num_classes': train_num_classes,
-            'encoder':FLAGS.encoder
+            'encoder': FLAGS.encoder
         })
 
     desired_samples = _from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
@@ -120,7 +120,8 @@ def main(_):
     )
 
     # model Model
-    model.train(train_input_fn, steps=FLAGS.num_steps)
+    model.train(train_input_fn,
+                steps=FLAGS.num_steps)
 
 
 if __name__ == '__main__':
@@ -174,17 +175,12 @@ if __name__ == '__main__':
         '--desired_ms',
         type=int,
         default=1000,
-        help='Expected duration in milliseconds of the wavs', )
+        help='Expected duration in milliseconds of the wavs')
     parser.add_argument(
         '--window_stride_ms',
         type=float,
         default=10.0,
-        help='How far to move in time between spectogram timeslices.', )
-    parser.add_argument(
-        '--num_steps',
-        type=int,
-        default=10000,
-        help='num_steps')
+        help='How far to move in time between spectogram timeslices.')
     parser.add_argument(
         '--magnitude_squared',
         type=bool,
@@ -215,6 +211,11 @@ if __name__ == '__main__':
         type=bool,
         default=True,
         help='squared')
+    parser.add_argument(
+        '--num_steps',
+        type=int,
+        default=10000,
+        help='num_steps')
     parser.add_argument(
         '--learning_rate',
         type=float,
