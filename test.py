@@ -1,20 +1,18 @@
 import tensorflow as tf
-
+import numpy as np
 from model.voice_dataset import read_audio
 
 
-def test_audio_too_short():
-    desired_samples = 100000
-    wav_file = tf.placeholder(dtype=tf.string)
-    audio, sample_rate, all_samples = read_audio(wav_file,
-                                                 desired_samples)
-    with tf.Session() as sess:
-        all_samples_val, audio_val = sess.run([all_samples, audio],
-                                              feed_dict={wav_file: "./data/train/121624931534904112937-0.wav"})
-        print("length:{} padded length:{}".format(all_samples_val, len(audio_val)))
 
 def test_dataset():
-    pass
+    dataset = tf.data.Dataset.from_tensor_slices(np.array([1.0, 2.0, 3.0, 4.0, 5.0]))
+    dataset = dataset.repeat().batch(2)
+    iterator = dataset.make_one_shot_iterator()
+    one_batch = iterator.get_next()
+    i=0
+    with tf.Session() as sess:
+        while i<4:
+            print(sess.run(one_batch))
+            i += 1
 
-test_audio_too_short()
 test_dataset()
