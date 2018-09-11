@@ -160,7 +160,7 @@ eval_folder:
     wav sub directory: wav files
     labels file
     enrollment_config: wav_file_id
-    verfication_config file: wav_file_id,claimed_label
+    verfication_config file: wav_file_id,claimed_label # 121624931534904112937-0.wav --> 121624931534904112937-0
     identification_config file: wav_file_id,group_id #group_id < 0 if we consider the group with all users
     group_config file: group id,label of group_member 1,label of group_member 2,...
 '''
