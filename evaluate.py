@@ -93,6 +93,7 @@ def _eer(to_be_verified, verification_sim, true_v_a, true_v_r):
     eer_threshold = 0.01 * min_pos - 1.0
     return eer, eer_threshold
 
+
 def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
     verification_sim = []
     true_v_a = []  # true accept
@@ -118,20 +119,23 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
         eer, eer_thredhold = _eer(to_be_verified, verification_sim, true_v_a, true_v_r)
         return eer, eer, eer_thredhold
 
-def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, member_groups):
+
+def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, groups):
     grouped_registerations = dict()
     identification_sim = []
 
     for embedding_index, target_group_id in to_be_identified:
-        if target_group_id in grouped_registerations:
-            target_registerations = grouped_registerations[target_group_id]
+        if target_group_id >= 0:
+            if target_group_id in grouped_registerations:
+                target_registerations = grouped_registerations[target_group_id]
+            else:
+                target_registerations = dict()
+                group = groups[target_group_id]
+                for id in group:
+                    target_registerations[id] = registerations[id]
+                grouped_registerations[target_group_id] = target_registerations
         else:
-            target_registerations = dict()
-            group = member_groups[target_group_id]
-            for id in group:
-                target_registerations[id] = registerations[id]
-            grouped_registerations[target_group_id] = target_registerations
-
+            target_registerations = registerations
         sim, id = _get_max_sim_and_id(embeddings, target_registerations)
         identification_sim.append((sim, id))
 
@@ -140,15 +144,94 @@ def _evaluate_identification(embeddings, label_ids, registerations, to_be_identi
     acc = len(correct_identified) / len(to_be_identified)
     return acc
 
-def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_be_identified, member_groups):
+
+def evaluate(embeddings, label_ids, enrollments, to_be_verified, to_be_identified, groups, threshold=None):
     embeddings_normed = _l2_norm(embeddings)
-    registerations = _get_registerations(embeddings_normed[:top_n_for_registeration],
-                                         label_ids[:top_n_for_registeration])
+    registerations = _get_registerations([embeddings_normed[i] for i in enrollments],
+                                         [label_ids[i] for i in enrollments])
+    fa_rate, fr_rate, threshold = _evaluate_verification(embeddings, label_ids, registerations, to_be_verified,
+                                                         threshold)
+    acc = _evaluate_identification(embeddings_normed, label_ids, registerations, to_be_identified, groups)
+    return fa_rate, fr_rate, threshold, acc
 
-    eer,_, eer_threshold=_evaluate_verification(embeddings, label_ids, registerations,to_be_verified)
-    acc = _evaluate_identification(embeddings_normed, label_ids, registerations, to_be_identified, member_groups)
 
-    return (eer, eer_threshold), acc
+'''
+eval_folder: 
+    wav sub directory: wav files
+    labels file
+    enrollment_config: wav_file_id
+    verfication_config file: wav_file_id,claimed_label
+    identification_config file: wav_file_id,group_id #group_id < 0 if we consider the group with all users
+    group_config file: group id,label of group_member 1,label of group_member 2,...
+'''
+
+
+def _get_enrollments(enrollment_config):
+    with open(enrollment_config) as f:
+        enrollments = f.read().splitlines()
+    return enrollments
+
+
+def _get_groups(group_config_file):
+    with open(group_config_file) as f:
+        lines = f.read().splitlines()
+    # map a line to an ID
+    groups = dict()
+
+    for line in lines:
+        parts = line.split(',')
+        group_id = parts[0]
+        group_members = parts[1:]
+        groups[group_id] = group_members
+
+    return groups
+
+
+def _get_to_be_verified(verfication_config_file):
+    with open(verfication_config_file) as f:
+        lines = f.read().splitlines()
+
+    to_be_verified = []
+    for line in lines:
+        parts = line.split(',')
+        wav_file = parts[0]
+        claimed = parts[1]
+        to_be_verified.append((wav_file, claimed))
+
+    return to_be_verified
+
+
+def _get_to_be_identified(identification_config_file):
+    with open(identification_config_file) as f:
+        lines = f.read().splitlines()
+
+    to_be_identified = []
+
+    for line in lines:
+        parts = line.split(',')
+        wav_file = parts[0]
+        if len(parts) > 1:
+            group_id = -1
+        else:
+            group_id = parts[1]
+
+        to_be_identified.append((wav_file, group_id))
+
+    return to_be_identified
+
+
+def _get_file_id(file):
+    file_name = os.path.basename(file)
+    file_id, _ = os.path.splitext(file_name)
+    return file_id
+
+
+def _get_file_id_to_index(files):
+    file_id_to_index = dict()
+    for i, file in enumerate(files):
+        file_id = _get_file_id(file)
+        file_id_to_index[file_id] = i
+    return file_id_to_index
 
 
 def main(_):
@@ -158,6 +241,19 @@ def main(_):
     # Define the input function for training
     wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'eval'))
     labels, label_ids = get_labels(os.path.join(FLAGS.data_dir, 'eval_labels'))
+
+    groups = _get_groups(os.path.join(FLAGS.data_dir, 'groups_config'))
+    enrollments = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'enrollment_config'))
+    to_be_verified = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'verification_config'))
+    to_be_identified = _get_to_be_identified(os.path.join(FLAGS.data_dir, 'identification_config'))
+    wav_file_id_to_index = _get_file_id_to_index(wav_files)
+
+    # TODO validate configurations
+
+    # transform the configurations: wav file id --> index, label_id --> label_index
+    enrollments = [wav_file_id_to_index[i] for i in enrollments]
+    to_be_verified = [(wav_file_id_to_index[i], label_ids[j]) for i, j in to_be_verified]
+    to_be_identified = [(wav_file_id_to_index[i], group_id) for i, group_id in to_be_identified]
 
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
@@ -186,8 +282,23 @@ def main(_):
         is_training=False
     )
 
-    # model Model
-    model.predict(eval_input_fn)
+    all_embeddings = []
+    for embeddings in model.predict(eval_input_fn):
+        all_embeddings.extend(embeddings)
+
+    fa_rate, fr_rate, threshold, acc = evaluate(embeddings,
+                                                label_ids,
+                                                enrollments,
+                                                to_be_verified,
+                                                to_be_identified,
+                                                groups,
+                                                FLAGS.threshold)
+    eval_msg_template = 'verfication false accept rate:{}' + \
+                        '            false reject rate:{}' + \
+                        '            threshold:{}' + \
+                        'identification accuracy:{}'
+
+    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold, acc))
 
 
 if __name__ == '__main__':
@@ -267,6 +378,11 @@ if __name__ == '__main__':
         type=int,
         default=10,
         help='batch_size')
+    parser.add_argument(
+        '--threshold',
+        type=float,
+        default=None,
+        help='If the similarity between two wav files is no less than this threshold, they are considered from the same person.')
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
