@@ -2,10 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="02dafdf2-0986-46af-a6a9-0c441b352f7f" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/evaluate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/UserVerificationSystem.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/UserVerificationSystem.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/voice_dataset_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/voice_dataset_test.py" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/model/voice_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/voice_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -13,6 +20,10 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/UserVerificationSystem$voice_dataset_test.coverage" NAME="voice_dataset_test Coverage Results" MODIFIED="1536658013989" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/UserVerificationSystem$test.coverage" NAME="test Coverage Results" MODIFIED="1536657925939" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="623993693">
@@ -83,6 +94,7 @@
       <file leaf-file-name="voice_dataset.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="3825">
               <caret line="156" column="97" selection-start-line="156" selection-start-column="14" selection-end-line="156" selection-end-column="97" />
             </state>
@@ -106,8 +118,12 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="2325">
               <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+=======
+            <state relative-caret-position="250">
+              <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
               <folding>
-                <element signature="e#0#23#0" expanded="true" />
+                <element signature="e#653#662#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -116,15 +132,21 @@
       <file leaf-file-name="train.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1375">
               <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
+=======
+            <state relative-caret-position="275">
+              <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="train_labels" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/data/train_labels">
           <provider selected="true" editor-type-id="text-editor">
@@ -142,10 +164,18 @@
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
+=======
+      <file leaf-file-name="test.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="222">
+              <caret line="32" column="22" lean-forward="true" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="test.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -160,6 +190,20 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="225">
               <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+=======
+      <file leaf-file-name="evaluate.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/evaluate.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-300" />
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="encoder_resnet.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2325">
+              <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -167,11 +211,19 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="triplet_loss.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="217">
               <caret line="151" column="17" lean-forward="true" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
+=======
+      <file leaf-file-name="triplet_loss.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4025">
+              <caret line="161" column="46" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
             </state>
           </provider>
         </entry>
@@ -234,11 +286,19 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
+<<<<<<< HEAD
   <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="22" />
     <option name="y" value="11" />
     <option name="width" value="618" />
     <option name="height" value="469" />
+=======
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="32" />
+    <option name="y" value="18" />
+    <option name="width" value="608" />
+    <option name="height" value="462" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -261,10 +321,13 @@
               <item name="UserVerificationSystem" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
+<<<<<<< HEAD
             <path>
               <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
+=======
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
           </expand>
           <select />
         </subPane>
@@ -297,7 +360,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.voice_dataset_test">
     <configuration name="deep_speaker_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="UserVerificationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -374,29 +437,54 @@
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="Unittests in voice_dataset_test.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
       <module name="UserVerificationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/model" />
+=======
+    <configuration name="voice_dataset_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="UserVerificationSystem" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+<<<<<<< HEAD
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$/model/voice_dataset_test.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
+=======
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/voice_dataset_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
     </configuration>
     <list>
       <item itemvalue="Python.deep_speaker_test" />
       <item itemvalue="Python.train" />
       <item itemvalue="Python.voice_dataset" />
       <item itemvalue="Python.test" />
+<<<<<<< HEAD
       <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
+=======
+      <item itemvalue="Python.voice_dataset_test" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.voice_dataset_test" />
         <item itemvalue="Python.test" />
         <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
         <item itemvalue="Python.train" />
@@ -793,16 +881,27 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+<<<<<<< HEAD
     <editor active="true" />
+=======
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
     <layout>
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32955974" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3280255" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.34968552" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2284041" />
+=======
+      <window_info anchor="bottom" id="Version Control" order="7" weight="0.3289941" />
+      <window_info anchor="bottom" id="Python Console" order="10" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3280255" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2284041" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
       <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="right" id="Database" />
       <window_info anchor="right" id="SciView" />
@@ -822,6 +921,7 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+<<<<<<< HEAD
   <component name="Vcs.Log.History.Properties">
     <option name="COLUMN_ORDER">
       <list>
@@ -832,6 +932,8 @@
       </list>
     </option>
   </component>
+=======
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
@@ -875,6 +977,28 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2350">
+          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4025">
+          <caret line="161" column="46" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/ainemo_speaker_dataset.py" />
+    <entry file="file://$PROJECT_DIR$/train_2.py" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/iterator_ops.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/readers.py" />
@@ -938,6 +1062,16 @@
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/core/numeric.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/linalg/linalg.py" />
     <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/builtins.py" />
+<<<<<<< HEAD
+=======
+    <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4025">
+          <caret line="161" column="46" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
     <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2325">
@@ -948,8 +1082,11 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/array_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/client/session.py" />
     <entry file="file://$PROJECT_DIR$/evaluate.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="6025">
           <caret line="241" column="59" selection-start-line="241" selection-start-column="59" selection-end-line="241" selection-end-column="59" />
           <folding>
@@ -975,6 +1112,9 @@
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
+=======
+        <state relative-caret-position="-300" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
       </provider>
     </entry>
     <entry file="file:///usr/lib/python3.6/unittest/case.py" />
@@ -987,14 +1127,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/voice_dataset_test.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="225">
           <caret line="9" column="26" lean-forward="true" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
+=======
+        <state relative-caret-position="250">
+          <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
+          <folding>
+            <element signature="e#653#662#0" expanded="true" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
@@ -1009,13 +1157,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3825">
           <caret line="156" column="97" selection-start-line="156" selection-start-column="14" selection-end-line="156" selection-end-column="97" />
+=======
+    <entry file="file://$PROJECT_DIR$/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="16" column="22" selection-start-line="16" selection-start-column="22" selection-end-line="16" selection-end-column="22" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="217">
           <caret line="151" column="17" lean-forward="true" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
+=======
+        <state relative-caret-position="222">
+          <caret line="32" column="22" lean-forward="true" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
+>>>>>>> 3551fa3c18fa8b5ebcdd4fd71acfc0e8b47dc27e
         </state>
       </provider>
     </entry>
