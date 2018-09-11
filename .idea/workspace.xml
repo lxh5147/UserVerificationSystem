@@ -27,7 +27,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="109" />
+          <entry key="py" value="111" />
           <entry key="train_labels" value="2" />
           <entry key="xml" value="1" />
         </counts>
@@ -35,22 +35,22 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="109" />
+          <entry key="Python" value="111" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="31" />
-          <entry key="py" value="12056" />
+          <entry key="py" value="12786" />
           <entry key="train_labels" value="1" />
-          <entry key="txt" value="813" />
+          <entry key="txt" value="910" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="845" />
-          <entry key="Python" value="12056" />
+          <entry key="PLAIN_TEXT" value="942" />
+          <entry key="Python" value="12786" />
         </counts>
       </usages-collector>
     </session>
@@ -80,13 +80,35 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="83" column="30" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="30" />
+            <state relative-caret-position="278">
+              <caret line="30" column="61" lean-forward="true" selection-start-line="30" selection-start-column="61" selection-end-line="30" selection-end-column="61" />
               <folding>
                 <element signature="e#653#663#0" expanded="true" />
-                <marker date="1536659074329" expanded="true" signature="1667:2421" ph="..." />
-                <marker date="1536659074329" expanded="true" signature="1939:2421" ph="..." />
+                <marker date="1536660374041" expanded="true" signature="2183:2937" ph="..." />
+                <marker date="1536660374041" expanded="true" signature="2455:2937" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="288">
+              <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+                <marker date="1536659931617" expanded="true" signature="130:135" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/lib/python3.6/unittest/case.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="179">
+              <caret line="823" column="44" selection-start-line="823" selection-start-column="41" selection-end-line="823" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -140,11 +162,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state>
+              <caret selection-end-line="3" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1536657320231" expanded="true" signature="298:510" ph="..." />
+                <marker date="1536659489320" expanded="true" signature="298:510" ph="..." />
+                <marker date="1536659489320" expanded="true" signature="614:625" ph="..." />
               </folding>
             </state>
           </provider>
@@ -168,21 +191,13 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="161" column="46" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Python Script" />
+        <option value="Python Unit Test" />
       </list>
     </option>
   </component>
@@ -221,8 +236,9 @@
         <option value="$PROJECT_DIR$/model/test.py" />
         <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/evaluate.py" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/data/train_labels" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/model/voice_dataset_test.py" />
         <option value="$PROJECT_DIR$/model/voice_dataset.py" />
       </list>
     </option>
@@ -299,7 +315,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.train">
+  <component name="RunManager" selected="Python tests.Unittests in voice_dataset_test.py">
     <configuration name="deep_speaker_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="UserVerificationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -384,16 +400,32 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests in voice_dataset_test.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="UserVerificationSystem" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/model" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/model/voice_dataset_test.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.deep_speaker_test" />
       <item itemvalue="Python.train" />
       <item itemvalue="Python.voice_dataset" />
       <item itemvalue="Python.test" />
+      <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.train" />
+        <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.train" />
         <item itemvalue="Python.voice_dataset" />
         <item itemvalue="Python.deep_speaker_test" />
       </list>
@@ -725,8 +757,39 @@
       <option name="project" value="LOCAL" />
       <updated>1536658717245</updated>
     </task>
-    <option name="localTasksCounter" value="46" />
+    <task id="LOCAL-00046" summary="feature extractor for audio helper function">
+      <created>1536659123520</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1536659123520</updated>
+    </task>
+    <task id="LOCAL-00047" summary="added unit test for voice dataset">
+      <created>1536659947548</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1536659947548</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 17h 51m 35s.xml">
+      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 17h 56m 12s.xml">
+      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 17h 57m 38s.xml">
+      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 17h 58m 36s.xml">
+      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 18h 06m 19s.xml">
+      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -774,8 +837,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="clean dataset" />
-    <MESSAGE value="added train" />
     <MESSAGE value="train function" />
     <MESSAGE value="1d for audio input" />
     <MESSAGE value="initial runnable version" />
@@ -799,7 +860,9 @@
     <MESSAGE value="use placeholder for wav file" />
     <MESSAGE value="read_audio helper function" />
     <MESSAGE value="fixed '_' issued" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed '_' issued" />
+    <MESSAGE value="feature extractor for audio helper function" />
+    <MESSAGE value="added unit test for voice dataset" />
+    <option name="LAST_COMMIT_MESSAGE" value="added unit test for voice dataset" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -813,8 +876,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/model/ainemo_speaker_dataset.py" />
-    <entry file="file://$PROJECT_DIR$/train_2.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/iterator_ops.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/readers.py" />
@@ -959,17 +1020,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1536657320231" expanded="true" signature="298:510" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="141">
@@ -981,14 +1031,44 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="3" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <marker date="1536659489320" expanded="true" signature="298:510" ph="..." />
+            <marker date="1536659489320" expanded="true" signature="614:625" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.6/unittest/case.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="179">
+          <caret line="823" column="44" selection-start-line="823" selection-start-column="41" selection-end-line="823" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="288">
+          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1536659931617" expanded="true" signature="130:135" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="83" column="30" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="30" />
+        <state relative-caret-position="278">
+          <caret line="30" column="61" lean-forward="true" selection-start-line="30" selection-start-column="61" selection-end-line="30" selection-end-column="61" />
           <folding>
             <element signature="e#653#663#0" expanded="true" />
-            <marker date="1536659074329" expanded="true" signature="1667:2421" ph="..." />
-            <marker date="1536659074329" expanded="true" signature="1939:2421" ph="..." />
+            <marker date="1536660374041" expanded="true" signature="2183:2937" ph="..." />
+            <marker date="1536660374041" expanded="true" signature="2455:2937" ph="..." />
           </folding>
         </state>
       </provider>
