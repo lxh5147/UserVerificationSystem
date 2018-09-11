@@ -65,7 +65,7 @@ def _fa_fr_verfication(to_be_verified, sims, true_a, true_r, threshold=0.7):
     return fa, fr
 
 
-def _correct_identification(to_be_identified, sims, label_ids):
+def _identification_correct(to_be_identified, sims, label_ids):
     correct = []
     for i, j in enumerate(sims):
         embedding_index = to_be_identified[i][0]
@@ -93,19 +93,14 @@ def _eer(to_be_verified, verification_sim, true_v_a, true_v_r):
     eer_thres = 0.01 * min_pos - 1.0
     return eer, eer_thres
 
-
-def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_be_identified, member_groups):
-    embeddings_normed = _l2_norm(embeddings)
-    registerations = _get_registerations(embeddings_normed[:top_n_for_registeration],
-                                         label_ids[:top_n_for_registeration])
-
+def _evaluate_verification(embeddings, label_ids, registerations,to_be_verified, thredhold=None):
     verification_sim = []
     true_v_a = []  # true accept
     true_v_r = []  # true reject
 
     for embedding_index, claim_id in to_be_verified:
         embeddings_target = registerations[claim_id]
-        embedding_unknown = embeddings_normed[embedding_index]
+        embedding_unknown = embeddings[embedding_index]
         sim = _get_max_sim(embedding_unknown, embeddings_target)
         verification_sim.append(sim)
         true_id = label_ids[embedding_index]
@@ -113,7 +108,17 @@ def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_
             true_v_a.append(embedding_index)
         else:
             true_v_r.append(embedding_index)
+    if thredhold:
+        fa, fr = _fa_fr_verfication(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
+        fa_rate = len(fa) / len(true_v_r)
+        fr_rate = len(fr) / len(true_v_a)
+        return fa_rate,fr_rate, thredhold
+    else:
+        # verification performance
+        eer, eer_thredhold = _eer(to_be_verified, verification_sim, true_v_a, true_v_r)
+        return eer, eer, eer_thredhold
 
+def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, member_groups):
     grouped_registerations = dict()
     identification_sim = []
 
@@ -127,17 +132,23 @@ def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_
                 target_registerations[id] = registerations[id]
             grouped_registerations[target_group_id] = target_registerations
 
-        sim, id = _get_max_sim_and_id(embedding_unknown, target_registerations)
+        sim, id = _get_max_sim_and_id(embeddings, target_registerations)
         identification_sim.append((sim, id))
 
-    # verification performance
-    eer, eer_thres = _eer(to_be_verified, verification_sim, true_v_a, true_v_r)
-
     # identification performance
-    correct_identified = _correct_identification(to_be_identified, identification_sim, label_ids)
+    correct_identified = _identification_correct(to_be_identified, identification_sim, label_ids)
     acc = len(correct_identified) / len(to_be_identified)
+    return acc
 
-    return (eer, eer_thres), acc
+def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_be_identified, member_groups):
+    embeddings_normed = _l2_norm(embeddings)
+    registerations = _get_registerations(embeddings_normed[:top_n_for_registeration],
+                                         label_ids[:top_n_for_registeration])
+
+    eer,_, eer_thredhold=_evaluate_verification(embeddings, label_ids, registerations,to_be_verified)
+    acc = _evaluate_identification(embeddings_normed, label_ids, registerations, to_be_identified, member_groups)
+
+    return (eer, eer_thredhold), acc
 
 
 def main(_):
