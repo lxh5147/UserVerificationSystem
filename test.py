@@ -13,5 +13,8 @@ def test_audio_too_short():
                                               feed_dict={wav_file: "./data/train/121624931534904112937-0.wav"})
         print("length:{} padded length:{}".format(all_samples_val, len(audio_val)))
 
+def test_dataset():
+    pass
 
 test_audio_too_short()
+test_dataset()
