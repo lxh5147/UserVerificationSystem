@@ -17,7 +17,8 @@ import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
 
-def read_audio(wav_file,desired_samples):
+
+def read_audio(wav_file, desired_samples):
     wav_loader = io_ops.read_file(wav_file)
     audio, sample_rate = contrib_audio.decode_wav(wav_loader,
                                                   desired_channels=1)
@@ -58,8 +59,7 @@ def dataset(wav_files,
         (wav_files, labels))
 
     def decode(wav_file, _):
-        audio,sample_rate,_= read_audio(wav_file,desired_samples)
-
+        audio, sample_rate, __ = read_audio(wav_file, desired_samples)
         spectrogram = contrib_audio.audio_spectrogram(
             audio,
             window_size=window_size_samples,
