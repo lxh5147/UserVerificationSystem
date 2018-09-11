@@ -63,12 +63,12 @@ if __name__ == '__main__':
         '--model_dir',
         type=str,
         default='./tmp_model',
-        help='model_dir')
+        help='Model directory where the model will be save.')
     parser.add_argument(
         '--data_dir',
         type=str,
         default='./data',
-        help='model_dir')
+        help='Data directory for training the model.')
     parser.add_argument(
         '--encoder',
         type=str,
@@ -78,22 +78,23 @@ if __name__ == '__main__':
         '--filters',
         type=str,
         default='64,128,256,512',
-        help='filters')
+        help='If use the cnn model ,the first number is the cnn layer\'s filter number'
+             'If use the resnet model,the numbers list is the different layer\'s filter number')
     parser.add_argument(
         '--blocks',
         type=int,
         default=3,
-        help='blocks')
+        help='The number of basic blocks in a neural network')
     parser.add_argument(
         '--kernel_size',
         type=int,
         default=3,
-        help='kernel_size')
+        help='An integer or tuple/list of a single integer')
     parser.add_argument(
         '--strides',
         type=int,
         default=2,
-        help='strides of conv')
+        help='The stride length of the convolution.')
     parser.add_argument(
         '--embedding_size',
         type=int,
@@ -123,17 +124,18 @@ if __name__ == '__main__':
         '--magnitude_squared',
         type=bool,
         default=True,
-        help='magnitude_squared')
+        help='Whether to return the squared magnitude or just the'
+             'magnitude. Using squared magnitude can avoid extra calculations.')
     parser.add_argument(
         '--dct_coefficient_count',
         type=int,
         default=40,
-        help='dct_coefficient_count')
+        help='How many output channels to produce per time slice.')
     parser.add_argument(
         '--batch_size',
         type=int,
         default=10,
-        help='batch_size')
+        help='An integer indicating the desired batch size')
     parser.add_argument(
         '--triplet_strategy',
         type=str,
@@ -143,22 +145,23 @@ if __name__ == '__main__':
         '--margin',
         type=float,
         default=0.2,
-        help='margin')
+        help='margin for triplet loss')
     parser.add_argument(
         '--squared',
         type=bool,
         default=True,
-        help='squared')
+        help='Boolean. If true, output is the pairwise squared euclidean distance matrix.'
+             'If false, output is the pairwise euclidean distance matrix.')
     parser.add_argument(
         '--num_steps',
         type=int,
         default=10000,
-        help='num_steps')
+        help='Number of steps to run')
     parser.add_argument(
         '--learning_rate',
         type=float,
         default=0.01,
-        help='learning_rate')
+        help='Initial learning rate')
     parser.add_argument(
         '--learning_rate_decay_rate',
         type=float,
