@@ -50,17 +50,34 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="-1740599036">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.4" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="3417" />
+          <entry key="txt" value="194" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="PLAIN_TEXT" value="194" />
+          <entry key="Python" value="3417" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="228">
-              <caret line="81" column="12" selection-start-line="81" selection-start-column="4" selection-end-line="81" selection-end-column="14" />
-              <folding>
-                <element signature="e#653#663#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="210">
+              <caret line="85" column="15" selection-start-line="85" selection-start-column="4" selection-end-line="85" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -68,8 +85,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1422">
-              <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+            <state relative-caret-position="210">
+              <caret line="39" column="42" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="42" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -80,11 +97,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3141">
-              <caret line="188" column="49" selection-start-line="188" selection-start-column="49" selection-end-line="188" selection-end-column="49" />
+            <state relative-caret-position="195">
+              <caret line="16" column="23" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="23" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1536553413735" expanded="true" signature="203:205" ph="..." />
               </folding>
             </state>
           </provider>
@@ -93,39 +109,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/evaluate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-108">
-              <caret line="63" column="42" lean-forward="true" selection-start-line="63" selection-start-column="42" selection-end-line="63" selection-end-column="42" />
+            <state relative-caret-position="180">
+              <caret line="296" column="55" lean-forward="true" selection-start-line="296" selection-start-column="55" selection-end-line="296" selection-end-column="55" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1536561735501" expanded="true" signature="3924:4137" ph="..." />
+                <marker date="1536649273068" expanded="true" signature="2368:2370" ph="..." />
+                <marker date="1536649273068" expanded="true" signature="4149:5131" ph="..." />
+                <marker date="1536649273068" expanded="true" signature="6175:6284" ph="..." />
+                <marker date="1536649273068" expanded="true" signature="6672:7742" ph="..." />
+                <marker date="1536649273068" expanded="true" signature="7431:7537" ph="..." />
+                <marker date="1536649273068" expanded="true" signature="7570:7742" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/builtins.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="2952" column="8" selection-start-line="2952" selection-start-column="8" selection-end-line="2952" selection-end-column="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/linalg/linalg.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-111">
-              <caret line="2102" column="4" selection-start-line="2102" selection-start-column="4" selection-end-line="2102" selection-end-column="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/core/numeric.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-57">
-              <caret line="1122" column="4" selection-start-line="1122" selection-start-column="4" selection-end-line="1122" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -133,7 +127,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
+            <state relative-caret-position="105">
               <caret line="7" selection-start-line="7" selection-end-line="7" selection-end-column="21" />
             </state>
           </provider>
@@ -142,17 +136,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
+            <state relative-caret-position="2415">
               <caret line="161" column="46" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/numpy/core/multiarray.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="5178" column="8" selection-start-line="5178" selection-start-column="8" selection-end-line="5178" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -198,19 +183,19 @@
         <option value="$PROJECT_DIR$/model/cross_entropy_loss.py" />
         <option value="$PROJECT_DIR$/model/encoder_resnet.py" />
         <option value="$PROJECT_DIR$/model/model_fn.py" />
-        <option value="$PROJECT_DIR$/model/voice_dataset.py" />
-        <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/model/test.py" />
         <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/model/voice_dataset.py" />
+        <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/evaluate.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="88" />
-    <option name="y" value="60" />
-    <option name="width" value="1400" />
-    <option name="height" value="878" />
+    <option name="x" value="32" />
+    <option name="y" value="18" />
+    <option name="width" value="608" />
+    <option name="height" value="462" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -232,6 +217,15 @@
               <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="UserVerificationSystem" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.6 (tf) &gt;" type="70bed36:NamedLibraryElementNode" />
             </path>
           </expand>
           <select />
@@ -264,7 +258,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test">
+  <component name="RunManager" selected="Python.train">
     <configuration name="deep_speaker_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="UserVerificationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -357,8 +351,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.test" />
         <item itemvalue="Python.train" />
+        <item itemvalue="Python.test" />
         <item itemvalue="Python.voice_dataset" />
         <item itemvalue="Python.deep_speaker_test" />
       </list>
@@ -627,14 +621,35 @@
       <option name="project" value="LOCAL" />
       <updated>1536561634834</updated>
     </task>
-    <task id="LOCAL-00037" summary="initial implementation of evaluation">
-      <created>1536561739040</created>
+    <task id="LOCAL-00037" summary="refactor evaluation common functions">
+      <created>1536637409518</created>
       <option name="number" value="00037" />
       <option name="presentableId" value="LOCAL-00037" />
       <option name="project" value="LOCAL" />
-      <updated>1536561739040</updated>
+      <updated>1536637409518</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="refactoring">
+      <created>1536637886996</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1536637886996</updated>
+    </task>
+    <task id="LOCAL-00039" summary="evaluation first implementation">
+      <created>1536648506774</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1536648506774</updated>
+    </task>
+    <task id="LOCAL-00040" summary="transform group member from id to its index">
+      <created>1536649062147</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1536649062147</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="TodoView">
@@ -647,14 +662,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="975" extended-state="6" />
+    <frame x="67" y="25" width="1293" height="636" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22950819" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22913386" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32955974" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.31005916" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32806325" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.32955974" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -693,7 +708,11 @@
     <MESSAGE value="small reformat" />
     <MESSAGE value="remove common functions away from train.py" />
     <MESSAGE value="initial implementation of evaluation" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial implementation of evaluation" />
+    <MESSAGE value="refactor evaluation common functions" />
+    <MESSAGE value="refactoring" />
+    <MESSAGE value="evaluation first implementation" />
+    <MESSAGE value="transform group member from id to its index" />
+    <option name="LAST_COMMIT_MESSAGE" value="transform group member from id to its index" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -712,115 +731,29 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/contrib/framework/python/ops/audio_ops.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/contrib/framework/python/ops/audio_ops.py" />
     <entry file="file://$PROJECT_DIR$/model/ainemo_speaker_dataset.py" />
     <entry file="file://$PROJECT_DIR$/train_2.py" />
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/iterator_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10314">
-          <caret line="590" column="6" selection-start-line="590" selection-start-column="6" selection-end-line="590" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="32364">
-          <caret line="1829" column="23" selection-start-line="1829" selection-start-column="23" selection-end-line="1829" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/readers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4176">
-          <caret line="243" column="6" selection-start-line="243" selection-start-column="6" selection-end-line="243" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/iterator_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/data/ops/readers.py" />
     <entry file="file://$PROJECT_DIR$/model/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/unit_test.py" />
     <entry file="file://$PROJECT_DIR$/model/model_test.py" />
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/summary/summary.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-435">
-          <caret line="192" column="4" selection-start-line="192" selection-start-column="4" selection-end-line="192" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/variable_scope.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2022">
-          <caret line="1435" column="4" selection-start-line="1435" selection-start-column="4" selection-end-line="1435" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/training/checkpointable/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="474" column="6" selection-start-line="474" selection-start-column="6" selection-end-line="474" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_array_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-931">
-          <caret line="8492" column="4" selection-start-line="8492" selection-start-column="4" selection-end-line="8492" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_audio_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="142" column="72" selection-start-line="142" selection-start-column="61" selection-end-line="142" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/framework/ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="1581" selection-start-line="1581" selection-end-line="1581" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/random_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-76">
-          <caret line="280" column="4" selection-start-line="280" selection-start-column="4" selection-end-line="280" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/array_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="1816" column="14" selection-start-line="1816" selection-start-column="8" selection-end-line="1816" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/summary/summary.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/variable_scope.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/training/checkpointable/base.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_array_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_audio_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/framework/ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/random_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/array_ops.py" />
     <entry file="file://$PROJECT_DIR$/model/model_softmax_fn.py" />
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/losses/util.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/keras/layers/convolutional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="534">
-          <caret line="356" column="35" selection-start-line="356" selection-start-column="27" selection-end-line="356" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/keras/engine/base_layer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="606">
-          <caret line="519" column="25" selection-start-line="519" selection-start-column="18" selection-end-line="519" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/losses/util.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/keras/layers/convolutional.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/keras/engine/base_layer.py" />
     <entry file="file:///usr/lib/python3.6/doctest.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -828,86 +761,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/keras/regularizers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="60" column="43" selection-start-line="60" selection-start-column="33" selection-end-line="60" selection-end-column="43" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/variables.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="1522" column="4" selection-start-line="1522" selection-start-column="4" selection-end-line="1522" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/functional_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="264" column="4" selection-start-line="264" selection-start-column="4" selection-end-line="264" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/core.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1908">
-          <caret line="118" column="17" selection-start-line="118" selection-start-column="4" selection-end-line="118" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/losses/losses_impl.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15246">
-          <caret line="863" column="19" selection-start-line="863" selection-start-column="4" selection-end-line="863" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4788">
-          <caret line="280" column="34" selection-start-line="280" selection-start-column="17" selection-end-line="280" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/pooling.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2196">
-          <caret line="128" column="4" selection-start-line="128" selection-start-column="4" selection-end-line="128" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/convolutional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2016">
-          <caret line="126" column="19" selection-start-line="126" selection-start-column="18" selection-end-line="126" selection-end-column="19" />
-          <folding>
-            <element signature="e#818#856#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_math_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="86004">
-          <caret line="4795" column="4" selection-start-line="4795" selection-start-column="4" selection-end-line="4795" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/nn_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43074">
-          <caret line="2419" column="22" selection-start-line="2419" selection-start-column="11" selection-end-line="2419" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/math_ops.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5274">
-          <caret line="322" column="4" selection-start-line="322" selection-start-column="4" selection-end-line="322" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/keras/regularizers.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/variables.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/functional_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/core.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/losses/losses_impl.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/base.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/pooling.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/layers/convolutional.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_math_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/nn_ops.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/math_ops.py" />
     <entry file="file://$PROJECT_DIR$/model/cross_entropy_loss.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="126">
@@ -915,20 +779,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/training/adam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="39" column="34" selection-start-line="39" selection-start-column="21" selection-end-line="39" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/training/learning_rate_decay.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="177">
-          <caret line="33" column="33" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/training/adam.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/training/learning_rate_decay.py" />
     <entry file="file://$PROJECT_DIR$/data/train_labels">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1495" />
@@ -945,109 +797,74 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="4" column="4" selection-start-line="4" selection-start-column="4" selection-end-line="4" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/estimator/estimator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1104">
-          <caret line="479" column="6" selection-start-line="479" selection-start-column="6" selection-end-line="479" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/estimator/estimator.py" />
     <entry file="file://$PROJECT_DIR$/model/model_fn.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-250">
           <caret line="13" column="20" lean-forward="true" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="26" />
-          <folding>
-            <element signature="e#25#48#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1422">
-          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3141">
-          <caret line="188" column="49" selection-start-line="188" selection-start-column="49" selection-end-line="188" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1536553413735" expanded="true" signature="203:205" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/numpy/core/multiarray.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="5178" column="8" selection-start-line="5178" selection-start-column="8" selection-end-line="5178" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/core/numeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-57">
-          <caret line="1122" column="4" selection-start-line="1122" selection-start-column="4" selection-end-line="1122" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/numpy/core/multiarray.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/core/numeric.py" />
+    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/linalg/linalg.py" />
+    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/builtins.py" />
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
+        <state relative-caret-position="105">
           <caret line="7" selection-start-line="7" selection-end-line="7" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/numpy/linalg/linalg.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-111">
-          <caret line="2102" column="4" selection-start-line="2102" selection-start-column="4" selection-end-line="2102" selection-end-column="4" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
+        <state relative-caret-position="2415">
           <caret line="161" column="46" selection-start-line="161" selection-start-column="28" selection-end-line="161" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="39" column="42" selection-start-line="39" selection-start-column="16" selection-end-line="39" selection-end-column="42" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="81" column="12" selection-start-line="81" selection-start-column="4" selection-end-line="81" selection-end-column="14" />
-          <folding>
-            <element signature="e#653#663#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="210">
+          <caret line="85" column="15" selection-start-line="85" selection-start-column="4" selection-end-line="85" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/builtins.py">
+    <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="2952" column="8" selection-start-line="2952" selection-start-column="8" selection-end-line="2952" selection-end-column="8" />
+        <state relative-caret-position="195">
+          <caret line="16" column="23" selection-start-line="16" selection-start-column="12" selection-end-line="16" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/evaluate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-108">
-          <caret line="63" column="42" lean-forward="true" selection-start-line="63" selection-start-column="42" selection-end-line="63" selection-end-column="42" />
+        <state relative-caret-position="180">
+          <caret line="296" column="55" lean-forward="true" selection-start-line="296" selection-start-column="55" selection-end-line="296" selection-end-column="55" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-            <marker date="1536561735501" expanded="true" signature="3924:4137" ph="..." />
+            <marker date="1536649273068" expanded="true" signature="2368:2370" ph="..." />
+            <marker date="1536649273068" expanded="true" signature="4149:5131" ph="..." />
+            <marker date="1536649273068" expanded="true" signature="6175:6284" ph="..." />
+            <marker date="1536649273068" expanded="true" signature="6672:7742" ph="..." />
+            <marker date="1536649273068" expanded="true" signature="7431:7537" ph="..." />
+            <marker date="1536649273068" expanded="true" signature="7570:7742" ph="..." />
           </folding>
         </state>
       </provider>

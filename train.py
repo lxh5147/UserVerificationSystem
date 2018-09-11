@@ -14,9 +14,9 @@ def main(_):
 
     # Define the input function for training
     wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    labels, label_ids = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+    labels, label_to_id = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
 
-    train_num_classes = len(label_ids)
+    train_num_classes = len(label_to_id)
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
         model_dir=FLAGS.model_dir,
