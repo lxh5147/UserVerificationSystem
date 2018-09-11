@@ -50,7 +50,7 @@ def _get_max_sim_and_id(embedding_unknown, embeddings_registered):
     return sim_max, id_max
 
 
-def _fa_fr_verfication(to_be_verified, sims, true_a, true_r, threshold=0.7):
+def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
     # return the indexes false rejected and false accepted
     fa = []  # false accept
     fr = []  # false reject
@@ -81,7 +81,7 @@ def _eer(to_be_verified, verification_sim, true_v_a, true_v_r):
     fr_rates = []
     gap = []
     for threshold in [0.01 * i - 1.0 for i in range(200)]:
-        fa, fr = _fa_fr_verfication(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
+        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
         fa_rate = len(fa) / len(true_v_r)
         fr_rate = len(fr) / len(true_v_a)
         fa_rates.append(fa_rate)
@@ -90,10 +90,10 @@ def _eer(to_be_verified, verification_sim, true_v_a, true_v_r):
 
     min_pos = gap.index(min(gap))
     eer = (fa_rates[min_pos] + fr_rates[min_pos]) / 2
-    eer_thres = 0.01 * min_pos - 1.0
-    return eer, eer_thres
+    eer_threshold = 0.01 * min_pos - 1.0
+    return eer, eer_threshold
 
-def _evaluate_verification(embeddings, label_ids, registerations,to_be_verified, thredhold=None):
+def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
     verification_sim = []
     true_v_a = []  # true accept
     true_v_r = []  # true reject
@@ -108,11 +108,11 @@ def _evaluate_verification(embeddings, label_ids, registerations,to_be_verified,
             true_v_a.append(embedding_index)
         else:
             true_v_r.append(embedding_index)
-    if thredhold:
-        fa, fr = _fa_fr_verfication(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
+    if threshold:
+        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
         fa_rate = len(fa) / len(true_v_r)
         fr_rate = len(fr) / len(true_v_a)
-        return fa_rate,fr_rate, thredhold
+        return fa_rate, fr_rate, threshold
     else:
         # verification performance
         eer, eer_thredhold = _eer(to_be_verified, verification_sim, true_v_a, true_v_r)
@@ -145,10 +145,10 @@ def evaluate(embeddings, label_ids, top_n_for_registeration, to_be_verified, to_
     registerations = _get_registerations(embeddings_normed[:top_n_for_registeration],
                                          label_ids[:top_n_for_registeration])
 
-    eer,_, eer_thredhold=_evaluate_verification(embeddings, label_ids, registerations,to_be_verified)
+    eer,_, eer_threshold=_evaluate_verification(embeddings, label_ids, registerations,to_be_verified)
     acc = _evaluate_identification(embeddings_normed, label_ids, registerations, to_be_identified, member_groups)
 
-    return (eer, eer_thredhold), acc
+    return (eer, eer_threshold), acc
 
 
 def main(_):
