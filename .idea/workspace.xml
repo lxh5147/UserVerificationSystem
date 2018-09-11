@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="02dafdf2-0986-46af-a6a9-0c441b352f7f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/train_labels" beforeDir="false" afterPath="$PROJECT_DIR$/data/train_labels" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/voice_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/voice_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -31,26 +29,28 @@
         <counts>
           <entry key="py" value="109" />
           <entry key="train_labels" value="2" />
+          <entry key="xml" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
           <entry key="Python" value="109" />
+          <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="31" />
-          <entry key="py" value="11938" />
+          <entry key="py" value="12056" />
           <entry key="train_labels" value="1" />
-          <entry key="txt" value="760" />
+          <entry key="txt" value="813" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="792" />
-          <entry key="Python" value="11938" />
+          <entry key="PLAIN_TEXT" value="845" />
+          <entry key="Python" value="12056" />
         </counts>
       </usages-collector>
     </session>
@@ -80,11 +80,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-856">
-              <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
+            <state relative-caret-position="188">
+              <caret line="83" column="30" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="30" />
               <folding>
                 <element signature="e#653#663#0" expanded="true" />
-                <marker date="1536656946234" expanded="true" signature="849:1667" ph="..." />
+                <marker date="1536659074329" expanded="true" signature="1667:2421" ph="..." />
+                <marker date="1536659074329" expanded="true" signature="1939:2421" ph="..." />
               </folding>
             </state>
           </provider>
@@ -105,8 +106,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-579">
-              <caret line="18" selection-start-line="18" selection-end-line="18" />
+            <state relative-caret-position="141">
+              <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
                 <marker date="1536564451563" expanded="true" signature="203:205" ph="..." />
@@ -132,15 +133,6 @@
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/builtins.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="2952" column="8" selection-start-line="2952" selection-start-column="8" selection-end-line="2952" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -229,9 +221,9 @@
         <option value="$PROJECT_DIR$/model/test.py" />
         <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/evaluate.py" />
-        <option value="$PROJECT_DIR$/model/voice_dataset.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/data/train_labels" />
+        <option value="$PROJECT_DIR$/model/voice_dataset.py" />
       </list>
     </option>
   </component>
@@ -719,7 +711,21 @@
       <option name="project" value="LOCAL" />
       <updated>1536655102159</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="read_audio helper function">
+      <created>1536657567467</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1536657567467</updated>
+    </task>
+    <task id="LOCAL-00045" summary="fixed '_' issued">
+      <created>1536658717245</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1536658717245</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TodoView">
@@ -734,13 +740,13 @@
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="975" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22896175" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22896175" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32806325" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3289941" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3289941" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32955974" />
@@ -754,12 +760,20 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
+  </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="some code to process audio data" />
-    <MESSAGE value="voice dataset" />
     <MESSAGE value="clean dataset" />
     <MESSAGE value="added train" />
     <MESSAGE value="train function" />
@@ -783,17 +797,12 @@
     <MESSAGE value="transform group member from id to its index" />
     <MESSAGE value="added one native test case for audio file reading" />
     <MESSAGE value="use placeholder for wav file" />
-    <option name="LAST_COMMIT_MESSAGE" value="use placeholder for wav file" />
+    <MESSAGE value="read_audio helper function" />
+    <MESSAGE value="fixed '_' issued" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed '_' issued" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train.py</url>
-          <line>18</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -950,17 +959,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-579">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1536564451563" expanded="true" signature="203:205" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
@@ -972,13 +970,25 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="141">
+          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <marker date="1536564451563" expanded="true" signature="203:205" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-856">
-          <caret line="60" column="26" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
+        <state relative-caret-position="188">
+          <caret line="83" column="30" selection-start-line="83" selection-start-column="25" selection-end-line="83" selection-end-column="30" />
           <folding>
             <element signature="e#653#663#0" expanded="true" />
-            <marker date="1536656946234" expanded="true" signature="849:1667" ph="..." />
+            <marker date="1536659074329" expanded="true" signature="1667:2421" ph="..." />
+            <marker date="1536659074329" expanded="true" signature="1939:2421" ph="..." />
           </folding>
         </state>
       </provider>

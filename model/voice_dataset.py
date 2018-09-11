@@ -36,6 +36,29 @@ def read_audio(wav_file, desired_samples):
     return audio, sample_rate, all_samples
 
 
+def extract_audio_feature(audio,
+                          sample_rate,
+                          window_size_samples,
+                          window_stride_samples,
+                          magnitude_squared=True,
+                          dct_coefficient_count=40):
+    spectrogram = contrib_audio.audio_spectrogram(
+        audio,
+        window_size=window_size_samples,
+        stride=window_stride_samples,
+        magnitude_squared=magnitude_squared)
+
+    feat = contrib_audio.mfcc(
+        spectrogram,
+        sample_rate,
+        dct_coefficient_count=dct_coefficient_count)
+
+    # TODO: use delta features?
+    # from 1, time_steps, dct_coefficient_count to time steps, dct_coefficient_count
+    feat = tf.squeeze(feat)
+    return feat
+
+
 def dataset(wav_files,
             labels,
             desired_samples,
@@ -58,23 +81,15 @@ def dataset(wav_files,
     raw_dataset = tf.data.Dataset.from_tensor_slices(
         (wav_files, labels))
 
-    def decode(wav_file, _):
-        audio, sample_rate, __ = read_audio(wav_file, desired_samples)
-        spectrogram = contrib_audio.audio_spectrogram(
-            audio,
-            window_size=window_size_samples,
-            stride=window_stride_samples,
-            magnitude_squared=magnitude_squared)
-
-        feat = contrib_audio.mfcc(
-            spectrogram,
-            sample_rate,
-            dct_coefficient_count=dct_coefficient_count)
-
-        # TODO: use delta features?
-        # from 1, time_steps, dct_coefficient_count to time steps, dct_coefficient_count
-        feat = tf.squeeze(feat)
-        return (feat, _)
+    def decode(wav_file, label):
+        audio, sample_rate, _ = read_audio(wav_file, desired_samples)
+        feat = extract_audio_feature(audio,
+                                     sample_rate,
+                                     window_size_samples=window_size_samples,
+                                     window_stride_samples=window_stride_samples,
+                                     magnitude_squared=magnitude_squared,
+                                     dct_coefficient_count=dct_coefficient_count)
+        return (feat, label)
 
     return raw_dataset.map(decode)
 
