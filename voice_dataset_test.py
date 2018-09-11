@@ -17,7 +17,7 @@ def test_get_dataset_first():
                             window_stride_samples,
                             )
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
-    return features, label
+    return features, labels
 def main():
     with tf.Session() as sess:
         for i in range(10):

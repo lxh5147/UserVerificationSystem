@@ -83,17 +83,17 @@ def get_labels(labels_file):
     with open(labels_file) as f:
         lines = f.read().splitlines()
     # map a line to an ID
-    ids = {}
+    label_to_id = {}
     label_ids = []
     for line in lines:
-        if line in ids:
-            cur_id = ids[line]
+        if line in label_to_id:
+            cur_id = label_to_id[line]
             label_ids.append(cur_id)
         else:
-            cur_id = len(ids)
-            ids[line] = cur_id
+            cur_id = len(label_to_id)
+            label_to_id[line] = cur_id
             label_ids.append(cur_id)
-    return label_ids, ids
+    return label_ids, label_to_id
 
 
 def get_wav_files(directory):
@@ -126,6 +126,8 @@ def input_fn(wav_files,
     # Shuffle, repeat, and batch the examples.
     if is_training:
         voice_dataset = voice_dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
+    else:
+        voice_dataset = voice_dataset.batch(batch_size)
 
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
     return features, labels

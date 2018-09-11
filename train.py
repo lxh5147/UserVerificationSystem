@@ -13,10 +13,10 @@ def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # Define the input function for training
-    train_wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    train_labels, train_label_ids = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+    wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
+    labels, label_to_id = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
 
-    train_num_classes = len(train_label_ids)
+    train_num_classes = len(label_to_id)
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
         model_dir=FLAGS.model_dir,
@@ -43,8 +43,8 @@ def main(_):
     window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
     window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
     train_input_fn = lambda: input_fn(
-        wav_files=train_wav_files,
-        labels=train_labels,
+        wav_files=wav_files,
+        labels=labels,
         desired_samples=desired_samples,
         window_size_samples=window_size_samples,
         window_stride_samples=window_stride_samples,
@@ -53,7 +53,6 @@ def main(_):
         batch_size=FLAGS.batch_size
     )
 
-    # model Model
     model.train(train_input_fn,
                 steps=FLAGS.num_steps)
 
@@ -70,6 +69,11 @@ if __name__ == '__main__':
         type=str,
         default='./data',
         help='model_dir')
+    parser.add_argument(
+        '--encoder',
+        type=str,
+        default='cnn',
+        help='Encoder that encodes a wav to a vector. Use cnn or resnet')
     parser.add_argument(
         '--filters',
         type=str,
@@ -180,11 +184,6 @@ if __name__ == '__main__':
         type=float,
         default=1.,
         help='Weight of cross entropy loss.')
-    parser.add_argument(
-        '--encoder',
-        type=str,
-        default='cnn',
-        help='Encoder that encodes a wav to a vector. Use cnn or resnet')
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
