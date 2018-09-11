@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="02dafdf2-0986-46af-a6a9-0c441b352f7f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/voice_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/voice_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/voice_dataset_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/voice_dataset_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluate.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluate.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +27,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="114" />
+          <entry key="py" value="115" />
           <entry key="train_labels" value="2" />
           <entry key="xml" value="1" />
         </counts>
@@ -37,22 +35,22 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="114" />
+          <entry key="Python" value="115" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="31" />
-          <entry key="py" value="14244" />
+          <entry key="py" value="14252" />
           <entry key="train_labels" value="1" />
-          <entry key="txt" value="1081" />
+          <entry key="txt" value="1167" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="1113" />
-          <entry key="Python" value="14244" />
+          <entry key="PLAIN_TEXT" value="1199" />
+          <entry key="Python" value="14252" />
         </counts>
       </usages-collector>
     </session>
@@ -82,7 +80,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
+            <state relative-caret-position="416">
               <caret line="166" column="67" selection-start-line="166" selection-start-column="67" selection-end-line="166" selection-end-column="67" />
               <folding>
                 <element signature="e#653#662#0" expanded="true" />
@@ -93,14 +91,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+            <state relative-caret-position="132">
+              <caret line="55" column="90" selection-start-line="55" selection-start-column="90" selection-end-line="55" selection-end-column="90" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
-                <marker date="1536674205212" expanded="true" signature="211:797" ph="..." />
+                <marker date="1536674238664" expanded="true" signature="211:797" ph="..." />
               </folding>
             </state>
           </provider>
@@ -116,32 +114,35 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/train.py">
+        <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+            <state relative-caret-position="337">
+              <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1536564451563" expanded="true" signature="203:205" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/data/train_labels">
+        <entry file="file://$PROJECT_DIR$/train.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="429">
-              <caret line="104" column="21" selection-start-line="104" selection-start-column="21" selection-end-line="104" selection-end-column="21" />
+            <state relative-caret-position="141">
+              <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
+              <folding>
+                <element signature="e#0#23#0" expanded="true" />
+                <marker date="1536674320854" expanded="true" signature="203:205" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/evaluate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="241" column="59" selection-start-line="241" selection-start-column="59" selection-end-line="241" selection-end-column="59" />
+            <state relative-caret-position="306">
+              <caret line="174" column="35" lean-forward="true" selection-start-line="174" selection-start-column="35" selection-end-line="174" selection-end-column="35" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
               </folding>
@@ -152,12 +153,10 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="53" lean-forward="true" selection-start-line="51" selection-start-column="4" selection-end-line="53" />
+            <state relative-caret-position="702">
+              <caret line="39" selection-start-line="39" selection-end-line="39" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
-                <marker date="1536674129527" expanded="true" signature="2021:2199" ph="..." />
-                <marker date="1536674129527" expanded="true" signature="2219:3071" ph="..." />
               </folding>
             </state>
           </provider>
@@ -234,11 +233,11 @@
         <option value="$PROJECT_DIR$/model/model_fn.py" />
         <option value="$PROJECT_DIR$/model/test.py" />
         <option value="$PROJECT_DIR$/train.py" />
-        <option value="$PROJECT_DIR$/evaluate.py" />
         <option value="$PROJECT_DIR$/data/train_labels" />
-        <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/model/voice_dataset.py" />
         <option value="$PROJECT_DIR$/model/voice_dataset_test.py" />
+        <option value="$PROJECT_DIR$/test.py" />
+        <option value="$PROJECT_DIR$/evaluate.py" />
       </list>
     </option>
   </component>
@@ -263,11 +262,6 @@
             <path>
               <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="UserVerificationSystem" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
-              <item name="UserVerificationSystem" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
@@ -436,20 +430,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1534922220196</updated>
-    </task>
-    <task id="LOCAL-00009" summary="initial runnable version">
-      <created>1536235660593</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1536235660593</updated>
-    </task>
-    <task id="LOCAL-00010" summary="fixed attention bug">
-      <created>1536244894962</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1536244894962</updated>
     </task>
     <task id="LOCAL-00011" summary="use random clip">
       <created>1536301255265</created>
@@ -780,13 +760,24 @@
       <option name="project" value="LOCAL" />
       <updated>1536673466255</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="one utility function to remove _PMX chunks with a test case">
+      <created>1536674296620</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1536674296620</updated>
+    </task>
+    <task id="LOCAL-00059" summary="one utility function to remove _PMX chunks with a test case">
+      <created>1536674326084</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1536674326084</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 19h 42m 39s.xml">
-      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 19h 43m 11s.xml">
       <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
     </history-entry>
@@ -814,6 +805,9 @@
     <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 21h 55m 42s.xml">
       <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.11 at 21h 56m 57s.xml">
+      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -826,14 +820,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="925" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22896175" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32806325" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.49308175" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.49308175" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -862,7 +855,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="use random clip" />
     <MESSAGE value="use separated python files for shared functions" />
     <MESSAGE value="added l2 regularization" />
     <MESSAGE value="added summary of loss" />
@@ -887,7 +879,8 @@
     <MESSAGE value="added one simple test case to read a dataset" />
     <MESSAGE value="added one simple test to read a dataset" />
     <MESSAGE value="one case to show how to convert the audio file edited by adobe" />
-    <option name="LAST_COMMIT_MESSAGE" value="one case to show how to convert the audio file edited by adobe" />
+    <MESSAGE value="one utility function to remove _PMX chunks with a test case" />
+    <option name="LAST_COMMIT_MESSAGE" value="one utility function to remove _PMX chunks with a test case" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1006,16 +999,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1422">
-          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/array_ops.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="116">
@@ -1044,27 +1027,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <marker date="1536564451563" expanded="true" signature="203:205" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/evaluate.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="241" column="59" selection-start-line="241" selection-start-column="59" selection-end-line="241" selection-end-column="59" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/estimator/training.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
@@ -1086,21 +1048,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="55" column="90" selection-start-line="55" selection-start-column="90" selection-end-line="55" selection-end-column="90" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1536674238664" expanded="true" signature="211:797" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="53" lean-forward="true" selection-start-line="51" selection-start-column="4" selection-end-line="53" />
+        <state relative-caret-position="702">
+          <caret line="39" selection-start-line="39" selection-end-line="39" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
-            <marker date="1536674129527" expanded="true" signature="2021:2199" ph="..." />
-            <marker date="1536674129527" expanded="true" signature="2219:3071" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
+        <state relative-caret-position="416">
           <caret line="166" column="67" selection-start-line="166" selection-start-column="67" selection-end-line="166" selection-end-column="67" />
           <folding>
             <element signature="e#653#662#0" expanded="true" />
@@ -1110,13 +1091,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
+    <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="56" column="8" selection-start-line="56" selection-start-column="8" selection-end-line="56" selection-end-column="8" />
+        <state relative-caret-position="141">
+          <caret line="55" column="13" selection-start-line="55" selection-start-column="13" selection-end-line="55" selection-end-column="13" />
           <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <marker date="1536674205212" expanded="true" signature="211:797" ph="..." />
+            <element signature="e#0#23#0" expanded="true" />
+            <marker date="1536674320854" expanded="true" signature="203:205" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/evaluate.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="174" column="35" lean-forward="true" selection-start-line="174" selection-start-column="35" selection-end-line="174" selection-end-column="35" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>

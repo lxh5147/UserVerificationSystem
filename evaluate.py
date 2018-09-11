@@ -296,9 +296,9 @@ def main(_):
                                                 to_be_identified,
                                                 groups,
                                                 FLAGS.threshold)
-    eval_msg_template = 'verfication false accept rate:{}' + \
-                        '            false reject rate:{}' + \
-                        '            threshold:{}' + \
+    eval_msg_template = 'verfication false accept rate:{}\n' + \
+                        '            false reject rate:{}\n' + \
+                        '            threshold:{}\n' + \
                         'identification accuracy:{}'
 
     tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold, acc))
