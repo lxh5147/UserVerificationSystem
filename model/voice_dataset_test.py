@@ -1,7 +1,7 @@
 import unittest
 import tensorflow as tf
 from model.voice_dataset import read_audio, input_fn
-
+from collections import  OrderedDict
 
 class VoiceDatasetTestCase(unittest.TestCase):
     def test_read_audio(self):
@@ -26,9 +26,10 @@ class VoiceDatasetTestCase(unittest.TestCase):
         desired_samples = 1600
         window_size_samples = 400
         window_stride_samples = 100
+        batch_size = 2
         features, label_ids = input_fn(wav_files,
                                        labels,
-                                       batch_size=1,
+                                       batch_size=batch_size,
                                        desired_samples=desired_samples,
                                        window_size_samples=window_size_samples,
                                        window_stride_samples=window_stride_samples,
@@ -41,12 +42,10 @@ class VoiceDatasetTestCase(unittest.TestCase):
         with tf.Session() as sess:
             for i in range(repeated_times):
                 label_ids_val = sess.run( label_ids)
-                for label_id in label_ids_val:
-                    if label_id not in labels_readout:
-                        labels_readout.append(label_id)
+                labels_readout.extend(label_ids_val)
 
-        self.assertEqual(len(labels_readout),len(labels),'label length')
-
+        self.assertEqual(len(labels_readout),repeated_times*batch_size,'total number of labels')
+        self.assertEqual(list(dict.fromkeys(labels_readout)).sort(),list(dict.fromkeys(labels)).sort(),'the same unique labels')
 
 if __name__ == '__main__':
     unittest.main()
