@@ -1,11 +1,10 @@
 import unittest
 import tensorflow as tf
-from model.voice_dataset import read_audio, input_fn
-from collections import  OrderedDict
+from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX
+
 
 class VoiceDatasetTestCase(unittest.TestCase):
-    def test_read_audio(self):
-        wav_file_val = '../data/train/121624931534904112937-0.wav'
+    def _test_read_audio(self, wav_file_val):
         desired_samples = 100000
         wav_file = tf.placeholder(dtype=tf.string)
         audio, sample_rate, all_samples = read_audio(wav_file,
@@ -16,6 +15,10 @@ class VoiceDatasetTestCase(unittest.TestCase):
 
         self.assertTrue(all_samples_val < desired_samples, 'less than desired samples')
         self.assertEqual(len(audio_val), desired_samples, 'padded audio length')
+
+    def test_read_audio(self):
+        wav_file_val = '../data/train/121624931534904112937-0.wav'
+        self._test_read_audio(wav_file_val)
 
     def test_input_fn(self):
         wav_files = ['../data/train/121624931534904112937-0.wav',
@@ -41,11 +44,19 @@ class VoiceDatasetTestCase(unittest.TestCase):
         repeated_times = 10
         with tf.Session() as sess:
             for i in range(repeated_times):
-                label_ids_val = sess.run( label_ids)
+                label_ids_val = sess.run(label_ids)
                 labels_readout.extend(label_ids_val)
 
-        self.assertEqual(len(labels_readout),repeated_times*batch_size,'total number of labels')
-        self.assertEqual(list(dict.fromkeys(labels_readout)).sort(),list(dict.fromkeys(labels)).sort(),'the same unique labels')
+        self.assertEqual(len(labels_readout), repeated_times * batch_size, 'total number of labels')
+        self.assertEqual(list(dict.fromkeys(labels_readout)).sort(), list(dict.fromkeys(labels)).sort(),
+                         'the same unique labels')
+
+    def test_convert_audio_with_PMX(self):
+        wav_file = '../data/test/1252695_voice_reco_1527810946756.wav'
+        wav_file_processed = '../data/test/1252695_voice_reco_1527810946756_processed.wav'
+        convert_audio_with_PMX(wav_file, wav_file_processed)
+        self._test_read_audio(wav_file_processed)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -16,6 +16,8 @@ import os
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
+from scipy.io.wavfile import read, write
+from librosa import load
 
 
 def read_audio(wav_file, desired_samples, desired_channels=1):
@@ -160,3 +162,17 @@ def input_fn(wav_files,
 
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
     return features, labels
+
+
+def convert_audio_with_PMX(input_wav, output_wav, sample_rate=16000):
+    '''
+    remove the chunks added by Adobe
+    :param input_wav: input wav file that contains _PMX chunks
+    :param sample_rate: sample rate of the wav
+    :param output_wav: a wav with the _PMX chunks removed
+    :return: None
+    '''
+    data, sample_rate = load(input_wav, sr=sample_rate)
+    # convert the data to int16
+    data = data.astype(dtype='int16')
+    write(output_wav, sample_rate, data)

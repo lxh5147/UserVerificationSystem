@@ -233,6 +233,7 @@ def _get_file_id_to_index(files):
         file_id_to_index[file_id] = i
     return file_id_to_index
 
+
 def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
@@ -247,8 +248,8 @@ def main(_):
     wav_file_id_to_index = _get_file_id_to_index(wav_files)
     # TODO validate configurations
     # transform the configurations: wav file id --> index, label_id --> label_index
-    groups_transformed=dict()
-    for group_id  in groups:
+    groups_transformed = dict()
+    for group_id in groups:
         group = [label_to_id[i] for i in groups[group_id]]
         groups_transformed[group_id] = group
     groups = groups_transformed
@@ -256,7 +257,6 @@ def main(_):
     enrollments = [wav_file_id_to_index[i] for i in enrollments]
     to_be_verified = [(wav_file_id_to_index[i], label_to_id[j]) for i, j in to_be_verified]
     to_be_identified = [(wav_file_id_to_index[i], group_id) for i, group_id in to_be_identified]
-
 
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
