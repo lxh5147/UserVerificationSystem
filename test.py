@@ -1,8 +1,5 @@
 import tensorflow as tf
 import numpy as np
-from model.voice_dataset import read_audio
-
-
 
 def test_dataset():
     dataset = tf.data.Dataset.from_tensor_slices(np.array([1.0, 2.0, 3.0, 4.0, 5.0]))
