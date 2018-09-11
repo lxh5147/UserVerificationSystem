@@ -7,7 +7,8 @@ from tensorflow.python.ops import io_ops
 
 def test_audio_too_short():
     desired_samples=100000
-    wav_file = "./data/train/121624931534904112937-0.wav"
+    wav_file = tf.placeholder(dtype = tf.string)
+
     wav_loader = io_ops.read_file(wav_file)
     audio, sample_rate = contrib_audio.decode_wav(wav_loader,
                                                   desired_channels=1)
@@ -25,7 +26,7 @@ def test_audio_too_short():
 
 
     with tf.Session() as sess:
-        all_samples_val, audio_val = sess.run([all_samples, audio])
+        all_samples_val, audio_val = sess.run([all_samples, audio],feed_dict={wav_file:"./data/train/121624931534904112937-0.wav"})
         print("length:{} padded length:{}".format(all_samples_val,len(audio_val)))
 
 test_audio_too_short()
