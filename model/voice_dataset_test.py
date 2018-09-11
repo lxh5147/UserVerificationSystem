@@ -36,12 +36,11 @@ class VoiceDatasetTestCase(unittest.TestCase):
                                        dct_coefficient_count=40,
                                        is_training=True,
                                        buffer_size=1000)
-
         labels_readout = []
         repeated_times = 10
         with tf.Session() as sess:
             for i in range(repeated_times):
-                features_val, label_ids_val = sess.run([features, label_ids])
+                label_ids_val = sess.run( label_ids)
                 for label_id in label_ids_val:
                     if label_id not in labels_readout:
                         labels_readout.append(label_id)
