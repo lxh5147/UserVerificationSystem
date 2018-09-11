@@ -1,32 +1,17 @@
-import numpy as np
 import tensorflow as tf
-import os
 
-from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
-from tensorflow.python.ops import io_ops
+from model.voice_dataset import read_audio
+
 
 def test_audio_too_short():
-    desired_samples=100000
-    wav_file = tf.placeholder(dtype = tf.string)
-
-    wav_loader = io_ops.read_file(wav_file)
-    audio, sample_rate = contrib_audio.decode_wav(wav_loader,
-                                                  desired_channels=1)
-
-    # choose a random clip with desired_samples from the audio
-    all_samples = tf.shape(audio)[0]
-    audio = tf.cond(tf.less(all_samples, desired_samples),
-                    true_fn=lambda: tf.pad(tensor=audio,
-                                           paddings=[[0, desired_samples - all_samples], [0, 0]],
-                                           constant_values=-1),
-                    false_fn=lambda: tf.random_crop(value=audio, size=[desired_samples, 1])
-                    )
-    # update the static shape information of an audio tensor
-    audio.set_shape([desired_samples, 1])
-
-
+    desired_samples = 100000
+    wav_file = tf.placeholder(dtype=tf.string)
+    audio, sample_rate, all_samples = read_audio(wav_file,
+                                                 desired_samples)
     with tf.Session() as sess:
-        all_samples_val, audio_val = sess.run([all_samples, audio],feed_dict={wav_file:"./data/train/121624931534904112937-0.wav"})
-        print("length:{} padded length:{}".format(all_samples_val,len(audio_val)))
+        all_samples_val, audio_val = sess.run([all_samples, audio],
+                                              feed_dict={wav_file: "./data/train/121624931534904112937-0.wav"})
+        print("length:{} padded length:{}".format(all_samples_val, len(audio_val)))
+
 
 test_audio_too_short()
