@@ -1,5 +1,5 @@
 import tensorflow as tf
-from model.voice_dataset import input_fn, get_wav_files, get_labels, from_ms_to_samples
+from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 from model.model_fn import create_model
 import argparse
 import sys
@@ -13,8 +13,8 @@ def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # Define the input function for training
-    wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'train'))
-    labels, label_to_id = get_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+    wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+    wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
     filters = map(lambda _: int(_), FLAGS.filters.split(','))

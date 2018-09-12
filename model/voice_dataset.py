@@ -110,23 +110,6 @@ def from_ms_to_samples(sample_rate, duration_ms):
     return int(sample_rate * duration_ms / 1000)
 
 
-def get_labels(labels_file):
-    with open(labels_file) as f:
-        lines = f.read().splitlines()
-    # map a line to an ID
-    label_to_id = {}
-    label_ids = []
-    for line in lines:
-        if line in label_to_id:
-            cur_id = label_to_id[line]
-            label_ids.append(cur_id)
-        else:
-            cur_id = len(label_to_id)
-            label_to_id[line] = cur_id
-            label_ids.append(cur_id)
-    return label_ids, label_to_id
-
-
 def get_file_and_labels(file_and_labels_file):
     with open(file_and_labels_file) as f:
         lines = f.read().splitlines()
@@ -146,14 +129,6 @@ def get_file_and_labels(file_and_labels_file):
             label_ids.append(cur_id)
 
     return files, label_ids, label_to_id
-
-
-def get_wav_files(directory):
-    files = []
-    for r, d, f in os.walk(directory):
-        for file in f:
-            files.append(os.path.join(r, file))
-    return files
 
 
 def input_fn(wav_files,
