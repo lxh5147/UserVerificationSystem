@@ -171,7 +171,6 @@ def _get_enrollments(enrollment_config):
         enrollments = f.read().splitlines()
     return enrollments
 
-
 def _get_groups(group_config_file):
     with open(group_config_file) as f:
         lines = f.read().splitlines()
@@ -242,7 +241,7 @@ def main(_):
     wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'eval'))
     labels, label_to_id = get_labels(os.path.join(FLAGS.data_dir, 'eval_labels'))
     groups = _get_groups(os.path.join(FLAGS.data_dir, 'groups_config'))
-    enrollments = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'enrollment_config'))
+    enrollments = _get_enrollments(os.path.join(FLAGS.data_dir, 'enrollment_config'))
     to_be_verified = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'verification_config'))
     to_be_identified = _get_to_be_identified(os.path.join(FLAGS.data_dir, 'identification_config'))
     wav_file_id_to_index = _get_file_id_to_index(wav_files)
@@ -289,16 +288,16 @@ def main(_):
     for embeddings in model.predict(eval_input_fn):
         all_embeddings.extend(embeddings)
 
-    fa_rate, fr_rate, threshold, acc = evaluate(np.asanyarray(embeddings),
+    fa_rate, fr_rate, threshold, acc = evaluate(np.asanyarray(all_embeddings),
                                                 label_to_id,
                                                 enrollments,
                                                 to_be_verified,
                                                 to_be_identified,
                                                 groups,
                                                 FLAGS.threshold)
-    eval_msg_template = 'verfication false accept rate:{}' + \
-                        '            false reject rate:{}' + \
-                        '            threshold:{}' + \
+    eval_msg_template = 'verfication false accept rate:{}\n' + \
+                        '            false reject rate:{}\n' + \
+                        '            threshold:{}\n' + \
                         'identification accuracy:{}'
 
     tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold, acc))
