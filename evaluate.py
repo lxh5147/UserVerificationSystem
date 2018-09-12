@@ -42,8 +42,8 @@ def _get_max_sim_and_id(embedding_unknown, embeddings_registered):
     # find the max similarity between the unknown embeddings and all the registered embeddings
     sim_max = -1.
     id_max = -1
-    for id, embeddings_target in embeddings_registered:
-        sim = _get_max_sim(embedding_unknown, embeddings_registered)
+    for id in embeddings_registered:
+        sim = _get_max_sim(embedding_unknown, embeddings_registered[id])
         if sim > sim_max:
             sim_max = sim
             id_max = id
@@ -125,7 +125,7 @@ def _evaluate_identification(embeddings, label_ids, registerations, to_be_identi
     identification_sim = []
 
     for embedding_index, target_group_id in to_be_identified:
-        if target_group_id >= 0:
+        if target_group_id: # not empty
             if target_group_id in grouped_registerations:
                 target_registerations = grouped_registerations[target_group_id]
             else:
@@ -136,7 +136,7 @@ def _evaluate_identification(embeddings, label_ids, registerations, to_be_identi
                 grouped_registerations[target_group_id] = target_registerations
         else:
             target_registerations = registerations
-        sim, id = _get_max_sim_and_id(embeddings, target_registerations)
+        sim, id = _get_max_sim_and_id(embeddings[embedding_index], target_registerations)
         identification_sim.append((sim, id))
 
     # identification performance
@@ -170,6 +170,7 @@ def _get_enrollments(enrollment_config):
     with open(enrollment_config) as f:
         enrollments = f.read().splitlines()
     return enrollments
+
 
 def _get_groups(group_config_file):
     with open(group_config_file) as f:
@@ -210,7 +211,7 @@ def _get_to_be_identified(identification_config_file):
         parts = line.split(',')
         wav_file = parts[0]
         if len(parts) == 1:
-            group_id = -1
+            group_id = ''
         else:
             group_id = parts[1]
 
@@ -237,8 +238,8 @@ def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # Define the input function for training
-    wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'eval_labels'))
-    wav_files =[os.path.join(FLAGS.data_dir, 'eval',wav_file) for wav_file in wav_files]
+    wav_files, label_ids, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'eval_labels'))
+    wav_files = [os.path.join(FLAGS.data_dir, 'eval', wav_file) for wav_file in wav_files]
 
     groups = _get_groups(os.path.join(FLAGS.data_dir, 'groups_config'))
     enrollments = _get_enrollments(os.path.join(FLAGS.data_dir, 'enrollment_config'))
@@ -274,7 +275,7 @@ def main(_):
     window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
     eval_input_fn = lambda: input_fn(
         wav_files=wav_files,
-        labels=labels,
+        labels=label_ids,
         desired_samples=desired_samples,
         window_size_samples=window_size_samples,
         window_stride_samples=window_stride_samples,
@@ -289,7 +290,7 @@ def main(_):
         all_embeddings.extend(prediction['embeddings'])
 
     fa_rate, fr_rate, threshold, acc = evaluate(np.asanyarray(all_embeddings),
-                                                label_to_id,
+                                                label_ids,
                                                 enrollments,
                                                 to_be_verified,
                                                 to_be_identified,
