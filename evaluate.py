@@ -1,5 +1,5 @@
 import tensorflow as tf
-from model.voice_dataset import input_fn, get_wav_files, get_labels, from_ms_to_samples
+from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 from model.model_fn import create_model
 import argparse
 import sys
@@ -209,7 +209,7 @@ def _get_to_be_identified(identification_config_file):
     for line in lines:
         parts = line.split(',')
         wav_file = parts[0]
-        if len(parts) > 1:
+        if len(parts) == 1:
             group_id = -1
         else:
             group_id = parts[1]
@@ -220,8 +220,7 @@ def _get_to_be_identified(identification_config_file):
 
 
 def _get_file_id(file):
-    file_name = os.path.basename(file)
-    file_id, _ = os.path.splitext(file_name)
+    file_id = os.path.basename(file)
     return file_id
 
 
@@ -238,8 +237,9 @@ def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # Define the input function for training
-    wav_files = get_wav_files(os.path.join(FLAGS.data_dir, 'eval'))
-    labels, label_to_id = get_labels(os.path.join(FLAGS.data_dir, 'eval_labels'))
+    wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'eval_labels'))
+    wav_files =[os.path.join(FLAGS.data_dir, 'eval',wav_file) for wav_file in wav_files]
+
     groups = _get_groups(os.path.join(FLAGS.data_dir, 'groups_config'))
     enrollments = _get_enrollments(os.path.join(FLAGS.data_dir, 'enrollment_config'))
     to_be_verified = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'verification_config'))
@@ -285,8 +285,8 @@ def main(_):
     )
 
     all_embeddings = []
-    for embeddings in model.predict(eval_input_fn):
-        all_embeddings.extend(embeddings)
+    for prediction in model.predict(eval_input_fn, yield_single_examples=False):
+        all_embeddings.extend(prediction['embeddings'])
 
     fa_rate, fr_rate, threshold, acc = evaluate(np.asanyarray(all_embeddings),
                                                 label_to_id,

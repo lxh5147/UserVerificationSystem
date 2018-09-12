@@ -127,6 +127,27 @@ def get_labels(labels_file):
     return label_ids, label_to_id
 
 
+def get_file_and_labels(file_and_labels_file):
+    with open(file_and_labels_file) as f:
+        lines = f.read().splitlines()
+
+    label_to_id = {}
+    label_ids = []
+    files = []
+    for line in lines:
+        file, label = line.split(',')
+        files.append(file)
+        if label in label_to_id:
+            cur_id = label_to_id[label]
+            label_ids.append(cur_id)
+        else:
+            cur_id = len(label_to_id)
+            label_to_id[label] = cur_id
+            label_ids.append(cur_id)
+
+    return files, label_ids, label_to_id
+
+
 def get_wav_files(directory):
     files = []
     for r, d, f in os.walk(directory):
