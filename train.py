@@ -68,7 +68,7 @@ if __name__ == '__main__':
         '--data_dir',
         type=str,
         default='./data',
-        help='model_dir')
+        help='data dir')
     parser.add_argument(
         '--encoder',
         type=str,

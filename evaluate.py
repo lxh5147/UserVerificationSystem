@@ -4,7 +4,7 @@ from model.model_fn import create_model
 import argparse
 import sys
 import os
-from predict import l2_norm, get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings
+from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings
 
 FLAGS = None
 
@@ -304,7 +304,7 @@ if __name__ == '__main__':
         '--data_dir',
         type=str,
         default='./data',
-        help='model_dir')
+        help='data dir')
     parser.add_argument(
         '--encoder',
         type=str,
