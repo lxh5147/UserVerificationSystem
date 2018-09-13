@@ -65,39 +65,30 @@ def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
     return fa, fr
 
 
-def _identification_correct(to_be_identified, sims, label_ids):
-    correct = []
-    for i, j in enumerate(sims):
-        embedding_index = to_be_identified[i][0]
-        true_id = label_ids[embedding_index]
-        sim, id = j
-        if true_id == id:
-            correct.append(embedding_index)
-    return correct
-
-
-def _eer(to_be_verified, verification_sim, true_v_a, true_v_r):
-    fa_rates = []
-    fr_rates = []
-    gap = []
-    for threshold in [0.01 * i - 1.0 for i in range(200)]:
-        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
-        fa_rate = len(fa) / len(true_v_r)
-        fr_rate = len(fr) / len(true_v_a)
-        fa_rates.append(fa_rate)
-        fr_rates.append(fr_rate)
-        gap.append(abs(fa_rate - fr_rate))
-
+def _eer(fa_rates, fr_rates):
+    gap = [abs(fa_rate - fr_rate) for fa_rate, fr_rate in zip(fa_rates, fr_rates)]
     min_pos = gap.index(min(gap))
     eer = (fa_rates[min_pos] + fr_rates[min_pos]) / 2
     eer_threshold = 0.01 * min_pos - 1.0
     return eer, eer_threshold
 
 
+def _verification_eer(to_be_verified, verification_sim, true_a, true_r):
+    fa_rates = []
+    fr_rates = []
+    for threshold in [0.01 * i - 1.0 for i in range(200)]:
+        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
+        fa_rate = len(fa) / len(true_r)
+        fr_rate = len(fr) / len(true_a)
+        fa_rates.append(fa_rate)
+        fr_rates.append(fr_rate)
+    return _eer(fa_rates, fr_rates)
+
+
 def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
     verification_sim = []
-    true_v_a = []  # true accept
-    true_v_r = []  # true reject
+    true_a = []  # true accept
+    true_r = []  # true reject
 
     for embedding_index, claim_id in to_be_verified:
         embeddings_target = registerations[claim_id]
@@ -106,53 +97,98 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
         verification_sim.append(sim)
         true_id = label_ids[embedding_index]
         if true_id == claim_id:
-            true_v_a.append(embedding_index)
+            true_a.append(embedding_index)
         else:
-            true_v_r.append(embedding_index)
+            true_r.append(embedding_index)
     if threshold:
-        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_v_a, true_v_r, threshold)
-        fa_rate = len(fa) / len(true_v_r)
-        fr_rate = len(fr) / len(true_v_a)
+        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
+        if true_r:
+            fa_rate = len(fa) / len(true_r)
+        else:
+            fa_rate = 0
+        if true_a:
+            fr_rate = len(fr) / len(true_a)
+        else:
+            fr_rate = 0
         return fa_rate, fr_rate, threshold
     else:
         # verification performance
-        eer, eer_thredhold = _eer(to_be_verified, verification_sim, true_v_a, true_v_r)
+        eer, eer_thredhold = _verification_eer(to_be_verified, verification_sim, true_a, true_r)
         return eer, eer, eer_thredhold
 
 
-def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, groups):
+def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
+    # return the indexes false rejected and false accepted
+    fa = []  # false accept
+    fr = []  # false reject
+    for i, j in enumerate(sims):
+        embedding_index = to_be_identified[i][0]
+        true_id = label_ids[embedding_index]
+        sim, id = j
+        if true_id == id:
+            if sim < threshold:
+                fr.append(embedding_index)
+        else:
+            if sim >= threshold:
+                fa.append(embedding_index)
+
+    return fa, fr
+
+
+def _identification_eer(to_be_identified, sims, label_ids, true_a, true_r):
+    fa_rates = []
+    fr_rates = []
+    for threshold in [0.01 * i - 1.0 for i in range(200)]:
+        fa, fr = _verfication_fa_fr(to_be_identified, sims, label_ids, threshold)
+        fa_rate = len(fa) / len(true_r)
+        fr_rate = len(fr) / len(true_a)
+        fa_rates.append(fa_rate)
+        fr_rates.append(fr_rate)
+    return _eer(fa_rates, fr_rates)
+
+
+def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, groups, threshold=None):
     grouped_registerations = dict()
-    identification_sim = []
+    sims = []
+
+    true_a = []  # true accept
+    true_r = []  # true reject
 
     for embedding_index, target_group_id in to_be_identified:
-        if target_group_id: # not empty
+        if target_group_id:  # not empty
             if target_group_id in grouped_registerations:
-                target_registerations = grouped_registerations[target_group_id]
+                group_registerations = grouped_registerations[target_group_id]
             else:
-                target_registerations = dict()
+                group_registerations = dict()
                 group = groups[target_group_id]
                 for id in group:
-                    target_registerations[id] = registerations[id]
-                grouped_registerations[target_group_id] = target_registerations
+                    group_registerations[id] = registerations[id]
+                grouped_registerations[target_group_id] = group_registerations
         else:
-            target_registerations = registerations
-        sim, id = _get_max_sim_and_id(embeddings[embedding_index], target_registerations)
-        identification_sim.append((sim, id))
+            group_registerations = registerations
+        sim, id = _get_max_sim_and_id(embeddings[embedding_index], group_registerations)
+        sims.append((sim, id))
 
-    # identification performance
-    correct_identified = _identification_correct(to_be_identified, identification_sim, label_ids)
-    acc = len(correct_identified) / len(to_be_identified)
-    return acc
+        true_id = label_ids[embedding_index]
+        if true_id in group_registerations:
+            true_a.append(embedding_index)
+        else:
+            true_r.append(embedding_index)
 
-
-def evaluate(embeddings, label_ids, enrollments, to_be_verified, to_be_identified, groups, threshold=None):
-    embeddings_normed = _l2_norm(embeddings)
-    registerations = _get_registerations([embeddings_normed[i] for i in enrollments],
-                                         [label_ids[i] for i in enrollments])
-    fa_rate, fr_rate, threshold = _evaluate_verification(embeddings, label_ids, registerations, to_be_verified,
-                                                         threshold)
-    acc = _evaluate_identification(embeddings_normed, label_ids, registerations, to_be_identified, groups)
-    return fa_rate, fr_rate, threshold, acc
+    if threshold:
+        fa, fr = _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7)
+        if true_r:
+            fa_rate = len(fa) / len(true_r)
+        else:
+            fa_rate = 0
+        if true_a:
+            fr_rate = len(fr) / len(true_a)
+        else:
+            fr_rate = 0
+        return fa_rate, fr_rate, threshold
+    else:
+        eer, eer_thredhold = _identification_eer(to_be_identified, sims, label_ids, true_a, true_r)
+        return eer, eer, eer_thredhold
 
 
 '''
@@ -285,23 +321,27 @@ def main(_):
         is_training=False
     )
 
-    all_embeddings = []
+    embeddings = []
     for prediction in model.predict(eval_input_fn, yield_single_examples=False):
-        all_embeddings.extend(prediction['embeddings'])
+        embeddings.extend(prediction['embeddings'])
 
-    fa_rate, fr_rate, threshold, acc = evaluate(np.asanyarray(all_embeddings),
-                                                label_ids,
-                                                enrollments,
-                                                to_be_verified,
-                                                to_be_identified,
-                                                groups,
-                                                FLAGS.threshold)
-    eval_msg_template = 'verfication false accept rate:{}\n' + \
-                        '            false reject rate:{}\n' + \
-                        '            threshold:{}\n' + \
-                        'identification accuracy:{}'
+    embeddings_normed = _l2_norm(embeddings)
+    registerations = _get_registerations([embeddings_normed[i] for i in enrollments],
+                                         [label_ids[i] for i in enrollments])
+    fa_rate, fr_rate, threshold = _evaluate_verification(embeddings, label_ids, registerations, to_be_verified,
+                                                         FLAGS.threshold)
 
-    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold, acc))
+    eval_msg_template = 'false accept rate:{}\n' + \
+                        'false reject rate:{}\n' + \
+                        'threshold:{}'
+
+    tf.logging.info('verification performance')
+    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold))
+
+    fa_rate, fr_rate, threshold = _evaluate_identification(embeddings_normed, label_ids, registerations,
+                                                           to_be_identified, groups, threshold)
+    tf.logging.info('identification performance')
+    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold))
 
 
 if __name__ == '__main__':
