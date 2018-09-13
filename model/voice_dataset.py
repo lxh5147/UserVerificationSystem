@@ -12,15 +12,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """tf.data.Dataset interface to the Voice dataset."""
-import os
 import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
-from scipy.io.wavfile import read, write
+from scipy.io.wavfile import write
 from librosa import load
 
 
-def read_audio(wav_file, desired_samples, desired_channels=1):
+def read_audio(wav_file, desired_samples=-1, desired_channels=1):
     '''
     :param wav_file: a string tensor that represents the target wav file
     :param desired_samples: how many samples to read from the wav file
@@ -34,17 +33,19 @@ def read_audio(wav_file, desired_samples, desired_channels=1):
     wav_loader = io_ops.read_file(wav_file)
     audio, sample_rate = contrib_audio.decode_wav(wav_loader,
                                                   desired_channels=desired_channels)
-
-    # choose a random clip with desired_samples from the audio
     num_samples = tf.shape(audio)[0]
-    audio = tf.cond(tf.less(num_samples, desired_samples),
-                    true_fn=lambda: tf.pad(tensor=audio,
-                                           paddings=[[0, desired_samples - num_samples], [0, 0]],
-                                           constant_values=-1),
-                    false_fn=lambda: tf.random_crop(value=audio, size=[desired_samples, 1])
-                    )
-    # update the static shape information of an audio tensor
-    audio.set_shape([desired_samples, 1])
+
+    if desired_samples >= 0:  # otherwise we read all the samples
+        # choose a random clip with desired_samples from the audio
+        audio = tf.cond(tf.less(num_samples, desired_samples),
+                        true_fn=lambda: tf.pad(tensor=audio,
+                                               paddings=[[0, desired_samples - num_samples], [0, 0]],
+                                               constant_values=-1),
+                        false_fn=lambda: tf.random_crop(value=audio, size=[desired_samples, 1])
+                        )
+        # update the static shape information of an audio tensor
+        audio.set_shape([desired_samples, 1])
+
     return audio, sample_rate, num_samples
 
 
