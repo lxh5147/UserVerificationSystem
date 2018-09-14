@@ -12,16 +12,16 @@ import numpy as np
 import tensorflow as tf
 
 from model.model_fn import create_model
-from predict import get_embeddings, get_enrollments
+from predict import get_embeddings, get_enrollments, get_max_sim_and_id
 
 FLAGS = None
 
 
-def _write_pcm16_wav(output_file, audio, sample_rate=16000):
+def _write_pcm16_wav(output_file, audio):
     with wave.open(output_file, 'wb') as writer:
         writer.setnchannels(1)
         writer.setsampwidth(2)
-        writer.setframerate(sample_rate)
+        writer.setframerate(FLAGS.sample_rate)
         writer.writeframes(audio)
 
 
@@ -88,14 +88,8 @@ def _update_enrollment_config(device_id, user_id, wav_files):
 def _enroll_user(model,
                  device_id,
                  user_id,
-                 streams,
-                 desired_ms,
-                 window_size_ms,
-                 window_stride_ms,
-                 sample_rate,
-                 magnitude_squared,
-                 dct_coefficient_count,
-                 batch_size):
+                 streams
+                ):
     _ensure_user_root_path(device_id, user_id)
     wav_files_exist = _get_enrollment_wav_files(device_id, user_id)
     wav_files = []
@@ -105,13 +99,13 @@ def _enroll_user(model,
     # compute and save embeddings
     embeddings = get_embeddings(model,
                                 wav_files,
-                                desired_ms,
-                                window_size_ms,
-                                window_stride_ms,
-                                sample_rate,
-                                magnitude_squared,
-                                dct_coefficient_count,
-                                batch_size)
+                                FLAGS.desired_ms,
+                                FLAGS.window_size_ms,
+                                FLAGS.window_stride_ms,
+                                FLAGS.sample_rate,
+                                FLAGS.magnitude_squared,
+                                FLAGS.dct_coefficient_count,
+                                FLAGS.batch_size)
     for i, wav_file in enumerate(wav_files):
         embedding_file = wav_file + '.npy'
         np.save(embedding_file, embeddings[i])
@@ -135,6 +129,27 @@ def _load_registerations(device_id):
 
     return registerations
 
+def _verify(embedding_unknown, grouped_registerations, device_id, claimed_user_id):
+    if device_id not in grouped_registerations:
+        registerations = _load_registerations(device_id)
+        grouped_registerations[device_id]=registerations
+    else:
+        registerations = grouped_registerations[device_id]
+    if claimed_user_id not in registerations:
+        return False, -1, \
+               'claimed user with user id {} in device {} is not registered'.format(claimed_user_id, device_id)
+
+
+    sim_max, id_max = get_max_sim_and_id(embedding_unknown,registerations)
+    if id_max == claimed_user_id:
+        if sim_max >= FLAGS.threshold:
+            return True, sim_max, ''
+        else:
+            return False, sim_max, \
+                   'claimed user with user id {} in device {} is rejected since its similarity {} is less than the threshold {}'.format(claimed_user_id, device_id, sim_max, FLAGS.threshold)
+    else:
+        return False, sim_max,\
+               'claimed user with user id {} in device {} is rejected since it is confused with the user {} with a similarity {}'.format(claimed_user_id, device_id, id_max, sim_max)
 
 
 def main(_):
