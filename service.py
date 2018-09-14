@@ -50,7 +50,7 @@ def _parse_environ(environ):
     device_id = request_body.get('device_id', '')
     user_id = request_body.get('user_id', '')
     func_id = request_body.get('func_id', '')
-    streams_encoded = request_body.get('streams', None)
+    streams_encoded = request_body.get('streams', [])
     streams = []
     for stream in streams_encoded:
         streams.append(base64.b64decode(stream))

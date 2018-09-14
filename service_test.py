@@ -71,8 +71,10 @@ class ServiceTestCase(unittest.TestCase):
         }
         content = json.dumps(request_body)
         import io
-        input = io.StringIO()
-        input.write(content)
+
+        input = io.BytesIO()
+        input.write(content.encode())
+        input.seek(0)
         environ = {
             'wsgi.input': input,
             'CONTENT_LENGTH': len(content)
