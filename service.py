@@ -38,8 +38,12 @@ def _parse_environ(environ):
     return device_id, speaker_id, function_id, streams
 
 
+def _get_device_root_path(device_id):
+    return os.path.join(FLAGS.data_dir, '__device_' + device_id)
+
+
 def _get_user_root_path(device_id, user_id):
-    return os.path.join(FLAGS.data_dir, device_id, '__user_' + user_id)
+    return os.path.join(_get_device_root_path(device_id), '__user_' + user_id)
 
 
 def _get_user_ids(device_id):
@@ -63,10 +67,9 @@ def _delete_user(device_id, user_id):
         rmtree(user_root_path)
 
 
-def _save_pcm_stream(device_id, user_id, stream):
-    user_root_path = _get_user_root_path(device_id, user_id)
+def _save_pcm_stream(path, stream):
     uniq_filename = uuid.uuid4().hex[:6].upper()
-    output_file = os.path.join(user_root_path, uniq_filename + '.wav')
+    output_file = os.path.join(path, uniq_filename + '.wav')
     _write_pcm16_wav(output_file, stream, sample_rate=16000)
     return output_file
 
@@ -95,8 +98,9 @@ def _enroll_user(model,
     _ensure_user_root_path(device_id, user_id)
     wav_files_exist = _get_enrollment_wav_files(device_id, user_id)
     wav_files = []
+    user_root_path = _get_user_root_path(device_id, user_id)
     for stream in streams:
-        output_file = _save_pcm_stream(device_id, user_id, stream)
+        output_file = _save_pcm_stream(user_root_path, stream)
         wav_files.append(output_file)
     # compute and save embeddings
     embeddings = get_embeddings(model,
@@ -175,6 +179,19 @@ FUNC_VERIFY = '3'
 FUNC_IDENTIFY = '4'
 
 
+def _get_embedding(model, wav_file):
+    embeddings = get_embeddings(model,
+                                [wav_file],
+                                FLAGS.desired_ms,
+                                FLAGS.window_size_ms,
+                                FLAGS.window_stride_ms,
+                                FLAGS.sample_rate,
+                                FLAGS.magnitude_squared,
+                                FLAGS.dct_coefficient_count,
+                                batch_size=1)
+    return embeddings[0]
+
+
 def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
@@ -214,9 +231,17 @@ def main(_):
                 grouped_registerations[device_id] = _load_registerations(device_id)
         # verify
         if function_id == FUNC_VERIFY:
+            assert (len(streams) == 1)
+            device_root_path = _get_device_root_path(device_id)
+            output_file = _save_pcm_stream(os.path.join(device_root_path, '__verification__'), streams[0])
+            embedding_unknown = _get_embedding(model, output_file)
             status, sim = _verify(embedding_unknown, grouped_registerations, device_id, user_id)
         # identification
         if function_id == FUNC_IDENTIFY:
+            assert (len(streams) == 1)
+            device_root_path = _get_device_root_path(device_id)
+            output_file = _save_pcm_stream(os.path.join(device_root_path, '__identification__'), streams[0])
+            embedding_unknown = _get_embedding(model, output_file)
             status, target_user_id, sim = _identification(embedding_unknown, grouped_registerations, device_id)
 
     httpd = make_server(host=FLAGS.host,
