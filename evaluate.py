@@ -8,8 +8,6 @@ from model.model_fn import create_model
 from model.voice_dataset import get_file_and_labels
 from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
 
-FLAGS = None
-
 
 def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
     # return the indexes false rejected and false accepted

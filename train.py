@@ -7,9 +7,6 @@ import tensorflow as tf
 from model.model_fn import create_model
 from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 
-FLAGS = None
-
-
 def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
