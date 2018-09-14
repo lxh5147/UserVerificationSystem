@@ -41,12 +41,14 @@ def _parse_environ(environ):
 def _get_user_root_path(device_id, user_id):
     return os.path.join(FLAGS.data_dir, device_id, '__user_' + user_id)
 
+
 def _get_user_ids(device_id):
-    user_ids =[]
+    user_ids = []
     for name in os.listdir(os.path.join(FLAGS.data_dir, device_id)):
         if name.startswith('__user_'):
             user_ids.append(name[len('__user_'):])
     return user_ids
+
 
 def _ensure_user_root_path(device_id, user_id):
     user_root_path = _get_user_root_path(device_id, user_id)
@@ -89,7 +91,7 @@ def _enroll_user(model,
                  device_id,
                  user_id,
                  streams
-                ):
+                 ):
     _ensure_user_root_path(device_id, user_id)
     wav_files_exist = _get_enrollment_wav_files(device_id, user_id)
     wav_files = []
@@ -115,7 +117,7 @@ def _enroll_user(model,
 
 
 def _load_registerations(device_id):
-    user_ids =_get_user_ids(device_id)
+    user_ids = _get_user_ids(device_id)
     registerations = dict()
     for user_id in user_ids:
         wav_files = _get_enrollment_wav_files(device_id, user_id)
@@ -125,31 +127,52 @@ def _load_registerations(device_id):
             embedding = np.load(embedding_file)
             np.save(embedding_file, embeddings[i])
             embeddings.append(embedding)
-        registerations[user_id]=embeddings
+        registerations[user_id] = embeddings
 
     return registerations
+
+
+ACCEPT = 0
+REJECT_BELOW_THRESHOLD = -1
+REJECT_CONFUSED = -2
+REJECT_NOT_EXIST = -3
+
 
 def _verify(embedding_unknown, grouped_registerations, device_id, claimed_user_id):
     if device_id not in grouped_registerations:
         registerations = _load_registerations(device_id)
-        grouped_registerations[device_id]=registerations
+        grouped_registerations[device_id] = registerations
     else:
         registerations = grouped_registerations[device_id]
     if claimed_user_id not in registerations:
-        return False, -1, \
-               'claimed user with user id {} in device {} is not registered'.format(claimed_user_id, device_id)
-
-
-    sim_max, id_max = get_max_sim_and_id(embedding_unknown,registerations)
+        return REJECT_NOT_EXIST, -1
+    sim_max, id_max = get_max_sim_and_id(embedding_unknown, registerations)
     if id_max == claimed_user_id:
         if sim_max >= FLAGS.threshold:
-            return True, sim_max, ''
+            return ACCEPT, sim_max
         else:
-            return False, sim_max, \
-                   'claimed user with user id {} in device {} is rejected since its similarity {} is less than the threshold {}'.format(claimed_user_id, device_id, sim_max, FLAGS.threshold)
+            return REJECT_CONFUSED, sim_max
     else:
-        return False, sim_max,\
-               'claimed user with user id {} in device {} is rejected since it is confused with the user {} with a similarity {}'.format(claimed_user_id, device_id, id_max, sim_max)
+        return REJECT_CONFUSED, sim_max
+
+
+def _identification(embedding_unknown, grouped_registerations, device_id):
+    if device_id not in grouped_registerations:
+        registerations = _load_registerations(device_id)
+        grouped_registerations[device_id] = registerations
+    else:
+        registerations = grouped_registerations[device_id]
+    sim_max, id_max = get_max_sim_and_id(embedding_unknown, registerations)
+    if sim_max >= FLAGS.threshold:
+        return ACCEPT, id_max, sim_max
+    else:
+        return REJECT_BELOW_THRESHOLD, id_max, sim_max
+
+
+FUNC_DELETE = '1'
+FUNC_ENROLL = '2'
+FUNC_VERIFY = '3'
+FUNC_IDENTIFY = '4'
 
 
 def main(_):
@@ -168,18 +191,38 @@ def main(_):
             'encoder': FLAGS.encoder
         })
 
+    grouped_registerations = dict()
+
     def application(environ, start_response):
         method = environ['REQUEST_METHOD']
         path = environ['PATH_INFO']
         start_response('200 OK', [('Content-Type', 'application/json')])
-        device_id, speaker_id, function_id, streams = _parse_environ(environ)
-        pass
+        device_id, user_id, function_id, streams = _parse_environ(environ)
+        # enroll
+        if method == 'POST' and function_id == FUNC_ENROLL:
+            _enroll_user(device_id,
+                         user_id,
+                         streams
+                         )
+            # refresh the registerations
+            if device_id in grouped_registerations:
+                grouped_registerations[device_id] = _load_registerations(device_id)
+        # delete
+        if function_id == FUNC_DELETE:
+            _delete_user(device_id, user_id)
+            if device_id in grouped_registerations:
+                grouped_registerations[device_id] = _load_registerations(device_id)
+        # verify
+        if function_id == FUNC_VERIFY:
+            status, sim = _verify(embedding_unknown, grouped_registerations, device_id, user_id)
+        # identification
+        if function_id == FUNC_IDENTIFY:
+            status, target_user_id, sim = _identification(embedding_unknown, grouped_registerations, device_id)
 
     httpd = make_server(host=FLAGS.host,
                         port=FLAGS.port,
                         app=application
                         )
-
     tf.logging.info("serving http on port {0}...".format(FLAGS.port))
     httpd.serve_forever()
 
