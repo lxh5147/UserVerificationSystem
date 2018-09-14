@@ -5,7 +5,6 @@ import os
 import sys
 import uuid
 import wave
-from shutil import rmtree
 from wsgiref.simple_server import make_server
 
 import numpy as np
@@ -14,8 +13,11 @@ import tensorflow as tf
 from model.model_fn import create_model
 from predict import get_embeddings, get_enrollments, get_max_sim_and_id
 from shutil import move, rmtree
+import datetime
 
 FLAGS = None
+model = None
+grouped_registerations = None
 
 
 def _write_pcm16_wav(output_file, audio):
@@ -212,7 +214,6 @@ def main(_):
             'embedding_size': FLAGS.embedding_size,
             'encoder': FLAGS.encoder
         })
-
     grouped_registerations = dict()
 
     def application(environ, start_response):
@@ -220,8 +221,16 @@ def main(_):
         path = environ['PATH_INFO']
         start_response('200 OK', [('Content-Type', 'application/json')])
         device_id, user_id, function_id, streams = _parse_environ(environ)
+        result = dict()
+
+        tf.logging.info(
+            "Request with method:{}, path:{}, device_id:{}, user_id:{}, function_id:{}, num_streams:{}".format( \
+                method, path, device_id, user_id, function_id, len(streams) if streams else 'None'))
+
+        start = datetime.datetime.now()
+
         # enroll
-        if method == 'POST' and function_id == FUNC_ENROLL:
+        if function_id == FUNC_ENROLL:
             _enroll_user(device_id,
                          user_id,
                          streams
@@ -229,25 +238,39 @@ def main(_):
             # refresh the registerations
             if device_id in grouped_registerations:
                 grouped_registerations[device_id] = _load_registerations(device_id)
+
         # delete
         if function_id == FUNC_DELETE:
             _delete_user(device_id, user_id)
             if device_id in grouped_registerations:
                 grouped_registerations[device_id] = _load_registerations(device_id)
+
         # verify
         if function_id == FUNC_VERIFY:
             assert (len(streams) == 1)
             device_root_path = _get_device_root_path(device_id)
             output_file = _save_pcm_stream(os.path.join(device_root_path, '__verification__'), streams[0])
             embedding_unknown = _get_embedding(model, output_file)
-            status, sim = _verify(embedding_unknown, grouped_registerations, device_id, user_id)
+            status_code, sim = _verify(embedding_unknown, grouped_registerations, device_id, user_id)
+            result['status_code'] = status_code
+            result['sim_score'] = sim
+
         # identification
         if function_id == FUNC_IDENTIFY:
             assert (len(streams) == 1)
             device_root_path = _get_device_root_path(device_id)
             output_file = _save_pcm_stream(os.path.join(device_root_path, '__identification__'), streams[0])
             embedding_unknown = _get_embedding(model, output_file)
-            status, target_user_id, sim = _identification(embedding_unknown, grouped_registerations, device_id)
+            status_code, target_user_id, sim = _identification(embedding_unknown, grouped_registerations, device_id)
+            result['status_code'] = status_code
+            result['user_id'] = target_user_id
+            result['sim_score'] = sim
+
+        end = datetime.datetime.now()
+        elapsed = end - start
+        tf.logging.info("Response with result:{}, elapsed:{}".format(result, elapsed))
+
+        return [json.dumps(result)]
 
     httpd = make_server(host=FLAGS.host,
                         port=FLAGS.port,
