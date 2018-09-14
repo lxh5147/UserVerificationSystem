@@ -39,8 +39,14 @@ def _parse_environ(environ):
 
 
 def _get_user_root_path(device_id, user_id):
-    return os.path.join(FLAGS.data_dir, device_id, user_id)
+    return os.path.join(FLAGS.data_dir, device_id, '__user_' + user_id)
 
+def _get_user_ids(device_id):
+    user_ids =[]
+    for name in os.listdir(os.path.join(FLAGS.data_dir, device_id)):
+        if name.startswith('__user_'):
+            user_ids.append(name[len('__user_'):])
+    return user_ids
 
 def _ensure_user_root_path(device_id, user_id):
     user_root_path = _get_user_root_path(device_id, user_id)
@@ -114,15 +120,21 @@ def _enroll_user(model,
     _update_enrollment_config(device_id, user_id, wav_files)
 
 
-def _load_embeddings(device_id, user_id):
-    wav_files = _get_enrollment_wav_files(device_id, user_id)
-    embeddings = []
-    for i, wav_file in enumerate(wav_files):
-        embedding_file = wav_file + '.npy'
-        embedding = np.load(embedding_file)
-        np.save(embedding_file, embeddings[i])
-        embeddings.append(embedding)
-    return np.asanyarray(embeddings)
+def _load_registerations(device_id):
+    user_ids =_get_user_ids(device_id)
+    registerations = dict()
+    for user_id in user_ids:
+        wav_files = _get_enrollment_wav_files(device_id, user_id)
+        embeddings = []
+        for i, wav_file in enumerate(wav_files):
+            embedding_file = wav_file + '.npy'
+            embedding = np.load(embedding_file)
+            np.save(embedding_file, embeddings[i])
+            embeddings.append(embedding)
+        registerations[user_id]=embeddings
+
+    return registerations
+
 
 
 def main(_):
