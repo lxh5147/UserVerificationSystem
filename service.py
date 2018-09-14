@@ -47,7 +47,7 @@ def _write_pcm16_wav(output_file, audio):
 def _parse_environ(environ):
     request_body_encoded = environ['wsgi.input'].read(int(environ.get('CONTENT_LENGTH', 0)))
     request_body = json.loads(request_body_encoded.decode())
-    device_id = request_body.get('family_id', '')
+    device_id = request_body.get('device_id', '')
     user_id = request_body.get('user_id', '')
     func_id = request_body.get('func_id', '')
     streams_encoded = request_body.get('streams', None)

@@ -1,10 +1,12 @@
-import unittest
-import tensorflow as tf
-from model.model_fn import create_model
-import service
-from service import _write_pcm16_wav
 import os
+import unittest
+
 import numpy as np
+import tensorflow as tf
+
+import service
+from model.model_fn import create_model
+from service import _write_pcm16_wav, _parse_environ
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -58,6 +60,28 @@ class ServiceTestCase(unittest.TestCase):
         import scipy.io.wavfile as wavefile
         _, data_readed = wavefile.read(output_file)
         self.assertTrue((data == data_readed).all(), 'audio data equal')
+
+    def test_parse_environ(self):
+        import base64
+        import json
+        request_body = {
+            'device_id': 'family1',
+            'user_id': 'user1',
+            'func_id': service.FUNC_ENROLL
+        }
+        content = json.dumps(request_body)
+        import io
+        input = io.StringIO()
+        input.write(content)
+        environ = {
+            'wsgi.input': input,
+            'CONTENT_LENGTH': len(content)
+        }
+        device_id, user_id, func_id, streams = _parse_environ(environ)
+        self.assertEqual(device_id, request_body['device_id'], 'device_id')
+        self.assertEqual(user_id, request_body['user_id'], 'user_id')
+        self.assertEqual(func_id, request_body['func_id'], 'func_id')
+        self.assertEqual(len(streams), 0, 'streams')
 
 
 if __name__ == '__main__':
