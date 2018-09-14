@@ -200,7 +200,6 @@ def _get_embedding(model, wav_file):
 
 
 def main(_):
-    # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
 
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
@@ -286,11 +285,11 @@ if __name__ == '__main__':
         '--model_dir',
         type=str,
         default='./tmp_model',
-        help='model_dir')
+        help='model dir')
     parser.add_argument(
         '--data_dir',
         type=str,
-        default='./data',
+        default='./data/online',
         help='data dir')
     parser.add_argument(
         '--encoder',
