@@ -13,10 +13,10 @@
 #  limitations under the License.
 """tf.data.Dataset interface to the Voice dataset."""
 import tensorflow as tf
+from librosa import load
+from scipy.io.wavfile import write
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
-from scipy.io.wavfile import write
-from librosa import load
 
 
 def read_audio(wav_file, desired_samples=-1, desired_channels=1):

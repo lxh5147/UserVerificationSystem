@@ -2,9 +2,9 @@
 
 import tensorflow as tf
 
+from model.cross_entropy_loss import cross_entropy_loss
 from model.triplet_loss import batch_all_triplet_loss
 from model.triplet_loss import batch_hard_triplet_loss
-from model.cross_entropy_loss import cross_entropy_loss
 
 
 def _get_encoder(encoder_name):

@@ -1,9 +1,4 @@
 import tensorflow as tf
-import numpy as np
-from model.voice_dataset import read_audio
-
-import os
-import tensorflow as tf
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
 

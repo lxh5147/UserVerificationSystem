@@ -1,4 +1,5 @@
 import tensorflow as tf
+
 from model.attention import attention
 
 

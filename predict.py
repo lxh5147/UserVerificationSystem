@@ -1,5 +1,6 @@
-from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 import numpy as np
+
+from model.voice_dataset import input_fn, from_ms_to_samples
 
 
 def l2_norm(embeddings):
@@ -80,4 +81,3 @@ def get_enrollments(enrollment_config):
     with open(enrollment_config) as f:
         enrollments = f.read().splitlines()
     return enrollments
-

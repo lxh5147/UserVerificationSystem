@@ -1,5 +1,7 @@
 import unittest
+
 import tensorflow as tf
+
 from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX
 
 

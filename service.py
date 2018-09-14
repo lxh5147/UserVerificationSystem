@@ -1,16 +1,19 @@
-from wsgiref.simple_server import make_server
-import tensorflow as tf
-from model.model_fn import create_model
 import argparse
-import sys
-import os
-from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
-import json
 import base64
+import json
+import os
+import sys
+import uuid
 import wave
 from shutil import rmtree
-import uuid
+from wsgiref.simple_server import make_server
+
 import numpy as np
+import tensorflow as tf
+
+from model.model_fn import create_model
+from predict import get_embeddings, get_enrollments
+
 FLAGS = None
 
 
@@ -64,14 +67,15 @@ def _get_enrollment_wav_files(device_id, user_id):
     user_root_path = _get_user_root_path(device_id, user_id)
     enrollment_config = os.path.join(user_root_path, 'enrollment_config')
     if os._exists(enrollment_config):
-        return [os.path.join(user_root_path,i) for i in get_enrollments(enrollment_config)]
+        return [os.path.join(user_root_path, i) for i in get_enrollments(enrollment_config)]
     else:
         return []
 
-def _update_enrollment_config(device_id,user_id,wav_files):
+
+def _update_enrollment_config(device_id, user_id, wav_files):
     user_root_path = _get_user_root_path(device_id, user_id)
     enrollment_config = os.path.join(user_root_path, 'enrollment_config')
-    with open(enrollment_config,'w') as fw:
+    with open(enrollment_config, 'w') as fw:
         fw.writelines(wav_files)
 
 
@@ -88,26 +92,38 @@ def _enroll_user(model,
                  batch_size):
     _ensure_user_root_path(device_id, user_id)
     wav_files_exist = _get_enrollment_wav_files(device_id, user_id)
-    wav_files =[]
+    wav_files = []
     for stream in streams:
         output_file = _save_pcm_stream(device_id, user_id, stream)
         wav_files.append(output_file)
     # compute and save embeddings
     embeddings = get_embeddings(model,
-                   wav_files,
-                   desired_ms,
-                   window_size_ms,
-                   window_stride_ms,
-                   sample_rate,
-                   magnitude_squared,
-                   dct_coefficient_count,
-                   batch_size)
-    for i , wav_file in enumerate(wav_files):
+                                wav_files,
+                                desired_ms,
+                                window_size_ms,
+                                window_stride_ms,
+                                sample_rate,
+                                magnitude_squared,
+                                dct_coefficient_count,
+                                batch_size)
+    for i, wav_file in enumerate(wav_files):
         embedding_file = wav_file + '.npy'
-        np.save(embedding_file,embeddings[i])
+        np.save(embedding_file, embeddings[i])
     # update config
     wav_files_exist.extend(wav_files)
-    _update_enrollment_config(device_id,user_id,wav_files)
+    _update_enrollment_config(device_id, user_id, wav_files)
+
+
+def _load_embeddings(device_id, user_id):
+    wav_files = _get_enrollment_wav_files(device_id, user_id)
+    embeddings = []
+    for i, wav_file in enumerate(wav_files):
+        embedding_file = wav_file + '.npy'
+        embedding = np.load(embedding_file)
+        np.save(embedding_file, embeddings[i])
+        embeddings.append(embedding)
+    return np.asanyarray(embeddings)
+
 
 def main(_):
     # We want to see all the logging messages for this tutorial.

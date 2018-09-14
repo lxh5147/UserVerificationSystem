@@ -1,10 +1,12 @@
-import tensorflow as tf
-from model.voice_dataset import get_file_and_labels
-from model.model_fn import create_model
 import argparse
-import sys
 import os
-from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings,get_enrollments
+import sys
+
+import tensorflow as tf
+
+from model.model_fn import create_model
+from model.voice_dataset import get_file_and_labels
+from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
 
 FLAGS = None
 

@@ -1,9 +1,11 @@
-import tensorflow as tf
-from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
-from model.model_fn import create_model
 import argparse
-import sys
 import os
+import sys
+
+import tensorflow as tf
+
+from model.model_fn import create_model
+from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 
 FLAGS = None
 
