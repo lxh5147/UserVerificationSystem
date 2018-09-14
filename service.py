@@ -81,7 +81,7 @@ def _delete_user(device_id, user_id):
     move(user_root_path, os.path.join(device_root_path, '__deleted__'))
 
 
-def _save_pcm_stream(path, stream):
+def _save_pcm_stream_to_wav(path, stream):
     uniq_filename = uuid.uuid4().hex[:6].upper() + '.wav'
     output_file = os.path.join(path, uniq_filename)
     _write_pcm16_wav(output_file, stream, sample_rate=FLAGS.sample_rate)
@@ -97,25 +97,25 @@ def _get_enrollment_filenames(device_id, user_id):
         return []
 
 
-def _save_enrollment_config(device_id, user_id, wav_files):
+def _save_enrollment_config(device_id, user_id, files):
     user_root_path = _get_user_root_path(device_id, user_id)
     enrollment_config = os.path.join(user_root_path, 'enrollment_config')
     with open(enrollment_config, 'w') as fw:
-        fw.writelines(wav_files)
+        fw.writelines(files)
 
 
 def _enroll(model, device_id, user_id, streams):
     _ensure_user_root_path(device_id, user_id)
     enrollment_filenames = _get_enrollment_filenames(device_id, user_id)
-    wav_files = []
+    files = []
     user_root_path = _get_user_root_path(device_id, user_id)
     for stream in streams:
-        output_file, output_filename = _save_pcm_stream(user_root_path, stream)
-        wav_files.append(output_file)
+        output_file, output_filename = _save_pcm_stream_to_wav(user_root_path, stream)
+        files.append(output_file)
         enrollment_filenames.append(output_filename)
     # compute and save embeddings
     embeddings = get_embeddings(model,
-                                wav_files,
+                                files,
                                 FLAGS.desired_ms,
                                 FLAGS.window_size_ms,
                                 FLAGS.window_stride_ms,
@@ -123,8 +123,8 @@ def _enroll(model, device_id, user_id, streams):
                                 FLAGS.magnitude_squared,
                                 FLAGS.dct_coefficient_count,
                                 FLAGS.batch_size)
-    for i, wav_file in enumerate(wav_files):
-        embedding_file = wav_file + '.npy'
+    for i, file in enumerate(files):
+        embedding_file = file + '.npy'
         np.save(embedding_file, embeddings[i])
     # update config
     _save_enrollment_config(device_id, user_id, enrollment_filenames)
@@ -176,9 +176,9 @@ def _identification(embedding_unknown, device_id):
         return REJECT_BELOW_THRESHOLD, id_max, sim_max
 
 
-def _get_embedding(model, wav_file):
+def _get_embedding(model, filepath):
     embeddings = get_embeddings(model,
-                                [wav_file],
+                                [filepath],
                                 FLAGS.desired_ms,
                                 FLAGS.window_size_ms,
                                 FLAGS.window_stride_ms,
@@ -222,7 +222,7 @@ def application(environ, start_response):
     if function_id == FUNC_VERIFY:
         assert (len(streams) == 1)
         device_root_path = _get_device_root_path(device_id)
-        output_file = _save_pcm_stream(os.path.join(device_root_path, '__verification__'), streams[0])
+        output_file = _save_pcm_stream_to_wav(os.path.join(device_root_path, '__verification__'), streams[0])
         embedding_unknown = _get_embedding(model, output_file)
         status_code, sim = _verify(embedding_unknown, grouped_registerations, device_id, user_id)
         result['status_code'] = status_code
@@ -232,7 +232,7 @@ def application(environ, start_response):
     if function_id == FUNC_IDENTIFY:
         assert (len(streams) == 1)
         device_root_path = _get_device_root_path(device_id)
-        output_file = _save_pcm_stream(os.path.join(device_root_path, '__identification__'), streams[0])
+        output_file = _save_pcm_stream_to_wav(os.path.join(device_root_path, '__identification__'), streams[0])
         embedding_unknown = _get_embedding(model, output_file)
         status_code, target_user_id, sim = _identification(embedding_unknown, grouped_registerations, device_id)
         result['status_code'] = status_code
@@ -251,7 +251,6 @@ def main(_):
     global grouped_registerations
     tf.logging.set_verbosity(tf.logging.INFO)
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
-
     model = create_model(
         model_dir=FLAGS.model_dir,
         params={
@@ -263,7 +262,6 @@ def main(_):
             'encoder': FLAGS.encoder
         })
     grouped_registerations = dict()
-
     httpd = make_server(host=FLAGS.host,
                         port=FLAGS.port,
                         app=application
