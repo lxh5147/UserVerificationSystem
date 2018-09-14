@@ -13,6 +13,7 @@ import tensorflow as tf
 
 from model.model_fn import create_model
 from predict import get_embeddings, get_enrollments, get_max_sim_and_id
+from shutil import move, rmtree
 
 FLAGS = None
 
@@ -57,14 +58,18 @@ def _get_user_ids(device_id):
 def _ensure_user_root_path(device_id, user_id):
     user_root_path = _get_user_root_path(device_id, user_id)
     if not os.path.exists(user_root_path):
-        os.mkdir(user_root_path)
+        os.makedirs(user_root_path)
     return user_root_path
 
 
 def _delete_user(device_id, user_id):
+    device_root_path = _get_device_root_path(device_id)
     user_root_path = _get_user_root_path(device_id, user_id)
-    if os.path.exists(user_root_path):
-        rmtree(user_root_path)
+    # if the folder is already in the __DELETE__ folder, we delete the old one before moving
+    if os.exists(os.path.join(device_root_path, '__deleted__', '__user_' + user_id)):
+        rmtree()
+    # move to the __delete__ folder
+    move(user_root_path, os.path.join(device_root_path, '__deleted__'))
 
 
 def _save_pcm_stream(path, stream):
