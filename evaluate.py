@@ -234,7 +234,7 @@ def main(_):
     enrollments = get_enrollments(os.path.join(FLAGS.data_dir, 'enrollment_config'))
     to_be_verified = _get_to_be_verified(os.path.join(FLAGS.data_dir, 'verification_config'))
     to_be_identified = _get_to_be_identified(os.path.join(FLAGS.data_dir, 'identification_config'))
-    wav_file_id_to_index = _get_file_id_to_index(wav_files)
+    file_id_to_index = _get_file_id_to_index(wav_files)
     # TODO validate configurations
     # transform the configurations: wav file id --> index, label_id --> label_index
     groups_transformed = dict()
@@ -243,9 +243,9 @@ def main(_):
         groups_transformed[group_id] = group
     groups = groups_transformed
 
-    enrollments = [wav_file_id_to_index[i] for i in enrollments]
-    to_be_verified = [(wav_file_id_to_index[i], label_to_id[j]) for i, j in to_be_verified]
-    to_be_identified = [(wav_file_id_to_index[i], group_id) for i, group_id in to_be_identified]
+    enrollments = [file_id_to_index[i] for i in enrollments]
+    to_be_verified = [(file_id_to_index[i], label_to_id[j]) for i, j in to_be_verified]
+    to_be_identified = [(file_id_to_index[i], group_id) for i, group_id in to_be_identified]
 
     filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
@@ -293,7 +293,7 @@ if __name__ == '__main__':
         '--model_dir',
         type=str,
         default='./tmp_model',
-        help='model_dir')
+        help='model dir')
     parser.add_argument(
         '--data_dir',
         type=str,

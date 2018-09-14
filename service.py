@@ -25,6 +25,9 @@ FUNC_DELETE = '1'
 FUNC_ENROLL = '2'
 FUNC_VERIFY = '3'
 FUNC_IDENTIFY = '4'
+FUNC_COLLECT_DATA_ENROLLMENT = '8'
+FUNC_COLLECT_DATA_VERIFICATION = '9'
+FUNC_COLLECT_DATA_IDENTIFICATION = '9'
 
 
 def _write_pcm16_wav(output_file, audio):
@@ -189,7 +192,11 @@ def _get_embedding(model, filepath):
     return embeddings[0]
 
 
-def application(environ, start_response):
+def _get_data_collection_root_path(device_id, user_id):
+    return os.path.join(FLAGS.data_dir, '__data_collected__' '__device_' + device_id, '__user_' + user_id)
+
+
+def _application(environ, start_response):
     method = environ['REQUEST_METHOD']
     path = environ['PATH_INFO']
     start_response('200 OK', [('Content-Type', 'application/json')])
@@ -239,6 +246,14 @@ def application(environ, start_response):
         result['user_id'] = target_user_id
         result['sim_score'] = sim
 
+    # collect data
+    if function_id in [FUNC_COLLECT_DATA_ENROLLMENT, FUNC_COLLECT_DATA_VERIFICATION, FUNC_COLLECT_DATA_IDENTIFICATION]:
+        data_path_root = os.path.join(_get_data_collection_root_path(device_id, user_id), function_id)
+        if not os.path.exists(data_path_root):
+            os.makedirs(data_path_root)
+        for stream in streams:
+            _save_pcm_stream_to_wav(data_path_root, stream)
+
     end = datetime.datetime.now()
     elapsed = end - start
     tf.logging.info("Response with result:{}, elapsed:{}".format(result, elapsed))
@@ -264,7 +279,7 @@ def main(_):
     grouped_registerations = dict()
     httpd = make_server(host=FLAGS.host,
                         port=FLAGS.port,
-                        app=application
+                        app=_application
                         )
     tf.logging.info("serving http on port {0}...".format(FLAGS.port))
     httpd.serve_forever()
