@@ -31,6 +31,12 @@ FUNC_COLLECT_DATA_IDENTIFICATION = '9'
 
 
 def _write_pcm16_wav(output_file, audio):
+    '''
+    write int16 audio to a wav file
+    :param output_file: the wav file to write
+    :param audio: the audio stream, type numpy int16 array
+    :return: None
+    '''
     with wave.open(output_file, 'wb') as writer:
         writer.setnchannels(1)
         writer.setsampwidth(2)
