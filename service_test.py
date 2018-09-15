@@ -64,10 +64,13 @@ class ServiceTestCase(unittest.TestCase):
     def test_parse_environ(self):
         import base64
         import json
+        data = 'some data'
+
         request_body = {
             'device_id': 'family1',
             'user_id': 'user1',
-            'func_id': service.FUNC_ENROLL
+            'func_id': service.FUNC_ENROLL,
+            'streams':[base64.b64encode(data.encode()).decode()]
         }
         content = json.dumps(request_body)
         import io
@@ -83,8 +86,9 @@ class ServiceTestCase(unittest.TestCase):
         self.assertEqual(device_id, request_body['device_id'], 'device_id')
         self.assertEqual(user_id, request_body['user_id'], 'user_id')
         self.assertEqual(func_id, request_body['func_id'], 'func_id')
-        self.assertEqual(len(streams), 0, 'streams')
-
+        self.assertEqual(len(streams), 1, 'streams')
+        data_readed = streams[0].decode()
+        self.assertEqual(data, data_readed,'stream')
 
 if __name__ == '__main__':
     unittest.main()
