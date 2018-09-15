@@ -13,6 +13,12 @@ def l2_norm(embeddings):
 
 
 def get_registerations(embeddings, label_ids):
+    '''
+    Group the embeddings by their labels. One label has
+    :param embeddings:
+    :param label_ids:
+    :return:
+    '''
     # each person has a list of embeddings as his/her registeration
     registerations = dict()
 
