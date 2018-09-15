@@ -1,10 +1,12 @@
 import argparse
 import base64
+import datetime
 import json
 import os
 import sys
 import uuid
 import wave
+from shutil import move, rmtree
 from wsgiref.simple_server import make_server
 
 import numpy as np
@@ -12,8 +14,6 @@ import tensorflow as tf
 
 from model.model_fn import create_model
 from predict import get_embeddings, get_enrollments, get_max_sim_and_id
-from shutil import move, rmtree
-import datetime
 
 # function result
 ACCEPT = 0

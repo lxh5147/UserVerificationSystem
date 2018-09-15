@@ -6,7 +6,7 @@ import tensorflow as tf
 
 import service
 from model.model_fn import create_model
-from service import _write_pcm16_wav, _parse_environ, _get_device_root_path,_get_user_root_path
+from service import _write_pcm16_wav, _parse_environ, _get_device_root_path, _get_user_root_path
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -92,16 +92,16 @@ class ServiceTestCase(unittest.TestCase):
         self.assertEqual(data, data_readed, 'stream')
 
     def test_get_device_root_path(self):
-        device_id='family1'
+        device_id = 'family1'
         self.assertEqual(_get_device_root_path(device_id), \
-                         os.path.join(service.FLAGS.data_dir,'__device_' + device_id),\
+                         os.path.join(service.FLAGS.data_dir, '__device_' + device_id), \
                          'device root path')
 
     def test_get_user_root_path(self):
         device_id = 'family1'
-        user_id ='user1'
-        self.assertEqual(_get_user_root_path(device_id,user_id), \
-                         os.path.join(service.FLAGS.data_dir, '__device_' + device_id,'__user_'+user_id),\
+        user_id = 'user1'
+        self.assertEqual(_get_user_root_path(device_id, user_id), \
+                         os.path.join(service.FLAGS.data_dir, '__device_' + device_id, '__user_' + user_id), \
                          'user root path')
 
 
