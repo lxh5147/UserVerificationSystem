@@ -6,7 +6,7 @@ import tensorflow as tf
 
 import service
 from model.model_fn import create_model
-from service import _write_pcm16_wav, _parse_environ
+from service import _write_pcm16_wav, _parse_environ, _get_device_root_path,_get_user_root_path
 
 tf.logging.set_verbosity(tf.logging.INFO)
 
@@ -60,6 +60,7 @@ class ServiceTestCase(unittest.TestCase):
         import scipy.io.wavfile as wavefile
         _, data_readed = wavefile.read(output_file)
         self.assertTrue((data == data_readed).all(), 'audio data equal')
+        os.remove(output_file)
 
     def test_parse_environ(self):
         import base64
@@ -70,7 +71,7 @@ class ServiceTestCase(unittest.TestCase):
             'device_id': 'family1',
             'user_id': 'user1',
             'func_id': service.FUNC_ENROLL,
-            'streams':[base64.b64encode(data.encode()).decode()]
+            'streams': [base64.b64encode(data.encode()).decode()]
         }
         content = json.dumps(request_body)
         import io
@@ -88,7 +89,21 @@ class ServiceTestCase(unittest.TestCase):
         self.assertEqual(func_id, request_body['func_id'], 'func_id')
         self.assertEqual(len(streams), 1, 'streams')
         data_readed = streams[0].decode()
-        self.assertEqual(data, data_readed,'stream')
+        self.assertEqual(data, data_readed, 'stream')
+
+    def test_get_device_root_path(self):
+        device_id='family1'
+        self.assertEqual(_get_device_root_path(device_id), \
+                         os.path.join(service.FLAGS.data_dir,'__device_' + device_id),\
+                         'device root path')
+
+    def test_get_user_root_path(self):
+        device_id = 'family1'
+        user_id ='user1'
+        self.assertEqual(_get_user_root_path(device_id,user_id), \
+                         os.path.join(service.FLAGS.data_dir, '__device_' + device_id,'__user_'+user_id),\
+                         'user root path')
+
 
 if __name__ == '__main__':
     unittest.main()

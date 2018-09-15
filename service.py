@@ -45,6 +45,14 @@ def _write_pcm16_wav(output_file, audio):
 
 
 def _parse_environ(environ):
+    '''
+    extract parameters from the environment. The payload is in the wsgi.input field as a binary data stream.
+    :param environ: the environment from which to extract parameters.
+    :return: device_id, the id of the device that calls this service
+            user_id, string,the id of the user to be verified or claimed
+            func_id, string,the id of the function asked to be executed
+            streams, a list of binary streams sent from the device
+    '''
     request_body_encoded = environ['wsgi.input'].read(int(environ.get('CONTENT_LENGTH', 0)))
     request_body = json.loads(request_body_encoded.decode())
     device_id = request_body.get('device_id', '')
@@ -58,10 +66,23 @@ def _parse_environ(environ):
 
 
 def _get_device_root_path(device_id):
+    '''
+    Each device has a root path that stores all the data to server this device, such as users registered
+     for this device, data logged for verification and identification.
+    :param device_id: string, the device id
+    :return: the root path of the device
+    '''
     return os.path.join(FLAGS.data_dir, '__device_' + device_id)
 
 
 def _get_user_root_path(device_id, user_id):
+    '''
+    Each registered user in a device has one root path that stores all the data to serve this user, e.g., enrollment
+    data.
+    :param device_id: string, device id
+    :param user_id: string, user id
+    :return: the root path of the user
+    '''
     return os.path.join(_get_device_root_path(device_id), '__user_' + user_id)
 
 
