@@ -4,6 +4,11 @@ from model.voice_dataset import input_fn, from_ms_to_samples
 
 
 def l2_norm(embeddings):
+    '''
+    Apply L2 normalization to the embeddings
+    :param embeddings: numpy ndarray, (batch, dim)
+    :return: the normed embeddings, numpy ndarray, (batch,dim)
+    '''
     return embeddings / np.linalg.norm(embeddings, ord=2, axis=1, keepdims=True)
 
 
