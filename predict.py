@@ -14,8 +14,8 @@ def l2_norm(embeddings):
 
 def get_registerations(embeddings, label_ids):
     '''
-    Group the embeddings by their labels. One label has
-    :param embeddings:
+    Group the embeddings by their labels, since one label may have multiple embeddings.
+    :param embeddings: numpy ndarray,
     :param label_ids:
     :return:
     '''

@@ -24,24 +24,26 @@ def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
     return fa, fr
 
 
-def _eer(fa_rates, fr_rates):
+def _eer(fa_rates, fr_rates, thresholds):
     gap = [abs(fa_rate - fr_rate) for fa_rate, fr_rate in zip(fa_rates, fr_rates)]
     min_pos = gap.index(min(gap))
     eer = (fa_rates[min_pos] + fr_rates[min_pos]) / 2
-    eer_threshold = 0.01 * min_pos - 1.0
+    eer_threshold = thresholds[min_pos]
     return eer, eer_threshold
 
 
 def _verification_eer(to_be_verified, verification_sim, true_a, true_r):
     fa_rates = []
     fr_rates = []
+    thresholds =[]
     for threshold in [0.01 * i - 1.0 for i in range(200)]:
         fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
-        fa_rate = len(fa) / len(true_r)
-        fr_rate = len(fr) / len(true_a)
+        fa_rate = len(fa) / len(true_r) if true_r else 0.
+        fr_rate = len(fr) / len(true_a) if true_a else 0.
         fa_rates.append(fa_rate)
         fr_rates.append(fr_rate)
-    return _eer(fa_rates, fr_rates)
+        thresholds.append(threshold)
+    return _eer(fa_rates, fr_rates,thresholds)
 
 
 def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
@@ -61,14 +63,8 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
             true_r.append(embedding_index)
     if threshold:
         fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
-        if true_r:
-            fa_rate = len(fa) / len(true_r)
-        else:
-            fa_rate = 0
-        if true_a:
-            fr_rate = len(fr) / len(true_a)
-        else:
-            fr_rate = 0
+        fa_rate = len(fa) / len(true_r) if true_r else 0.
+        fr_rate = len(fr) / len(true_a) if true_a else 0.
         return fa_rate, fr_rate, threshold
     else:
         # verification performance
@@ -90,20 +86,21 @@ def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
         else:
             if sim >= threshold:
                 fa.append(embedding_index)
-
     return fa, fr
 
 
 def _identification_eer(to_be_identified, sims, label_ids, true_a, true_r):
     fa_rates = []
     fr_rates = []
+    thresholds = []
     for threshold in [0.01 * i - 1.0 for i in range(200)]:
-        fa, fr = _verfication_fa_fr(to_be_identified, sims, label_ids, threshold)
-        fa_rate = len(fa) / len(true_r)
-        fr_rate = len(fr) / len(true_a)
+        fa, fr = _identification_fa_fr(to_be_identified, sims, label_ids, threshold)
+        fa_rate = len(fa) / len(true_r) if true_r else 0.
+        fr_rate = len(fr) / len(true_a) if true_a else 0.
         fa_rates.append(fa_rate)
         fr_rates.append(fr_rate)
-    return _eer(fa_rates, fr_rates)
+        thresholds.append(threshold)
+    return _eer(fa_rates, fr_rates, thresholds)
 
 
 def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, groups, threshold=None):
@@ -133,17 +130,10 @@ def _evaluate_identification(embeddings, label_ids, registerations, to_be_identi
             true_a.append(embedding_index)
         else:
             true_r.append(embedding_index)
-
     if threshold:
-        fa, fr = _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7)
-        if true_r:
-            fa_rate = len(fa) / len(true_r)
-        else:
-            fa_rate = 0
-        if true_a:
-            fr_rate = len(fr) / len(true_a)
-        else:
-            fr_rate = 0
+        fa, fr = _identification_fa_fr(to_be_identified, sims, label_ids, threshold=threshold)
+        fa_rate = len(fa) / len(true_r) if true_r else 0.
+        fr_rate = len(fr) / len(true_a) if true_a else 0.
         return fa_rate, fr_rate, threshold
     else:
         eer, eer_thredhold = _identification_eer(to_be_identified, sims, label_ids, true_a, true_r)
@@ -179,23 +169,19 @@ def _get_groups(group_config_file):
 def _get_to_be_verified(verfication_config_file):
     with open(verfication_config_file) as f:
         lines = f.read().splitlines()
-
     to_be_verified = []
     for line in lines:
         parts = line.split(',')
         wav_file = parts[0]
         claimed = parts[1]
         to_be_verified.append((wav_file, claimed))
-
     return to_be_verified
 
 
 def _get_to_be_identified(identification_config_file):
     with open(identification_config_file) as f:
         lines = f.read().splitlines()
-
     to_be_identified = []
-
     for line in lines:
         parts = line.split(',')
         wav_file = parts[0]
@@ -203,9 +189,7 @@ def _get_to_be_identified(identification_config_file):
             group_id = ''
         else:
             group_id = parts[1]
-
         to_be_identified.append((wav_file, group_id))
-
     return to_be_identified
 
 
