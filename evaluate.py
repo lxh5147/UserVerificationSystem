@@ -34,6 +34,15 @@ def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
 
 
 def _eer(fa_rates, fr_rates, thresholds):
+    '''
+    Compute the nearly equal error rates (false rejection and false acceptance rates).
+    The gap between the two types of errors for each threshold is used to define "how close the two errors are".
+    :param fa_rates: list of floats, the false acceptance rates.
+    :param fr_rates: list of floats, the false rejectance rates
+    :param thresholds: list of floats, the thresholds. Each threshold corresponds to one false acceptance rate
+            and one false rejectance rate.
+    :return: the equal error rate and the corresponded threshold.
+    '''
     gap = [abs(fa_rate - fr_rate) for fa_rate, fr_rate in zip(fa_rates, fr_rates)]
     min_pos = gap.index(min(gap))
     eer = (fa_rates[min_pos] + fr_rates[min_pos]) / 2

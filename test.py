@@ -1,12 +1,5 @@
-def my_func():
-    print(mydict)
+a=0
 
+b=3/a if a else 2
 
-def my_func2():
-    global mydict
-    mydict = dict()
-    mydict['hi'] = 'lxh'
-
-
-my_func2()
-my_func()
+print(b)
