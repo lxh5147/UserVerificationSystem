@@ -1,7 +1,11 @@
 import tensorflow as tf
 
-
 def attention(inputs):
+    '''
+    A weighted average of the inputs, where the weight of an input corresponds to the attention paied on this input
+    :param inputs: 3D float tensor, (batch, time_steps, dim)
+    :return: weighted input, 2D float tensor, (batch, dim)
+    '''
     # input: batch_size, time_steps, dim
     # output: batch_size, dim
     with tf.variable_scope("attention"):
