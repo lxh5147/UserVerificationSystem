@@ -10,7 +10,16 @@ from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_emb
 
 
 def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
-    # return the indexes false rejected and false accepted
+    '''
+    Compute the embeddings falsely accepted and rejected for a verification evaluation.
+    :param to_be_verified: a list of tuple (embedding index, claimed user id)
+    :param sims: a list of float which represents the similarity between the embedding to be verified and the claimed user
+    :param true_a: a list of embedding indexes, each of which comes from the corresponded claimed user.
+    :param true_r: a list of embedding indexes, each of which does not come from the corresponded claimed user.
+    :param threshold: float, if the similarity between the embedding and the claimed user is no less than this threshold, the embedding
+            will be believed to come from the claimed user.
+    :return: two lists of embedding indexes, representing the enbeddings which are falsely accepted and rejected, respectively.
+    '''
     fa = []  # false accept
     fr = []  # false reject
     for i, sim in enumerate(sims):
@@ -35,7 +44,7 @@ def _eer(fa_rates, fr_rates, thresholds):
 def _verification_eer(to_be_verified, verification_sim, true_a, true_r):
     fa_rates = []
     fr_rates = []
-    thresholds =[]
+    thresholds = []
     for threshold in [0.01 * i - 1.0 for i in range(200)]:
         fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
         fa_rate = len(fa) / len(true_r) if true_r else 0.
@@ -43,7 +52,7 @@ def _verification_eer(to_be_verified, verification_sim, true_a, true_r):
         fa_rates.append(fa_rate)
         fr_rates.append(fr_rate)
         thresholds.append(threshold)
-    return _eer(fa_rates, fr_rates,thresholds)
+    return _eer(fa_rates, fr_rates, thresholds)
 
 
 def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
