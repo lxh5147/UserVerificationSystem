@@ -1,5 +1,5 @@
-a=0
+a = 0
 
-b=3/a if a else 2
+b = 3 / a if a else 2
 
 print(b)

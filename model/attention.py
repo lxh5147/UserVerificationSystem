@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 def attention(inputs):
     '''
     A weighted average of the inputs, where the weight of an input corresponds to the attention paied on this input
