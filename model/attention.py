@@ -6,8 +6,6 @@ def attention(inputs):
     :param inputs: 3D float tensor, (batch, time_steps, dim)
     :return: weighted input, 2D float tensor, (batch, dim)
     '''
-    # input: batch_size, time_steps, dim
-    # output: batch_size, dim
     with tf.variable_scope("attention"):
         w = tf.get_variable("hidden", initializer=tf.zeros_initializer(), shape=inputs.shape[-1:])
         # batch_size, time_steps
