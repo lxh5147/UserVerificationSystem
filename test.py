@@ -1,5 +1,5 @@
-a = 0
+import numpy as np
 
-b = 3 / a if a else 2
+a=np.asanyarray([[1],[2],[3]],dtype='int16')
 
-print(b)
+print(a[:2,0])
