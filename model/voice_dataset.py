@@ -170,6 +170,7 @@ def convert_audio_with_PMX(input_wav, output_wav, sample_rate=16000):
     :return: None
     '''
     data, sample_rate = load(input_wav, sr=sample_rate)
-    # convert the data to int16
+    # convert the float data to int16
+    data = data * 32767 # 2^16-1
     data = data.astype(dtype='int16')
     write(output_wav, sample_rate, data)

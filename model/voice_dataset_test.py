@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 
 from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX
-
+import  os
 
 class VoiceDatasetTestCase(unittest.TestCase):
     def _test_read_audio(self, wav_file_val):
@@ -17,6 +17,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
 
         self.assertTrue(all_samples_val < desired_samples, 'less than desired samples')
         self.assertEqual(len(audio_val), desired_samples, 'padded audio length')
+        self.assertTrue((audio_val!=0).any(),'any non zero audio data')
 
     def test_read_audio(self):
         wav_file_val = '../data/train/121624931534904112937-0.wav'
@@ -58,6 +59,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
         wav_file_processed = '../data/test/1252695_voice_reco_1527810946756_processed.wav'
         convert_audio_with_PMX(wav_file, wav_file_processed)
         self._test_read_audio(wav_file_processed)
+        os.remove(wav_file_processed)
 
 
 if __name__ == '__main__':
