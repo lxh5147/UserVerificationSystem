@@ -50,11 +50,23 @@ def _eer(fa_rates, fr_rates, thresholds):
     return eer, eer_threshold
 
 
-def _verification_eer(to_be_verified, verification_sim, true_a, true_r):
+def _verification_eer(to_be_verified, verification_sim, true_a, true_r, number_of_thresholds=200):
+    '''
+    Compute the nearly equal error rate for verification.
+    :param to_be_verified: a list of tuple (embedding index, claimed user id)
+    :param verification_sim: a list of float which represents the similarity between the embedding to be verified and the claimed user
+    :param true_a: a list of embedding indexes, each of which comes from the corresponded claimed user.
+    :param true_r: a list of embedding indexes, each of which does not come from the corresponded claimed user.
+    :param threshold: float, if the similarity between the embedding and the claimed user is no less than this threshold, the embedding
+            will be believed to come from the claimed user.
+    :return: float, the equaly error rate.
+    '''
     fa_rates = []
     fr_rates = []
     thresholds = []
-    for threshold in [0.01 * i - 1.0 for i in range(200)]:
+    threshold_step = 2. / number_of_thresholds
+
+    for threshold in [threshold_step * i - 1.0 for i in range(number_of_thresholds)]:
         fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
         fa_rate = len(fa) / len(true_r) if true_r else 0.
         fr_rate = len(fr) / len(true_a) if true_a else 0.

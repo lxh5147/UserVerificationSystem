@@ -1,7 +1,9 @@
 import unittest
 
-from evaluate import _verfication_fa_fr, _eer
+from evaluate import _verfication_fa_fr, _eer,_verification_eer
 
+def almost_equal(a,b,es=0.0001):
+    return abs(a-b) < es
 
 class EvaluateTestCase(unittest.TestCase):
     def test_verfication_fa_fr(self):
@@ -21,6 +23,15 @@ class EvaluateTestCase(unittest.TestCase):
         eer, threshold = _eer(fa_rates, fr_rates, thresholds)
         self.assertEqual(eer, 0.125, 'eer')
         self.assertEqual(threshold, 0.3, 'threshold')
+
+    def test_verification_eer(self):
+        to_be_verified = [(0, 1), (1, 1), (2, 0)]
+        sims = [0.6, 0.7, 0.8]
+        true_a = [0, 2]
+        true_r = [1]
+        eer, threshold = _verification_eer(to_be_verified,sims,true_a,true_r)
+        self.assertEqual(eer, 0.75,'eer')
+        self.assertTrue(almost_equal(threshold,0.6),'threhold')
 
 
 if __name__ == '__main__':
