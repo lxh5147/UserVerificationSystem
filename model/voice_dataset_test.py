@@ -1,27 +1,31 @@
+import os
 import unittest
 
+import numpy as np
 import tensorflow as tf
+from scipy.io.wavfile import read
 
-from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX
-import  os
+from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX, read_audio_int16
+
 
 class VoiceDatasetTestCase(unittest.TestCase):
-    def _test_read_audio(self, wav_file_val):
+    def test_read_audio(self):
+        wav_file_val = '../data/train/121624931534904112937-0.wav'
         desired_samples = 100000
         wav_file = tf.placeholder(dtype=tf.string)
         audio, sample_rate, all_samples = read_audio(wav_file,
                                                      desired_samples)
         with tf.Session() as sess:
-            all_samples_val, audio_val = sess.run([all_samples, audio],
-                                                  feed_dict={wav_file: wav_file_val})
+            all_samples_val, audio_val, sample_rate_val = sess.run([all_samples, audio, sample_rate],
+                                                                   feed_dict={wav_file: wav_file_val})
 
-        self.assertTrue(all_samples_val < desired_samples, 'less than desired samples')
+        sample_rate_readed, data_readed = read(wav_file_val)
+        self.assertEqual(all_samples_val, len(data_readed), 'total number of samples')
+        self.assertEqual(sample_rate_val, sample_rate_readed, 'sample rate')
         self.assertEqual(len(audio_val), desired_samples, 'padded audio length')
-        self.assertTrue((audio_val!=0).any(),'any non zero audio data')
-
-    def test_read_audio(self):
-        wav_file_val = '../data/train/121624931534904112937-0.wav'
-        self._test_read_audio(wav_file_val)
+        audio_val = audio_val[:all_samples_val, 0]
+        audio_val = (32767 * audio_val).astype('int16')
+        self.assertTrue(np.max(np.abs(data_readed - audio_val)) <= 1, 'audio data')
 
     def test_input_fn(self):
         wav_files = ['../data/train/121624931534904112937-0.wav',
@@ -58,7 +62,11 @@ class VoiceDatasetTestCase(unittest.TestCase):
         wav_file = '../data/test/1252695_voice_reco_1527810946756.wav'
         wav_file_processed = '../data/test/1252695_voice_reco_1527810946756_processed.wav'
         convert_audio_with_PMX(wav_file, wav_file_processed)
-        self._test_read_audio(wav_file_processed)
+        # this customized function ignores the PMX chunk
+        data, sr = read_audio_int16(wav_file)
+        sr_readed, data_readed = read(wav_file_processed)
+        self.assertEqual(sr, sr_readed, 'sample rate')
+        self.assertTrue((data == data_readed).all(), 'audio data')
         os.remove(wav_file_processed)
 
 

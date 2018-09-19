@@ -12,8 +12,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """tf.data.Dataset interface to the Voice dataset."""
+import os
+
+import audioread
+import numpy as np
 import tensorflow as tf
-from librosa import load
 from scipy.io.wavfile import write
 from tensorflow.contrib.framework.python.ops import audio_ops as contrib_audio
 from tensorflow.python.ops import io_ops
@@ -161,16 +164,28 @@ def input_fn(wav_files,
     return features, labels
 
 
-def convert_audio_with_PMX(input_wav, output_wav, sample_rate=16000):
+def read_audio_int16(path):
+    fmt = '<i{:d}'.format(2)
+    dtype = 'int16'
+    y = []
+    with audioread.audio_open(os.path.realpath(path)) as input_file:
+        sr_native = input_file.samplerate
+        for frame in input_file:
+            frame = np.frombuffer(frame, fmt).astype(dtype)
+            y.append(frame)
+        if y:
+            y = np.concatenate(y)
+        # Final cleanup for dtype and contiguity
+        y = np.ascontiguousarray(y, dtype=dtype)
+        return (y, sr_native)
+
+
+def convert_audio_with_PMX(input_wav, output_wav):
     '''
     remove the chunks added by Adobe
     :param input_wav: input wav file that contains _PMX chunks
-    :param sample_rate: sample rate of the wav
     :param output_wav: a wav with the _PMX chunks removed
     :return: None
     '''
-    data, sample_rate = load(input_wav, sr=sample_rate)
-    # convert the float data to int16
-    data = data * 32767 # 2^16-1
-    data = data.astype(dtype='int16')
+    data, sample_rate = read_audio_int16(input_wav)
     write(output_wav, sample_rate, data)
