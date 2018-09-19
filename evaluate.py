@@ -77,6 +77,16 @@ def _verification_eer(to_be_verified, verification_sim, true_a, true_r, number_o
 
 
 def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
+    '''
+    Run evaluation for verification, to get the false accept and false reject rate
+    and the threshold that corresponds to the equal error rate if it is not specified.
+    :param embeddings:
+    :param label_ids:
+    :param registerations:
+    :param to_be_verified:
+    :param threshold:
+    :return:
+    '''
     verification_sim = []
     true_a = []  # true accept
     true_r = []  # true reject
