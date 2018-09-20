@@ -33,21 +33,25 @@ def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
     return fa, fr
 
 
-def _eer(fa_rates, fr_rates, thresholds):
+def _eer(fa_rates, fr_rates, error_rates, thresholds):
     '''
     Compute the nearly equal error rates (false rejection and false acceptance rates).
     The gap between the two types of errors for each threshold is used to define "how close the two errors are".
-    :param fa_rates: list of floats, the false acceptance rates.
+    :param fa_rates: list of floats, the false acceptance rates
     :param fr_rates: list of floats, the false rejectance rates
+    :param error_rates: list of floats, the error rates
     :param thresholds: list of floats, the thresholds. Each threshold corresponds to one false acceptance rate
-            and one false rejectance rate.
-    :return: the equal error rate and the corresponded threshold.
+            and one false rejectance rate
+    :return: the the false acceptance rate, false rejection rate, the error rate, corresponding to the
+            eer threshold, and the eer threshold
     '''
     gap = [abs(fa_rate - fr_rate) for fa_rate, fr_rate in zip(fa_rates, fr_rates)]
     min_pos = gap.index(min(gap))
-    eer = (fa_rates[min_pos] + fr_rates[min_pos]) / 2
+    fa_rate = fa_rates[min_pos]
+    fr_rate = fr_rates[min_pos]
     eer_threshold = thresholds[min_pos]
-    return eer, eer_threshold
+    error_rate = error_rates[min_pos]
+    return fa_rate, fr_rate, error_rate, eer_threshold
 
 
 def _verification_eer(to_be_verified, verification_sim, true_a, true_r, number_of_thresholds=200):
@@ -63,34 +67,44 @@ def _verification_eer(to_be_verified, verification_sim, true_a, true_r, number_o
     '''
     fa_rates = []
     fr_rates = []
+    error_rates = []
     thresholds = []
     threshold_step = 2. / number_of_thresholds
+    total_true_a = len(true_a)
+    total_true_r = len(true_r)
+    total = total_true_a + total_true_r
 
+    # the total number of error cases is len(fa)+len(fr) and error rate is #errors/#verification cases
+    # roughly speaking, error rate = (fa_rate+fr_rate)/2
     for threshold in [threshold_step * i - 1.0 for i in range(number_of_thresholds)]:
         fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
-        fa_rate = len(fa) / len(true_r) if true_r else 0.
-        fr_rate = len(fr) / len(true_a) if true_a else 0.
+        fa_rate = len(fa) / total_true_r if total_true_r else 0.
+        fr_rate = len(fr) / total_true_a if total_true_a else 0.
+        error_rate = (len(fa) + len(fr)) / total if total else 0.
         fa_rates.append(fa_rate)
         fr_rates.append(fr_rate)
+        error_rates.append(error_rate)
         thresholds.append(threshold)
-    return _eer(fa_rates, fr_rates, thresholds)
+    return _eer(fa_rates, fr_rates, error_rates, thresholds)
 
 
 def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified, threshold=None):
     '''
     Run evaluation for verification, to get the false accept and false reject rate
     and the threshold that corresponds to the equal error rate if it is not specified.
-    :param embeddings:
-    :param label_ids:
-    :param registerations:
-    :param to_be_verified:
-    :param threshold:
-    :return:
+    :param embeddings: 2D float numpy array, (batch_size, dim), use the embedding index to get the target embedding
+    :param label_ids: 1D int numpy array, one embedding has one label id
+    :param registerations: dictionary, (label_id, registered embedding list),
+            the registerated embeddings to compare with. Each label correpsonds to a list of registered embeddings
+    :param to_be_verified: a list of tuple (embedding index, claimed user id)
+    :param threshold: float, if the similarity is above the threshold, the unknown embedding will be
+            regarded as identical to the target embedding
+    :return: a tuple (false acceptance rate, flase rejection rate, threshold used). If the threshold is not specified;
+            the equal error rate and the threshold corresponding to the EER are returned
     '''
     verification_sim = []
     true_a = []  # true accept
     true_r = []  # true reject
-
     for embedding_index, claim_id in to_be_verified:
         embeddings_target = registerations[claim_id]
         embedding_unknown = embeddings[embedding_index]
@@ -101,19 +115,25 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
             true_a.append(embedding_index)
         else:
             true_r.append(embedding_index)
+    total_true_a = len(true_a)
+    total_true_r = len(true_r)
+    total = total_true_a + total_true_r
     if threshold:
         fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
-        fa_rate = len(fa) / len(true_r) if true_r else 0.
-        fr_rate = len(fr) / len(true_a) if true_a else 0.
-        return fa_rate, fr_rate, threshold
+        fa_rate = len(fa) / total_true_r if total_true_r else 0.
+        fr_rate = len(fr) / total_true_a if total_true_a else 0.
+        error_rate = (len(fa) + len(fr)) / total if total else 0.
+        return fa_rate, fr_rate, error_rate, threshold
     else:
-        # verification performance
-        eer, eer_thredhold = _verification_eer(to_be_verified, verification_sim, true_a, true_r)
-        return eer, eer, eer_thredhold
+        return _verification_eer(to_be_verified, verification_sim, true_a, true_r)
 
 
 def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
+    # false reject: the target user is correctly identified, but rejected because of the similarity is below
+    # the given threshold.
+    # false accept: the target user is incorrectly identified, and the similarity is no less than the given threshold.
     # return the indexes false rejected and false accepted
+    # in the false acceptance case, the target user can either be unregistered or registered.
     fa = []  # false accept
     fr = []  # false reject
     for i, j in enumerate(sims):
@@ -129,27 +149,30 @@ def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
     return fa, fr
 
 
-def _identification_eer(to_be_identified, sims, label_ids, true_a, true_r):
+def _identification_eer(to_be_identified, sims, label_ids):
     fa_rates = []
     fr_rates = []
+    error_rates = []
     thresholds = []
+    total = len(to_be_identified)
+    # different from the case for verification, the total number of all cases to be identified is used
+    # the total error will be the sum of two errors.
     for threshold in [0.01 * i - 1.0 for i in range(200)]:
         fa, fr = _identification_fa_fr(to_be_identified, sims, label_ids, threshold)
-        fa_rate = len(fa) / len(true_r) if true_r else 0.
-        fr_rate = len(fr) / len(true_a) if true_a else 0.
+        fa_rate = len(fa) / total if total else 0.
+        fr_rate = len(fr) / total if total else 0.
+        error_rate = (len(fa) + len(fr)) / total if total else 0.
         fa_rates.append(fa_rate)
         fr_rates.append(fr_rate)
+        error_rates.append(error_rate)
         thresholds.append(threshold)
-    return _eer(fa_rates, fr_rates, thresholds)
+    return _eer(fa_rates, fr_rates, error_rates, thresholds)
 
 
 def _evaluate_identification(embeddings, label_ids, registerations, to_be_identified, groups, threshold=None):
     grouped_registerations = dict()
     sims = []
-
-    true_a = []  # true accept
-    true_r = []  # true reject
-
+    total = len(to_be_identified)
     for embedding_index, target_group_id in to_be_identified:
         if target_group_id:  # not empty
             if target_group_id in grouped_registerations:
@@ -164,20 +187,14 @@ def _evaluate_identification(embeddings, label_ids, registerations, to_be_identi
             group_registerations = registerations
         sim, id = get_max_sim_and_id(embeddings[embedding_index], group_registerations)
         sims.append((sim, id))
-
-        true_id = label_ids[embedding_index]
-        if true_id in group_registerations:
-            true_a.append(embedding_index)
-        else:
-            true_r.append(embedding_index)
     if threshold:
         fa, fr = _identification_fa_fr(to_be_identified, sims, label_ids, threshold=threshold)
-        fa_rate = len(fa) / len(true_r) if true_r else 0.
-        fr_rate = len(fr) / len(true_a) if true_a else 0.
-        return fa_rate, fr_rate, threshold
+        fa_rate = len(fa) / total if total else 0.
+        fr_rate = len(fr) / total if total else 0.
+        error_rate = (len(fa) + len(fr)) / total if total else 0.
+        return fa_rate, fr_rate, error_rate, threshold
     else:
-        eer, eer_thredhold = _identification_eer(to_be_identified, sims, label_ids, true_a, true_r)
-        return eer, eer, eer_thredhold
+        return _identification_eer(to_be_identified, sims, label_ids)
 
 
 '''
@@ -295,20 +312,23 @@ def main(_):
 
     registerations = get_registerations([embeddings[i] for i in enrollments],
                                         [label_ids[i] for i in enrollments])
-    fa_rate, fr_rate, threshold = _evaluate_verification(embeddings, label_ids, registerations, to_be_verified,
-                                                         FLAGS.threshold)
+    fa_rate, fr_rate, error_rate, threshold = _evaluate_verification(embeddings, label_ids, registerations,
+                                                                     to_be_verified,
+                                                                     FLAGS.threshold)
 
     eval_msg_template = 'false accept rate:{}\n' + \
                         'false reject rate:{}\n' + \
+                        'error rate:{}\n' + \
                         'threshold:{}'
 
     tf.logging.info('verification performance')
-    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold))
+    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, error_rate, threshold))
 
-    fa_rate, fr_rate, threshold = _evaluate_identification(embeddings, label_ids, registerations,
-                                                           to_be_identified, groups, threshold)
+    # use the threshold corresponded to the eer for verification
+    fa_rate, fr_rate, error_rate, threshold = _evaluate_identification(embeddings, label_ids, registerations,
+                                                                       to_be_identified, groups, threshold)
     tf.logging.info('identification performance')
-    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, threshold))
+    tf.logging.info(eval_msg_template.format(fa_rate, fr_rate, error_rate, threshold))
 
 
 if __name__ == '__main__':
