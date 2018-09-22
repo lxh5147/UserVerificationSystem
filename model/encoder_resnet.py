@@ -7,7 +7,7 @@ def clipped_relu(inputs):
     return tf.minimum(tf.maximum(inputs, 0), 20)
 
 
-def res_block(input_tensor, kernel_size, filters, stage, block, is_training=True):
+def identity_block(input_tensor, kernel_size, filters, stage, block, is_training=True):
     conv_name_base = 'res{}_{}_branch'.format(stage, block)
     output = input_tensor
 
@@ -53,12 +53,12 @@ def conv_and_res_block(input_tensor, kernel_size, filters, strides, stage, block
                                            name=conv_name + '_bn')
     output = clipped_relu(output)
     for i in range(blocks):
-        output = res_block(output,
-                           kernel_size=kernel_size,
-                           filters=filters,
-                           stage=stage,
-                           block=i,
-                           is_training=is_training)
+        output = identity_block(output,
+                                kernel_size=kernel_size,
+                                filters=filters,
+                                stage=stage,
+                                block=i,
+                                is_training=is_training)
 
     return output
 
