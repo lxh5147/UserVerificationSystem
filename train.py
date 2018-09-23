@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+from random import shuffle
 
 import tensorflow as tf
 
@@ -8,12 +9,19 @@ from model.model_fn import create_model
 from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 
 
+def _shuffle_and_rearrange_by_pair(items, labels):
+    zipped = list(zip(items, labels))
+    shuffle(zipped)
+    _items, _labels = tuple(zip(*zipped))
+    return list(_items),list(_labels)
+
 def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
 
     # Define the input function for training
     wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
+    wav_files, labels = _shuffle_and_rearrange_by_pair(wav_files, labels)
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
@@ -52,7 +60,6 @@ def main(_):
         dct_coefficient_count=FLAGS.dct_coefficient_count,
         batch_size=FLAGS.batch_size
     )
-
     model.train(train_input_fn,
                 steps=FLAGS.num_steps)
 

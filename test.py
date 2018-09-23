@@ -1,5 +1,10 @@
-import numpy as np
+from random import shuffle
+items = [11,21,31]
+labels=[1,2,3]
+all = list(zip(items,labels))
+#print(all)
+shuffle(all)
+a,b = tuple(zip(*all))
 
-a = np.asanyarray([[1], [2], [3]], dtype='int16')
-
-print(a[:2, 0])
+print (a)
+print(b)
