@@ -419,4 +419,3 @@ if __name__ == '__main__':
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
-

@@ -111,6 +111,26 @@ def dataset(wav_files,
     return raw_dataset.map(decode)
 
 
+def dataset_raw(wav_files,
+                labels,
+                desired_samples):
+    '''
+    :param wav_files: a list of audio file names
+    :param labels: the label of each file
+    :param desired_samples: how many number of samples to load from a wav file.
+    :return: raw data set
+    '''
+
+    raw_dataset = tf.data.Dataset.from_tensor_slices(
+        (wav_files, labels))
+
+    def decode(wav_file, label):
+        audio, sample_rate, _ = read_audio(wav_file, desired_samples)
+        return (audio, label)
+
+    return raw_dataset.map(decode)
+
+
 def from_ms_to_samples(sample_rate, duration_ms):
     return int(sample_rate * duration_ms / 1000)
 
@@ -136,6 +156,39 @@ def get_file_and_labels(file_and_labels_file):
     return files, label_ids, label_to_id
 
 
+def _post_process_dataset(dataset,
+                          batch_size,
+                          is_training=True,
+                          buffer_size=None):
+    # Shuffle, repeat, and batch the examples.
+    if is_training:
+        if buffer_size:
+            dataset = dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
+        else:
+            dataset = dataset.repeat().batch(batch_size)
+    else:
+        dataset = dataset.batch(batch_size)
+    return dataset
+
+
+def input_raw_fn(wav_files,
+                 labels,
+                 batch_size,
+                 desired_samples,
+                 is_training=True,
+                 buffer_size=None):
+    voice_dataset = dataset_raw(wav_files,
+                                labels,
+                                desired_samples
+                                )
+    voice_dataset = _post_process_dataset(
+        voice_dataset,
+        batch_size,
+        is_training,
+        buffer_size)
+    audios, labels = voice_dataset.make_one_shot_iterator().get_next()
+    return audios, labels
+
 def input_fn(wav_files,
              labels,
              batch_size,
@@ -154,15 +207,10 @@ def input_fn(wav_files,
                             magnitude_squared,
                             dct_coefficient_count
                             )
-    # Shuffle, repeat, and batch the examples.
-    if is_training:
-        if buffer_size:
-            voice_dataset = voice_dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
-        else:
-            voice_dataset = voice_dataset.repeat().batch(batch_size)
-    else:
-        voice_dataset = voice_dataset.batch(batch_size)
-
+    voice_dataset = _post_process_dataset(voice_dataset,
+                                          batch_size,
+                                          is_training,
+                                          buffer_size)
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
     return features, labels
 

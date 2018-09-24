@@ -13,7 +13,8 @@ def _shuffle_and_rearrange_by_pair(items, labels):
     zipped = list(zip(items, labels))
     shuffle(zipped)
     _items, _labels = tuple(zip(*zipped))
-    return list(_items),list(_labels)
+    return list(_items), list(_labels)
+
 
 def main(_):
     # We want to see all the logging messages for this tutorial.
