@@ -12,7 +12,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """tf.data.Dataset interface to the Voice dataset."""
-import collections
 import os
 
 import audioread
@@ -162,10 +161,7 @@ def _post_process_dataset(dataset,
                           buffer_size=16000):
     # Shuffle, repeat, and batch the examples.
     if is_training:
-        if buffer_size:
-            dataset = dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
-        else:
-            dataset = dataset.repeat().batch(batch_size)
+        dataset = dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
     else:
         dataset = dataset.batch(batch_size)
     return dataset
@@ -242,49 +238,3 @@ def convert_audio_with_PMX(input_wav, output_wav):
     data, sample_rate = read_audio_int16(input_wav)
     write(output_wav, sample_rate, data)
 
-
-def _group_by_labels(items, labels):
-    '''
-    Group items by labels. Both the label and item are in the same order as they occur.
-    :param items: a list of Objects to be grouped
-    :param labels: the corresponding item labels
-    :return: an ordered dictionary, representing the grouped items
-    '''
-    groups = collections.OrderedDict()
-    for item, label in zip(items, labels):
-        if label in groups:
-            groups[label].append(item)
-        else:
-            groups[label] = [item]
-    return groups
-
-
-def rearrange_with_same_label(items, labels, n=2):
-    '''
-    Re-arrange items so that n items have the same label and the next n with different label.
-    :param items: a list of items to arrange
-    :param labels: item labels
-    :param n: int, the expected number of items with the same label
-    :return: a list of items re-arranged
-    '''
-    groups = _group_by_labels(items, labels)
-    items_updated = []
-    labels_updated = []
-    labels_ordered = groups.keys()
-    counts_readed = dict()
-    for label in labels_ordered:
-        counts_readed[label] = 0
-    while len(items_updated) < len(items):
-        # rearrange all items
-        for label in labels_ordered:
-            group = groups[label]
-            count = len(group)
-            count_readed = counts_readed[label]
-            # try to read a pair of items from a group
-            for i in range(n):
-                if count_readed < count:
-                    items_updated.append(group[count_readed])
-                    labels_updated.append(label)
-                    count_readed += 1
-            counts_readed[label] = count_readed
-    return items_updated, labels_updated

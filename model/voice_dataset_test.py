@@ -5,9 +5,7 @@ import numpy as np
 import tensorflow as tf
 from scipy.io.wavfile import read
 
-from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX, read_audio_int16, _group_by_labels, \
-    rearrange_with_same_label
-
+from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX, read_audio_int16
 
 class VoiceDatasetTestCase(unittest.TestCase):
     def test_read_audio(self):
@@ -69,21 +67,6 @@ class VoiceDatasetTestCase(unittest.TestCase):
         self.assertEqual(sr, sr_readed, 'sample rate')
         self.assertTrue((data == data_readed).all(), 'audio data')
         os.remove(wav_file_processed)
-
-    def test_group_by_labels(self):
-        items = [11, 12, 13, 23, 22, 33]
-        labels = [1, 1, 1, 2, 2, 3]
-        groups = _group_by_labels(items, labels)
-        import collections
-        groups_expected = collections.OrderedDict({1: [11, 12, 13], 2: [23, 22], 3: [33]})
-        self.assertTrue(groups == groups_expected, 'groups')
-
-    def test_rearrange_by_pair(self):
-        items = [11, 12, 13, 23, 22, 33]
-        labels = [1, 1, 1, 2, 2, 3]
-        items_updated, labels_updated = rearrange_with_same_label(items, labels)
-        self.assertTrue(items_updated == [11, 12, 23, 22, 33, 13], 'items')
-        self.assertTrue(labels_updated == [1, 1, 2, 2, 3, 1], 'labels')
 
 
 if __name__ == '__main__':

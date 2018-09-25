@@ -6,14 +6,7 @@ from random import shuffle
 import tensorflow as tf
 
 from model.model_fn import create_model
-from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples, rearrange_with_same_label
-
-
-def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
-    zipped = list(zip(items, labels))
-    shuffle(zipped)
-    _items, _labels = tuple(zip(*zipped))
-    return rearrange_with_same_label(_items, _labels, n)
+from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
 
 
 def main(_):
@@ -22,7 +15,6 @@ def main(_):
 
     # Define the input function for training
     wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
-    #wav_files, labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
