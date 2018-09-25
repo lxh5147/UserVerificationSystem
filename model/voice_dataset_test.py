@@ -46,8 +46,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
                                        window_stride_samples=window_stride_samples,
                                        magnitude_squared=True,
                                        dct_coefficient_count=40,
-                                       is_training=True,
-                                       buffer_size=1000)
+                                       is_training=True)
         labels_readout = []
         repeated_times = 10
         with tf.Session() as sess:
