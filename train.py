@@ -22,7 +22,7 @@ def main(_):
 
     # Define the input function for training
     wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
-    wav_files, labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
+    #wav_files, labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)

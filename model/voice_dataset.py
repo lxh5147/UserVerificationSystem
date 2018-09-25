@@ -159,7 +159,7 @@ def get_file_and_labels(file_and_labels_file):
 def _post_process_dataset(dataset,
                           batch_size,
                           is_training=True,
-                          buffer_size=None):
+                          buffer_size=16000):
     # Shuffle, repeat, and batch the examples.
     if is_training:
         if buffer_size:
