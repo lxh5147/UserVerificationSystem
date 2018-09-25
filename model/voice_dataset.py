@@ -189,6 +189,7 @@ def input_raw_fn(wav_files,
     audios, labels = voice_dataset.make_one_shot_iterator().get_next()
     return audios, labels
 
+
 def input_fn(wav_files,
              labels,
              batch_size,
@@ -258,7 +259,7 @@ def _group_by_labels(items, labels):
     return groups
 
 
-def rearrange_with_same_label(items, labels,n=2):
+def rearrange_with_same_label(items, labels, n=2):
     '''
     Re-arrange items so that n items have the same label and the next n with different label.
     :param items: a list of items to arrange

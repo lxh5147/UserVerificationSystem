@@ -15,6 +15,7 @@ def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
     _items, _labels = tuple(zip(*zipped))
     return rearrange_with_same_label(_items, _labels, n)
 
+
 def main(_):
     # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)

@@ -3,8 +3,9 @@ import unittest
 import numpy as np
 import tensorflow as tf
 
-from model.encoder_sinc_conv import encoder, sinc
 from model.encoder_cnn import encoder as cnn_encoder
+from model.encoder_sinc_conv import encoder, sinc
+
 
 class SincEncoderTestCase(unittest.TestCase):
     def test_sinc(self):
@@ -23,11 +24,11 @@ class SincEncoderTestCase(unittest.TestCase):
             'freq_scale': 30,
             'sinc_filters': 20,
             'sinc_kernel_size': 3,
-            'filters':[10],
-            'blocks':3,
-            'kernel_size':2,
-            'strides':1,
-            'embedding_size':'50'
+            'filters': [10],
+            'blocks': 3,
+            'kernel_size': 2,
+            'strides': 1,
+            'embedding_size': '50'
         }
         output = encoder(inputs, params, cnn_encoder)
         init_op = tf.initialize_all_variables()
