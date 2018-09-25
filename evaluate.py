@@ -333,7 +333,7 @@ def main(_):
 
 if __name__ == '__main__':
     '''
-    CUDA_VISIBLE_DEVICES=1 python evaluate.py --model_dir='./mdf/errorl09' --data_dir='./data/25family' --encoder='resnet'  --filters=' 64, 128, 256,512' --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --sample_rate=16000 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --dct_coefficient_count=40 --batch_size=30
+    CUDA_VISIBLE_DEVICES=1 python evaluate.py --model_dir='../puffer_515' --data_dir='../../UserVerificationSystem/data/25family' --encoder='cnn'  --filters='64, 128, 256,512' --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --sample_rate=16000 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True  --dct_coefficient_count=40 --batch_size=60
     '''
     parser = argparse.ArgumentParser()
     parser.add_argument(

@@ -6,7 +6,7 @@ import tensorflow as tf
 from scipy.io.wavfile import read
 
 from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX, read_audio_int16, _group_by_labels, \
-    rearrange_by_pair
+    rearrange_with_same_label
 
 
 class VoiceDatasetTestCase(unittest.TestCase):
@@ -81,7 +81,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
     def test_rearrange_by_pair(self):
         items = [11, 12, 13, 23, 22, 33]
         labels = [1, 1, 1, 2, 2, 3]
-        items_updated, labels_updated = rearrange_by_pair(items, labels)
+        items_updated, labels_updated = rearrange_with_same_label(items, labels)
         self.assertTrue(items_updated == [11, 12, 23, 22, 33, 13], 'items')
         self.assertTrue(labels_updated == [1, 1, 2, 2, 3, 1], 'labels')
 

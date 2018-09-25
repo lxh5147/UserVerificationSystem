@@ -6,15 +6,14 @@ from random import shuffle
 import tensorflow as tf
 
 from model.model_fn import create_model
-from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples
+from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples, rearrange_with_same_label
 
 
-def _shuffle_and_rearrange_by_pair(items, labels):
+def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
     zipped = list(zip(items, labels))
     shuffle(zipped)
     _items, _labels = tuple(zip(*zipped))
-    return list(_items), list(_labels)
-
+    return rearrange_with_same_label(_items, _labels, n)
 
 def main(_):
     # We want to see all the logging messages for this tutorial.
@@ -22,7 +21,7 @@ def main(_):
 
     # Define the input function for training
     wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
-    wav_files, labels = _shuffle_and_rearrange_by_pair(wav_files, labels)
+    wav_files, labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
@@ -67,7 +66,7 @@ def main(_):
 
 if __name__ == '__main__':
     '''
-    CUDA_VISIBLE_DEVICES=1 python train.py --model_dir='../puffer_515' --data_dir='../../UserVer/UserVerificationSystem/data' --encoder='resnet'  --filters='64,128,256,512' --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --sample_rate=16000 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --dct_coefficient_count=40 --batch_size=30 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=12600 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
+    CUDA_VISIBLE_DEVICES=1 python train.py --model_dir='../puffer_515' --data_dir='../../UserVer/UserVerificationSystem/data' --encoder='cnn'  --filters='64,128,256,512' --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --sample_rate=16000 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --dct_coefficient_count=40 --batch_size=80 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=12600 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
     tensorboard --logdir=../puffer_515/
     '''
     parser = argparse.ArgumentParser()

@@ -258,11 +258,12 @@ def _group_by_labels(items, labels):
     return groups
 
 
-def rearrange_by_pair(items, labels):
+def rearrange_with_same_label(items, labels,n=2):
     '''
-    Re-arrange items so that two items have the same label and the next two different label.
+    Re-arrange items so that n items have the same label and the next n with different label.
     :param items: a list of items to arrange
     :param labels: item labels
+    :param n: int, the expected number of items with the same label
     :return: a list of items re-arranged
     '''
     groups = _group_by_labels(items, labels)
@@ -279,13 +280,10 @@ def rearrange_by_pair(items, labels):
             count = len(group)
             count_readed = counts_readed[label]
             # try to read a pair of items from a group
-            if count_readed < count:
-                items_updated.append(group[count_readed])
-                labels_updated.append(label)
-                count_readed += 1
-            if count_readed < count:
-                items_updated.append(group[count_readed])
-                labels_updated.append(label)
-                count_readed += 1
+            for i in range(n):
+                if count_readed < count:
+                    items_updated.append(group[count_readed])
+                    labels_updated.append(label)
+                    count_readed += 1
             counts_readed[label] = count_readed
     return items_updated, labels_updated
