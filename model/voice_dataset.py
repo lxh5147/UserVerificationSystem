@@ -14,6 +14,7 @@
 """tf.data.Dataset interface to the Voice dataset."""
 import collections
 import os
+from random import shuffle
 
 import audioread
 import numpy as np
@@ -95,8 +96,9 @@ def dataset(wav_files,
     :return: data set
     '''
 
-    raw_dataset = tf.data.Dataset.from_tensor_slices(
-        (wav_files, labels))
+    raw_dataset = tf.data.Dataset.from_generator(_create_generator(wav_files, labels),
+                                                 (tf.string, tf.int64),
+                                                 (tf.TensorShape([]), tf.TensorShape([])))
 
     def decode(wav_file, label):
         audio, sample_rate, _ = read_audio(wav_file, desired_samples)
@@ -120,10 +122,9 @@ def dataset_raw(wav_files,
     :param desired_samples: how many number of samples to load from a wav file.
     :return: raw data set
     '''
-
-    raw_dataset = tf.data.Dataset.from_tensor_slices(
-        (wav_files, labels))
-
+    raw_dataset = tf.data.Dataset.from_generator(_create_generator(wav_files, labels),
+                                                 (tf.string, tf.int64),
+                                                 (tf.TensorShape([]), tf.TensorShape([])))
     def decode(wav_file, label):
         audio, sample_rate, _ = read_audio(wav_file, desired_samples)
         return (audio, label)
@@ -158,14 +159,9 @@ def get_file_and_labels(file_and_labels_file):
 
 def _post_process_dataset(dataset,
                           batch_size,
-                          is_training=True,
-                          buffer_size=16000):
-    # Shuffle, repeat, and batch the examples.
+                          is_training=True):
     if is_training:
-        if buffer_size:
-            dataset = dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
-        else:
-            dataset = dataset.repeat().batch(batch_size)
+        dataset = dataset.repeat().batch(batch_size)
     else:
         dataset = dataset.batch(batch_size)
     return dataset
@@ -198,8 +194,7 @@ def input_fn(wav_files,
              window_stride_samples,
              magnitude_squared=True,
              dct_coefficient_count=40,
-             is_training=True,
-             buffer_size=None):
+             is_training=True):
     voice_dataset = dataset(wav_files,
                             labels,
                             desired_samples,
@@ -210,8 +205,7 @@ def input_fn(wav_files,
                             )
     voice_dataset = _post_process_dataset(voice_dataset,
                                           batch_size,
-                                          is_training,
-                                          buffer_size)
+                                          is_training)
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
     return features, labels
 
@@ -259,7 +253,7 @@ def _group_by_labels(items, labels):
     return groups
 
 
-def rearrange_with_same_label(items, labels, n=2):
+def _rearrange_with_same_label(items, labels, n=2):
     '''
     Re-arrange items so that n items have the same label and the next n with different label.
     :param items: a list of items to arrange
@@ -288,3 +282,21 @@ def rearrange_with_same_label(items, labels, n=2):
                     count_readed += 1
             counts_readed[label] = count_readed
     return items_updated, labels_updated
+
+
+def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
+    # re-shuffle the items and try to put every two items with the same label
+    zipped = list(zip(items, labels))
+    shuffle(zipped)
+    _items, _labels = tuple(zip(*zipped))
+    return _rearrange_with_same_label(_items, _labels, n)
+
+
+def _create_generator(items, labels):
+    # create a generator for the dataset
+    def generator():
+        _items, _labels = _shuffle_and_rearrange_with_same_label(items, labels)
+        for item, label in zip(_items, _labels):
+            yield (item, label)
+
+    return generator
