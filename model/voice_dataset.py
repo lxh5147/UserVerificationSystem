@@ -125,6 +125,7 @@ def dataset_raw(wav_files,
     raw_dataset = tf.data.Dataset.from_generator(_create_generator(wav_files, labels),
                                                  (tf.string, tf.int64),
                                                  (tf.TensorShape([]), tf.TensorShape([])))
+
     def decode(wav_file, label):
         audio, sample_rate, _ = read_audio(wav_file, desired_samples)
         return (audio, label)
@@ -167,11 +168,12 @@ def _post_process_dataset(dataset,
     return dataset
 
 
-def input_raw_fn(wav_files,
-                 labels,
-                 batch_size,
-                 desired_samples,
-                 is_training=True):
+def _input_fn_raw(wav_files,
+                  labels,
+                  is_training=True,
+                  **kwargs):
+    batch_size = kwargs['batch_size']
+    desired_samples = kwargs['desired_samples']
     voice_dataset = dataset_raw(wav_files,
                                 labels,
                                 desired_samples
@@ -184,15 +186,16 @@ def input_raw_fn(wav_files,
     return audios, labels
 
 
-def input_fn(wav_files,
-             labels,
-             batch_size,
-             desired_samples,
-             window_size_samples,
-             window_stride_samples,
-             magnitude_squared=True,
-             dct_coefficient_count=40,
-             is_training=True):
+def _input_fn_feature(wav_files,
+                      labels,
+                      is_training=True,
+                      **kwargs):
+    batch_size = kwargs['batch_size']
+    desired_samples = kwargs['desired_samples']
+    window_size_samples = kwargs['window_size_samples']
+    window_stride_samples = kwargs['window_stride_samples']
+    magnitude_squared = kwargs['magnitude_squared']
+    dct_coefficient_count = kwargs['dct_coefficient_count']
     voice_dataset = dataset(wav_files,
                             labels,
                             desired_samples,
@@ -211,34 +214,23 @@ def input_fn(wav_files,
 def get_input_function(
         wav_files,
         labels,
-        batch_size,
-        desired_samples,
         is_training=True,
-        type='feature',
+        encoder='cnn',
         **kwargs
 ):
-    assert type in ['feature', 'raw']
-    if type == 'feature':
-        return lambda: input_raw_fn(wav_files,
-                                    labels,
-                                    batch_size,
-                                    desired_samples,
-                                    is_training)
-    elif type == 'raw':
-        window_size_samples=kwargs['window_size_samples']
-        window_stride_samples=kwargs['window_stride_samples']
-        magnitude_squared = kwargs['magnitude_squared']
-        dct_coefficient_count = kwargs['dct_coefficient_count']
-        return lambda :input_fn(wav_files,
-             labels,
-             batch_size,
-             desired_samples,
-             window_size_samples,
-             window_stride_samples,
-             magnitude_squared,
-             dct_coefficient_count,
-             is_training)
-
+    # return the input function for a given type of encoder
+    assert encoder in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
+    if encoder in ['cnn', 'resnet']:
+        return lambda: _input_fn_raw(wav_files,
+                                     labels,
+                                     is_training,
+                                     **kwargs)
+    elif encoder in ['sinc_cnn', 'sinc_resnet']:
+        return lambda: _input_fn_feature(wav_files,
+                                         labels,
+                                         is_training,
+                                         **kwargs
+                                         )
 
 
 def read_audio_int16(path):
@@ -331,9 +323,3 @@ def _create_generator(items, labels):
             yield (item, label)
 
     return generator
-
-
-def _generate_feature(wav_file):
-    # refer to: speech feature extractor, to extract features,
-    # then we can use a generator to generate this kind of features
-    pass

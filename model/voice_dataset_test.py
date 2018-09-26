@@ -5,7 +5,8 @@ import numpy as np
 import tensorflow as tf
 from scipy.io.wavfile import read
 
-from model.voice_dataset import read_audio, input_fn, convert_audio_with_PMX, read_audio_int16, _group_by_labels, \
+from model.voice_dataset import read_audio, _input_fn_feature, convert_audio_with_PMX, read_audio_int16, \
+    _group_by_labels, \
     _rearrange_with_same_label
 
 
@@ -38,15 +39,15 @@ class VoiceDatasetTestCase(unittest.TestCase):
         window_size_samples = 400
         window_stride_samples = 100
         batch_size = 2
-        features, label_ids = input_fn(wav_files,
-                                       labels,
-                                       batch_size=batch_size,
-                                       desired_samples=desired_samples,
-                                       window_size_samples=window_size_samples,
-                                       window_stride_samples=window_stride_samples,
-                                       magnitude_squared=True,
-                                       dct_coefficient_count=40,
-                                       is_training=True)
+        features, label_ids = _input_fn_feature(wav_files,
+                                                labels,
+                                                batch_size=batch_size,
+                                                desired_samples=desired_samples,
+                                                window_size_samples=window_size_samples,
+                                                window_stride_samples=window_stride_samples,
+                                                magnitude_squared=True,
+                                                dct_coefficient_count=40,
+                                                is_training=True)
         labels_readout = []
         repeated_times = 10
         with tf.Session() as sess:

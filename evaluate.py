@@ -5,7 +5,7 @@ import sys
 import tensorflow as tf
 
 from model.model_fn import create_model
-from model.voice_dataset import get_file_and_labels
+from model.voice_dataset import get_file_and_labels, from_ms_to_samples
 from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
 
 
@@ -302,13 +302,7 @@ def main(_):
 
     embeddings = get_embeddings(model,
                                 wav_files=wav_files,
-                                desired_ms=FLAGS.desired_ms,
-                                window_size_ms=FLAGS.window_size_ms,
-                                window_stride_ms=FLAGS.window_stride_ms,
-                                sample_rate=FLAGS.sample_rate,
-                                magnitude_squared=FLAGS.magnitude_squared,
-                                dct_coefficient_count=FLAGS.dct_coefficient_count,
-                                batch_size=FLAGS.batch_size)
+                                **FLAGS.__dict__)
 
     registerations = get_registerations([embeddings[i] for i in enrollments],
                                         [label_ids[i] for i in enrollments])
@@ -418,4 +412,8 @@ if __name__ == '__main__':
         help='If the similarity between two wav files is no less than this threshold, they are considered from the same person.')
 
     FLAGS, _ = parser.parse_known_args()
+    FLAGS.desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
+    FLAGS.window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
+    FLAGS.window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
+
     tf.app.run(main=main, argv=[sys.argv[0]] + _)

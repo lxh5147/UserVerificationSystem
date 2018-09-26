@@ -1,22 +1,12 @@
-import tensorflow as tf
+def test(**kwargs):
+    p = kwargs['p']
+    print(p)
 
 
+def test2(x=1, q=2, **kwargs):
+    print(q)
 
-from  model.voice_dataset import _create_generator
 
-wav_files =['1.wav','2.wav','3.wav','4.wav']
-labels=[1,2,3,1]
+param = {'p': 2, 'q': 3}
 
-ds = tf.data.Dataset.from_generator(_create_generator(wav_files,labels),(tf.string, tf.int64),\
-                               (tf.TensorShape([]), tf.TensorShape([])))
-
-ds = ds.repeat()
-
-value = ds.make_one_shot_iterator().get_next()
-
-with tf.Session() as sess:
-    for i in range(16):
-        if i % len(labels) == 0:
-            print('==')
-        print(sess.run(value))
-
+test2(x=1, **param)

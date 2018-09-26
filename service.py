@@ -13,6 +13,7 @@ import numpy as np
 import tensorflow as tf
 
 from model.model_fn import create_model
+from model.voice_dataset import from_ms_to_samples
 from predict import get_embeddings, get_enrollments, get_max_sim_and_id
 
 # function result
@@ -209,13 +210,8 @@ def _identification(embedding_unknown, device_id):
 def _get_embedding(model, filepath):
     embeddings = get_embeddings(model,
                                 [filepath],
-                                FLAGS.desired_ms,
-                                FLAGS.window_size_ms,
-                                FLAGS.window_stride_ms,
-                                FLAGS.sample_rate,
-                                FLAGS.magnitude_squared,
-                                FLAGS.dct_coefficient_count,
-                                batch_size=1)
+                                batch_size=1,
+                                **FLAGS.__dict__)
     return embeddings[0]
 
 
@@ -396,4 +392,7 @@ if __name__ == '__main__':
         help='If the similarity between two wav files is no less than this threshold, they are considered from the same person.')
 
     FLAGS, _ = parser.parse_known_args()
+    FLAGS.desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
+    FLAGS.window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
+    FLAGS.window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
     tf.app.run(main=main, argv=[sys.argv[0]] + _)

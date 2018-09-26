@@ -2,13 +2,10 @@ import argparse
 import os
 import sys
 
-
 import tensorflow as tf
 
 from model.model_fn import create_model
-from model.voice_dataset import input_fn, get_file_and_labels, from_ms_to_samples, _rearrange_with_same_label
-
-
+from model.voice_dataset import get_file_and_labels, from_ms_to_samples, get_input_function
 
 
 def main(_):
@@ -40,19 +37,10 @@ def main(_):
             'num_classes': train_num_classes,
             'encoder': FLAGS.encoder
         })
-
-    desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
-    window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
-    window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
-    train_input_fn = lambda: input_fn(
+    train_input_fn = get_input_function(
         wav_files=wav_files,
         labels=labels,
-        desired_samples=desired_samples,
-        window_size_samples=window_size_samples,
-        window_stride_samples=window_stride_samples,
-        magnitude_squared=FLAGS.magnitude_squared,
-        dct_coefficient_count=FLAGS.dct_coefficient_count,
-        batch_size=FLAGS.batch_size
+        **FLAGS.__dict__
     )
     model.train(train_input_fn,
                 steps=FLAGS.num_steps)
@@ -60,7 +48,7 @@ def main(_):
 
 if __name__ == '__main__':
     '''
-    CUDA_VISIBLE_DEVICES=1 python train.py --model_dir='../puffer_515' --data_dir='../../UserVer/UserVerificationSystem/data' --encoder='cnn'  --filters='64,128,256,512' --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --sample_rate=16000 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --dct_coefficient_count=40 --batch_size=80 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=12600 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
+    CUDA_VISIBLE_DEVICES=1 python train.py --model_dir='../puffer_515' --data_dir='../../UserVerificationSystem/data/error' --encoder='cnn'  --filters='64,128,256,512' --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --sample_rate=16000 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --dct_coefficient_count=40 --batch_size=80 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=12600 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
     tensorboard --logdir=../puffer_515/
     '''
     parser = argparse.ArgumentParser()
@@ -191,4 +179,8 @@ if __name__ == '__main__':
         help='Weight of cross entropy loss.')
 
     FLAGS, _ = parser.parse_known_args()
+    FLAGS.desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
+    FLAGS.window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
+    FLAGS.window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
+
     tf.app.run(main=main, argv=[sys.argv[0]] + _)

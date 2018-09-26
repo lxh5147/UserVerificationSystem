@@ -6,6 +6,7 @@ import tensorflow as tf
 
 import service
 from model.model_fn import create_model
+from model.voice_dataset import from_ms_to_samples
 from service import _write_pcm16_wav, _parse_environ, _get_device_root_path, _get_user_root_path
 
 tf.logging.set_verbosity(tf.logging.INFO)
@@ -29,10 +30,10 @@ class ServiceTestCase(unittest.TestCase):
             'strides': 2,
             'embedding_size': 128,
             'encoder': 'cnn',
-            'desired_ms': 1000,
-            'window_size_ms': 30.0,
-            'window_stride_ms': 10.0,
             'sample_rate': 16000,
+            'desired_samples': from_ms_to_samples(16000, 1000),
+            'window_size_samples': from_ms_to_samples(16000, 30.0),
+            'window_stride_samples': from_ms_to_samples(16000, 10.0),
             'magnitude_squared': True,
             'dct_coefficient_count': 40,
             'batch_size': 10,

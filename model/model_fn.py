@@ -24,6 +24,7 @@ def _get_encoder(encoder_name):
         from model.encoder_sinc_conv import SincEncoder as sinc_encoder
         return sinc_encoder(encoder_resnet)
 
+
 def model_fn(features, labels, mode, params):
     """Model function for tf.estimator
     Args:

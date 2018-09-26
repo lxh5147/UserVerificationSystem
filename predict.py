@@ -1,6 +1,6 @@
 import numpy as np
 
-from model.voice_dataset import input_fn, from_ms_to_samples
+from model.voice_dataset import get_input_function
 
 
 def l2_norm(embeddings):
@@ -57,27 +57,14 @@ def get_max_sim_and_id(embedding_unknown, embeddings_registered):
 
 def get_embeddings(model,
                    wav_files,
-                   desired_ms,
-                   window_size_ms,
-                   window_stride_ms,
-                   sample_rate,
-                   magnitude_squared,
-                   dct_coefficient_count,
-                   batch_size):
-    desired_samples = from_ms_to_samples(sample_rate, desired_ms)
-    window_size_samples = from_ms_to_samples(sample_rate, window_size_ms)
-    window_stride_samples = from_ms_to_samples(sample_rate, window_stride_ms)
+                   **kwargs):
     label_ids = [-1 for _ in wav_files]
-    predict_input_fn = lambda: input_fn(
-        wav_files=wav_files,
-        labels=label_ids,
-        desired_samples=desired_samples,
-        window_size_samples=window_size_samples,
-        window_stride_samples=window_stride_samples,
-        magnitude_squared=magnitude_squared,
-        dct_coefficient_count=dct_coefficient_count,
-        batch_size=batch_size,
-        is_training=False
+
+    predict_input_fn = get_input_function(
+        wav_files,
+        label_ids,
+        is_training=False,
+        **kwargs
     )
 
     embeddings = []
