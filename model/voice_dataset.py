@@ -300,7 +300,3 @@ def _create_generator(items, labels):
             yield (item, label)
 
     return generator
-
-def _generate_wav_feature():
-    # feature generation function
-    pass
