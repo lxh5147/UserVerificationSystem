@@ -65,8 +65,23 @@ if __name__ == '__main__':
     parser.add_argument(
         '--encoder',
         type=str,
-        default='cnn',
+        default='sinc_cnn',
         help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet')
+    parser.add_argument(
+        '--sinc_freq_scale',
+        type=float,
+        default=16000.,
+        help='Frequency scale for sinc input feature ecoder')
+    parser.add_argument(
+        '--sinc_filters',
+        type=int,
+        default=40,
+        help='Number of filters for sinc input feature encoder')
+    parser.add_argument(
+        '--sinc_kernel_size',
+        type=int,
+        default=3,
+        help='The kernel size of the filter for sinc input feature encoder')
     parser.add_argument(
         '--filters',
         type=str,
