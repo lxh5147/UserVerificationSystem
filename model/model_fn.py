@@ -8,14 +8,21 @@ from model.triplet_loss import batch_hard_triplet_loss
 
 
 def _get_encoder(encoder_name):
-    assert encoder_name in ['cnn', 'resnet']
+    assert encoder_name in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
     if encoder_name == 'cnn':
         from model.encoder_cnn import encoder as encoder_cnn
         return encoder_cnn
     elif encoder_name == 'resnet':
         from model.encoder_resnet import encoder as encoder_resnet
         return encoder_resnet
-
+    elif encoder_name == 'sinc_cnn':
+        from model.encoder_cnn import encoder as encoder_cnn
+        from model.encoder_sinc_conv import SincEncoder as sinc_encoder
+        return sinc_encoder(encoder_cnn)
+    elif encoder_name == 'sinc_resnet':
+        from model.encoder_resnet import encoder as encoder_resnet
+        from model.encoder_sinc_conv import SincEncoder as sinc_encoder
+        return sinc_encoder(encoder_resnet)
 
 def model_fn(features, labels, mode, params):
     """Model function for tf.estimator

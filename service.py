@@ -328,7 +328,7 @@ if __name__ == '__main__':
         '--encoder',
         type=str,
         default='cnn',
-        help='Encoder that encodes a wav to a vector. Use cnn or resnet')
+        help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet')
     parser.add_argument(
         '--filters',
         type=str,

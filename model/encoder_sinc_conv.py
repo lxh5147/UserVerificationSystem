@@ -55,3 +55,15 @@ def encoder(inputs,
     return upper_encoder(output,
                          params,
                          is_training)
+
+
+class SincEncoder(object):
+    # wrapper of sinc encoder
+    def __init__(self, upper_encoder):
+        self._upper_encoder = upper_encoder
+
+    def __call__(self,
+                 inputs,
+                 params,
+                 is_training=True):
+        return encoder(inputs, params, self._upper_encoder, is_training)

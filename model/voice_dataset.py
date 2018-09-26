@@ -171,8 +171,7 @@ def input_raw_fn(wav_files,
                  labels,
                  batch_size,
                  desired_samples,
-                 is_training=True,
-                 buffer_size=None):
+                 is_training=True):
     voice_dataset = dataset_raw(wav_files,
                                 labels,
                                 desired_samples
@@ -180,8 +179,7 @@ def input_raw_fn(wav_files,
     voice_dataset = _post_process_dataset(
         voice_dataset,
         batch_size,
-        is_training,
-        buffer_size)
+        is_training)
     audios, labels = voice_dataset.make_one_shot_iterator().get_next()
     return audios, labels
 
@@ -208,6 +206,39 @@ def input_fn(wav_files,
                                           is_training)
     features, labels = voice_dataset.make_one_shot_iterator().get_next()
     return features, labels
+
+
+def get_input_function(
+        wav_files,
+        labels,
+        batch_size,
+        desired_samples,
+        is_training=True,
+        type='feature',
+        **kwargs
+):
+    assert type in ['feature', 'raw']
+    if type == 'feature':
+        return lambda: input_raw_fn(wav_files,
+                                    labels,
+                                    batch_size,
+                                    desired_samples,
+                                    is_training)
+    elif type == 'raw':
+        window_size_samples=kwargs['window_size_samples']
+        window_stride_samples=kwargs['window_stride_samples']
+        magnitude_squared = kwargs['magnitude_squared']
+        dct_coefficient_count = kwargs['dct_coefficient_count']
+        return lambda :input_fn(wav_files,
+             labels,
+             batch_size,
+             desired_samples,
+             window_size_samples,
+             window_stride_samples,
+             magnitude_squared,
+             dct_coefficient_count,
+             is_training)
+
 
 
 def read_audio_int16(path):
@@ -301,6 +332,8 @@ def _create_generator(items, labels):
 
     return generator
 
-def _generate_wav_feature():
-    # feature generation function
+
+def _generate_feature(wav_file):
+    # refer to: speech feature extractor, to extract features,
+    # then we can use a generator to generate this kind of features
     pass
