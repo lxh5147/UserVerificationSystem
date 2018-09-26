@@ -221,12 +221,12 @@ def get_input_function(
     # return the input function for a given type of encoder
     assert encoder in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
     if encoder in ['cnn', 'resnet']:
-        return lambda: _input_fn_raw(wav_files,
+        return lambda: _input_fn_feature(wav_files,
                                      labels,
                                      is_training,
                                      **kwargs)
     elif encoder in ['sinc_cnn', 'sinc_resnet']:
-        return lambda: _input_fn_feature(wav_files,
+        return lambda: _input_fn_raw(wav_files,
                                          labels,
                                          is_training,
                                          **kwargs
