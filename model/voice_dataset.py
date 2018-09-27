@@ -218,7 +218,6 @@ def _create_feature_generator(wav_files, labels, input_feature_type='fbank', **k
                             numcep=input_feature_dim)
             elif input_feature_type == 'raw':
                 feat = np.expand_dims(signal, 1)
-
             yield (feat, label)
 
     if input_feature_type in ['fbank', 'logfbank', 'mfcc']:

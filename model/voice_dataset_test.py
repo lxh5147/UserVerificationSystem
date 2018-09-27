@@ -83,7 +83,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
         wav_files = ['../data/train/121624931534904112937-0.wav']
         labels = [0]
         generator, _ = _create_feature_generator(wav_files, labels,
-                                                 window_size_ms=250,
+                                                 window_size_ms=25,
                                                  window_stride_ms=10,
                                                  desired_ms=1000,
                                                  input_feature_dim=40,
