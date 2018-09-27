@@ -294,7 +294,6 @@ def main(_):
         params={
             'filters': filters,
             **FLAGS.__dict__
-
         })
 
     embeddings = get_embeddings(model,

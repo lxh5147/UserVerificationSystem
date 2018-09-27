@@ -23,7 +23,6 @@ def main(_):
             'filters': filters,
             'num_classes': train_num_classes,
             **FLAGS.__dict__
-
         })
     train_input_fn = get_input_function(
         wav_files=wav_files,

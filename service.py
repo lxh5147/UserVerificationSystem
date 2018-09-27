@@ -293,9 +293,7 @@ def main(_):
         model_dir=FLAGS.model_dir,
         params={
             'filters': filters,
-            'num_classes': train_num_classes,
             **FLAGS.__dict__
-
         })
     grouped_registerations = dict()
     httpd = make_server(host=FLAGS.host,
