@@ -327,11 +327,6 @@ if __name__ == '__main__':
         default=16000.,
         help='Frequency scale of sinc input feature extractor')
     parser.add_argument(
-        '--sinc_filters',
-        type=int,
-        default=40,
-        help='Number of filters of sinc input feature extractor')
-    parser.add_argument(
         '--sinc_kernel_size',
         type=int,
         default=3,
@@ -387,10 +382,10 @@ if __name__ == '__main__':
         default=True,
         help='magnitude_squared')
     parser.add_argument(
-        '--dct_coefficient_count',
+        '--input_feature_dim',
         type=int,
         default=40,
-        help='dct_coefficient_count')
+        help='Dimension of input feature')
     parser.add_argument(
         '--batch_size',
         type=int,
@@ -403,7 +398,4 @@ if __name__ == '__main__':
         help='If the similarity between two wav files is no less than this threshold, they are considered from the same person.')
 
     FLAGS, _ = parser.parse_known_args()
-    FLAGS.desired_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.desired_ms)
-    FLAGS.window_size_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_size_ms)
-    FLAGS.window_stride_samples = from_ms_to_samples(FLAGS.sample_rate, FLAGS.window_stride_ms)
     tf.app.run(main=main, argv=[sys.argv[0]] + _)

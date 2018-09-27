@@ -1,53 +1,47 @@
 import os
 import unittest
 
-import numpy as np
 import tensorflow as tf
 from scipy.io.wavfile import read
 
-from model.voice_dataset import read_audio, _input_fn_feature, convert_audio_with_PMX, read_audio_int16, \
+from model.voice_dataset import read_audio, get_input_function, convert_audio_with_PMX, read_audio_int16, \
     _group_by_labels, \
-    _rearrange_with_same_label
+    _rearrange_with_same_label, \
+    _create_feature_generator
 
 
 class VoiceDatasetTestCase(unittest.TestCase):
     def test_read_audio(self):
-        wav_file_val = '../data/train/121624931534904112937-0.wav'
-        desired_samples = 100000
-        wav_file = tf.placeholder(dtype=tf.string)
-        audio, sample_rate, all_samples = read_audio(wav_file,
-                                                     desired_samples)
-        with tf.Session() as sess:
-            all_samples_val, audio_val, sample_rate_val = sess.run([all_samples, audio, sample_rate],
-                                                                   feed_dict={wav_file: wav_file_val})
-
-        sample_rate_readed, data_readed = read(wav_file_val)
+        wav_file = '../data/train/121624931534904112937-0.wav'
+        desired_ms = 10000
+        audio_val, sample_rate_val, all_samples_val = read_audio(wav_file,
+                                                                 desired_ms)
+        sample_rate_readed, data_readed = read(wav_file)
         self.assertEqual(all_samples_val, len(data_readed), 'total number of samples')
         self.assertEqual(sample_rate_val, sample_rate_readed, 'sample rate')
-        self.assertEqual(len(audio_val), desired_samples, 'padded audio length')
-        audio_val = audio_val[:all_samples_val, 0]
-        audio_val = (32767 * audio_val).astype('int16')
-        self.assertTrue(np.max(np.abs(data_readed - audio_val)) <= 1, 'audio data')
+        self.assertEqual(len(audio_val), desired_ms / 1000 * sample_rate_val, 'padded audio length')
+        audio_val = audio_val[:all_samples_val]
+        self.assertTrue((data_readed == audio_val).all(), 'audio data')
 
-    def test_input_fn(self):
+    def test_get_input_function(self):
         wav_files = ['../data/train/121624931534904112937-0.wav',
                      '../data/train/121624931534904112937-1.wav',
                      '../data/train/121624931534904112937-2.wav'
                      ]
         labels = [0, 1, 2]
-        desired_samples = 1600
-        window_size_samples = 400
-        window_stride_samples = 100
+        desired_ms = 100
+        window_size_ms = 25
+        window_stride_ms = 10
         batch_size = 2
-        features, label_ids = _input_fn_feature(wav_files,
-                                                labels,
-                                                batch_size=batch_size,
-                                                desired_samples=desired_samples,
-                                                window_size_samples=window_size_samples,
-                                                window_stride_samples=window_stride_samples,
-                                                magnitude_squared=True,
-                                                dct_coefficient_count=40,
-                                                is_training=True)
+        features, label_ids = get_input_function(wav_files,
+                                                 labels,
+                                                 batch_size=batch_size,
+                                                 desired_ms=desired_ms,
+                                                 window_size_ms=window_size_ms,
+                                                 window_stride_ms=window_stride_ms,
+                                                 magnitude_squared=True,
+                                                 input_feature_dim=40,
+                                                 is_training=True)
         labels_readout = []
         repeated_times = 10
         with tf.Session() as sess:
@@ -84,6 +78,24 @@ class VoiceDatasetTestCase(unittest.TestCase):
         items_updated, labels_updated = _rearrange_with_same_label(items, labels)
         self.assertTrue(items_updated == [11, 12, 23, 22, 33, 13], 'items')
         self.assertTrue(labels_updated == [1, 1, 2, 2, 3, 1], 'labels')
+
+    def test_create_feature_generator(self):
+        wav_files = ['../data/train/121624931534904112937-0.wav']
+        labels = [0]
+        generator = _create_feature_generator(wav_files, labels,
+                                              window_size_ms=250,
+                                              window_stride_ms=10,
+                                              desired_ms=1000,
+                                              input_feature_dim=40,
+                                              input_feature_type='fbank')
+        feats_readed = []
+        labels_readed = []
+        for feat, label in generator():
+            feats_readed.append(feat)
+            labels_readed.append(label)
+        self.assertEqual(labels_readed, labels, 'labels')
+        self.assertEqual(len(feats_readed), 1, 'features')
+        self.assertEqual(len(feats_readed[0][0]), 40, 'feature dim')
 
 
 if __name__ == '__main__':

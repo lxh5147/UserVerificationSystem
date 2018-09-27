@@ -18,7 +18,7 @@ def encoder(inputs,
             ):
     # Mel Initialization of the filter banks
     freq_scale = params['sinc_freq_scale']
-    filter_number = params['sinc_filters']  # the number of filters
+    filter_number = params['input_feature_dim']  # the number of filters
     kernel_size = params['sinc_kernel_size']  # the filter kernel size
     low_freq_mel = 80
     high_freq_mel = (2595 * np.log10(1 + (freq_scale / 2) / 700))  # Convert Hz to Mel
