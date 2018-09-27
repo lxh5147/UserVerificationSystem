@@ -293,11 +293,8 @@ def main(_):
         model_dir=FLAGS.model_dir,
         params={
             'filters': filters,
-            'blocks': FLAGS.blocks,
-            'kernel_size': FLAGS.kernel_size,
-            'strides': FLAGS.strides,
-            'embedding_size': FLAGS.embedding_size,
-            'encoder': FLAGS.encoder
+            **FLAGS.__dict__
+
         })
 
     embeddings = get_embeddings(model,
