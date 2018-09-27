@@ -26,6 +26,9 @@ from scipy.io.wavfile import write
 
 def read_audio(wav_file, desired_ms):
     sample_rate, signal = wav.read(wav_file)
+    # one channel wav
+    assert np.ndim(signal) == 1
+
     num_samples = len(signal)
     if desired_ms > 0:
         desired_samples = from_ms_to_samples(sample_rate, desired_ms)
@@ -79,18 +82,11 @@ def get_input_function(
         wav_files,
         labels,
         is_training=True,
-        encoder='cnn',
         **kwargs
 ):
     # return the input function for a given type of encoder
-    assert encoder in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
-    input_feature_type = 'fbank'
-    if encoder in ['cnn', 'resnet']:
-        input_feature_type = 'fbank'
-    elif encoder in ['sinc_cnn', 'sinc_resnet']:
-        input_feature_type = 'raw'
     batch_size = kwargs['batch_size']
-    generator, output_shapes = _create_feature_generator(wav_files, labels, input_feature_type=input_feature_type,
+    generator, output_shapes = _create_feature_generator(wav_files, labels,
                                                          **kwargs)
     voice_dataset = tf.data.Dataset.from_generator(
         generator,
@@ -186,42 +182,43 @@ def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
     return _rearrange_with_same_label(_items, _labels, n)
 
 
-def _create_feature_generator(wav_files, labels, input_feature_type='fbank', **kwargs):
+def _create_feature_generator(wav_files, labels, **kwargs):
     window_size_ms = kwargs['window_size_ms']
     window_stride_ms = kwargs['window_stride_ms']
     desired_ms = kwargs['desired_ms']
     input_feature_dim = kwargs['input_feature_dim']
-    assert input_feature_type in ['mfcc', 'fbank', 'logfbank', 'raw']
+    input_feature = kwargs['input_feature']
+    assert input_feature in ['mfcc', 'fbank', 'logfbank', 'raw']
 
     def generator():
         _wav_files, _labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
         for wav_file, label in zip(_wav_files, _labels):
             signal, sample_rate, _ = read_audio(wav_file, desired_ms)
-            if input_feature_type == 'fbank':
+            if input_feature == 'fbank':
                 feat, _ = fbank(signal,
                                 sample_rate,
                                 winlen=window_size_ms / 1000,
                                 winstep=window_stride_ms / 1000,
                                 nfilt=input_feature_dim)
-            elif input_feature_type == 'logfbank':
+            elif input_feature == 'logfbank':
                 feat = logfbank(signal,
                                 sample_rate,
                                 winlen=window_size_ms / 1000,
                                 winstep=window_stride_ms / 1000,
                                 nfilt=input_feature_dim)
-            elif input_feature_type == 'mfcc':
+            elif input_feature == 'mfcc':
                 feat = mfcc(signal,
                             sample_rate,
                             winlen=window_size_ms / 1000,
                             winstep=window_stride_ms / 1000,
                             nfilt=input_feature_dim,
                             numcep=input_feature_dim)
-            elif input_feature_type == 'raw':
+            elif input_feature == 'raw':
                 feat = np.expand_dims(signal, 1)
             yield (feat, label)
 
-    if input_feature_type in ['fbank', 'logfbank', 'mfcc']:
+    if input_feature in ['fbank', 'logfbank', 'mfcc']:
         output_shapes = (tf.TensorShape([None, input_feature_dim]), tf.TensorShape([]))
-    elif input_feature_type in ['raw']:
+    elif input_feature in ['raw']:
         output_shapes = (tf.TensorShape([None, 1]), tf.TensorShape([]))
     return generator, output_shapes

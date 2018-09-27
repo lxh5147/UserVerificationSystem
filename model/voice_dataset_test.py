@@ -41,6 +41,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
                                                  window_stride_ms=window_stride_ms,
                                                  magnitude_squared=True,
                                                  input_feature_dim=40,
+                                                 input_feature='fbank',
                                                  is_training=True)
         labels_readout = []
         repeated_times = 10
@@ -87,7 +88,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
                                                  window_stride_ms=10,
                                                  desired_ms=1000,
                                                  input_feature_dim=40,
-                                                 input_feature_type='fbank')
+                                                 input_feature='fbank')
         feats_readed = []
         labels_readed = []
         for feat, label in generator():

@@ -50,6 +50,11 @@ if __name__ == '__main__':
         default='./data',
         help='data dir')
     parser.add_argument(
+        '--input_feature',
+        type=str,
+        default='raw',
+        help='Input feature: Use raw|mfcc|fbank|logfbank. Only raw is valid if the encoder is sinc_*')
+    parser.add_argument(
         '--encoder',
         type=str,
         default='sinc_cnn',
