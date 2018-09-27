@@ -15,6 +15,7 @@
 import collections
 import os
 from random import shuffle, randint
+
 import audioread
 import numpy as np
 import scipy.io.wavfile as wav
@@ -27,7 +28,7 @@ def read_audio(wav_file, desired_ms):
     sample_rate, signal = wav.read(wav_file)
     num_samples = len(signal)
     if desired_ms > 0:
-        desired_samples = int(from_ms_to_samples(sample_rate, desired_ms))
+        desired_samples = from_ms_to_samples(sample_rate, desired_ms)
         if num_samples < desired_samples:
             signal = np.pad(signal,
                             (0, desired_samples - num_samples),
@@ -88,15 +89,14 @@ def get_input_function(
         input_feature_type = 'fbank'
     elif encoder in ['sinc_cnn', 'sinc_resnet']:
         input_feature_type = 'raw'
-
     batch_size = kwargs['batch_size']
-
-
+    generator, output_shapes = _create_feature_generator(wav_files, labels, input_feature_type=input_feature_type,
+                                                         **kwargs)
     voice_dataset = tf.data.Dataset.from_generator(
-        _create_feature_generator(wav_files, labels, input_feature_type=input_feature_type, **kwargs),
+        generator,
         (tf.float32, tf.int64),
-        (tf.TensorShape([None,None]), tf.TensorShape([])))
-
+        output_shapes=output_shapes
+    )
     voice_dataset = _post_process_dataset(voice_dataset,
                                           batch_size,
                                           is_training)
@@ -186,16 +186,6 @@ def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
     return _rearrange_with_same_label(_items, _labels, n)
 
 
-def _create_generator(items, labels, **kwargs):
-    # create a generator for the dataset
-    def generator():
-        _items, _labels = _shuffle_and_rearrange_with_same_label(items, labels)
-        for item, label in zip(_items, _labels):
-            yield (item, label)
-
-    return generator
-
-
 def _create_feature_generator(wav_files, labels, input_feature_type='fbank', **kwargs):
     window_size_ms = kwargs['window_size_ms']
     window_stride_ms = kwargs['window_stride_ms']
@@ -206,29 +196,33 @@ def _create_feature_generator(wav_files, labels, input_feature_type='fbank', **k
     def generator():
         _wav_files, _labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
         for wav_file, label in zip(_wav_files, _labels):
-            signal, sr, _ = read_audio(wav_file, desired_ms)
+            signal, sample_rate, _ = read_audio(wav_file, desired_ms)
             if input_feature_type == 'fbank':
                 feat, _ = fbank(signal,
-                                sr,
+                                sample_rate,
                                 winlen=window_size_ms / 1000,
                                 winstep=window_stride_ms / 1000,
                                 nfilt=input_feature_dim)
             elif input_feature_type == 'logfbank':
                 feat = logfbank(signal,
-                                sr,
+                                sample_rate,
                                 winlen=window_size_ms / 1000,
                                 winstep=window_stride_ms / 1000,
                                 nfilt=input_feature_dim)
             elif input_feature_type == 'mfcc':
                 feat = mfcc(signal,
-                            sr,
+                            sample_rate,
                             winlen=window_size_ms / 1000,
                             winstep=window_stride_ms / 1000,
                             nfilt=input_feature_dim,
                             numcep=input_feature_dim)
             elif input_feature_type == 'raw':
-                feat = signal
+                feat = np.expand_dims(signal, 1)
 
             yield (feat, label)
 
-    return generator
+    if input_feature_type in ['fbank', 'logfbank', 'mfcc']:
+        output_shapes = (tf.TensorShape([None, input_feature_dim]), tf.TensorShape([]))
+    elif input_feature_type in ['raw']:
+        output_shapes = (tf.TensorShape([None, 1]), tf.TensorShape([]))
+    return generator, output_shapes

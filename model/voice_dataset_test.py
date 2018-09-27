@@ -82,12 +82,12 @@ class VoiceDatasetTestCase(unittest.TestCase):
     def test_create_feature_generator(self):
         wav_files = ['../data/train/121624931534904112937-0.wav']
         labels = [0]
-        generator = _create_feature_generator(wav_files, labels,
-                                              window_size_ms=250,
-                                              window_stride_ms=10,
-                                              desired_ms=1000,
-                                              input_feature_dim=40,
-                                              input_feature_type='fbank')
+        generator, _ = _create_feature_generator(wav_files, labels,
+                                                 window_size_ms=250,
+                                                 window_stride_ms=10,
+                                                 desired_ms=1000,
+                                                 input_feature_dim=40,
+                                                 input_feature_type='fbank')
         feats_readed = []
         labels_readed = []
         for feat, label in generator():

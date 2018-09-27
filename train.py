@@ -5,7 +5,7 @@ import sys
 import tensorflow as tf
 
 from model.model_fn import create_model
-from model.voice_dataset import get_file_and_labels, from_ms_to_samples, get_input_function
+from model.voice_dataset import get_file_and_labels, get_input_function
 
 
 def main(_):
@@ -24,7 +24,7 @@ def main(_):
             'num_classes': train_num_classes,
             **FLAGS.__dict__
         })
-    train_input_fn = get_input_function(
+    train_input_fn = lambda: get_input_function(
         wav_files=wav_files,
         labels=labels,
         **FLAGS.__dict__
@@ -89,11 +89,6 @@ if __name__ == '__main__':
         type=int,
         default=128,
         help='embedding_size')
-    parser.add_argument(
-        '--sample_rate',
-        type=int,
-        default=16000,
-        help='Sample rate of the wavs', )
     parser.add_argument(
         '--window_size_ms',
         type=float,

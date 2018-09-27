@@ -60,7 +60,7 @@ def get_embeddings(model,
                    **kwargs):
     label_ids = [-1 for _ in wav_files]
 
-    predict_input_fn = get_input_function(
+    predict_input_fn = lambda: get_input_function(
         wav_files,
         label_ids,
         is_training=False,
