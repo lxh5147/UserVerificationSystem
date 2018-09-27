@@ -17,7 +17,7 @@ def encoder(inputs,
             is_training=True
             ):
     # Mel Initialization of the filter banks
-    freq_scale = params['freq_scale']
+    freq_scale = params['sinc_freq_scale']
     filter_number = params['sinc_filters']  # the number of filters
     kernel_size = params['sinc_kernel_size']  # the filter kernel size
     low_freq_mel = 80
