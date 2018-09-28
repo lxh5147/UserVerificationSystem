@@ -284,12 +284,9 @@ def main(_):
     enrollments = [file_id_to_index[i] for i in enrollments]
     to_be_verified = [(file_id_to_index[i], label_to_id[j]) for i, j in to_be_verified]
     to_be_identified = [(file_id_to_index[i], group_id) for i, group_id in to_be_identified]
-
-    filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
         model_dir=FLAGS.model_dir,
         params={
-            'filters': filters,
             **FLAGS.__dict__
         })
 
@@ -355,8 +352,9 @@ if __name__ == '__main__':
         help='Kernel size of sinc input feature extractor')
     parser.add_argument(
         '--filters',
-        type=str,
-        default='64,128,256,512',
+        type=int,
+        nargs='+',
+        default=[64, 128, 256, 512],
         help='filters')
     parser.add_argument(
         '--blocks',

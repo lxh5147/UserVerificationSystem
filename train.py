@@ -16,11 +16,10 @@ def main(_):
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
-    filters = map(lambda _: int(_), FLAGS.filters.split(','))
+
     model = create_model(
         model_dir=FLAGS.model_dir,
         params={
-            'filters': filters,
             'num_classes': train_num_classes,
             **FLAGS.__dict__
         })
@@ -71,8 +70,9 @@ if __name__ == '__main__':
         help='Kernel size of sinc input feature extractor')
     parser.add_argument(
         '--filters',
-        type=str,
-        default='64,128,256,512',
+        type=int,
+        nargs='+',
+        default=[64, 128, 256, 512],
         help='filters')
     parser.add_argument(
         '--blocks',
@@ -176,5 +176,4 @@ if __name__ == '__main__':
         help='Weight of cross entropy loss.')
 
     FLAGS, _ = parser.parse_known_args()
-
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
