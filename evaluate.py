@@ -9,7 +9,6 @@ from model.voice_dataset import get_file_and_labels, from_ms_to_samples
 from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
 
 
-
 def _verfication_fa_fr(sims, true_a, true_r, threshold=0.7):
     '''
     Compute the embeddings falsely accepted and rejected for a verification evaluation.
@@ -53,7 +52,7 @@ def _eer(fa_rates, fr_rates, error_rates, thresholds):
     return fa_rate, fr_rate, error_rate, eer_threshold
 
 
-def _verification_eer( verification_sim, true_a, true_r, number_of_thresholds=200):
+def _verification_eer(verification_sim, true_a, true_r, number_of_thresholds=200):
     '''
     Compute the nearly equal error rate for verification.
     :param verification_sim: a list of float which represents the similarity between the embedding to be verified and the claimed user
@@ -103,7 +102,7 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
     verification_sim = []
     true_a = []  # true accept
     true_r = []  # true reject
-    for i,(embedding_index, claim_id) in enumerate(to_be_verified):
+    for i, (embedding_index, claim_id) in enumerate(to_be_verified):
         embeddings_target = registerations[claim_id]
         embedding_unknown = embeddings[embedding_index]
         sim = get_max_sim(embedding_unknown, embeddings_target)
@@ -123,7 +122,7 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
         error_rate = (len(fa) + len(fr)) / total if total else 0.
         return fa_rate, fr_rate, error_rate, threshold
     else:
-        return _verification_eer( verification_sim, true_a, true_r)
+        return _verification_eer(verification_sim, true_a, true_r)
 
 
 def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):

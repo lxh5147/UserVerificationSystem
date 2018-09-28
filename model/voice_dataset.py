@@ -169,6 +169,7 @@ def _post_process_dataset(dataset,
         dataset = dataset.batch(batch_size)
     return dataset
 
+
 def _input_fn_raw(wav_files,
                   labels,
                   is_training=True,
@@ -223,15 +224,15 @@ def get_input_function(
     assert encoder in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
     if encoder in ['cnn', 'resnet']:
         return lambda: _input_fn_feature(wav_files,
-                                     labels,
-                                     is_training,
-                                     **kwargs)
-    elif encoder in ['sinc_cnn', 'sinc_resnet']:
-        return lambda: _input_fn_raw(wav_files,
                                          labels,
                                          is_training,
-                                         **kwargs
-                                         )
+                                         **kwargs)
+    elif encoder in ['sinc_cnn', 'sinc_resnet']:
+        return lambda: _input_fn_raw(wav_files,
+                                     labels,
+                                     is_training,
+                                     **kwargs
+                                     )
 
 
 def read_audio_int16(path):
