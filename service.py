@@ -293,11 +293,7 @@ def main(_):
         model_dir=FLAGS.model_dir,
         params={
             'filters': filters,
-            'blocks': FLAGS.blocks,
-            'kernel_size': FLAGS.kernel_size,
-            'strides': FLAGS.strides,
-            'embedding_size': FLAGS.embedding_size,
-            'encoder': FLAGS.encoder
+            **FLAGS.__dict__
         })
     grouped_registerations = dict()
     httpd = make_server(host=FLAGS.host,
@@ -323,8 +319,23 @@ if __name__ == '__main__':
     parser.add_argument(
         '--encoder',
         type=str,
-        default='cnn',
+        default='sinc_cnn',
         help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet')
+    parser.add_argument(
+        '--sinc_freq_scale',
+        type=float,
+        default=16000.,
+        help='Frequency scale of sinc input feature extractor')
+    parser.add_argument(
+        '--sinc_filters',
+        type=int,
+        default=40,
+        help='Number of filters of sinc input feature extractor')
+    parser.add_argument(
+        '--sinc_kernel_size',
+        type=int,
+        default=3,
+        help='Kernel size of sinc input feature extractor')
     parser.add_argument(
         '--filters',
         type=str,
