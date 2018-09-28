@@ -95,10 +95,8 @@ def dataset(wav_files,
     :param dct_coefficient_count: How many output channels to produce per time slice.
     :return: data set
     '''
-
-    raw_dataset = tf.data.Dataset.from_generator(_create_generator(wav_files, labels),
-                                                 (tf.string, tf.int64),
-                                                 (tf.TensorShape([]), tf.TensorShape([])))
+    raw_dataset = tf.data.Dataset.from_tensor_slices(
+        (wav_files, labels))
 
     def decode(wav_file, label):
         audio, sample_rate, _ = read_audio(wav_file, desired_samples)
@@ -122,9 +120,8 @@ def dataset_raw(wav_files,
     :param desired_samples: how many number of samples to load from a wav file.
     :return: raw data set
     '''
-    raw_dataset = tf.data.Dataset.from_generator(_create_generator(wav_files, labels),
-                                                 (tf.string, tf.int64),
-                                                 (tf.TensorShape([]), tf.TensorShape([])))
+    raw_dataset = tf.data.Dataset.from_tensor_slices(
+        (wav_files, labels))
 
     def decode(wav_file, label):
         audio, sample_rate, _ = read_audio(wav_file, desired_samples)
@@ -160,13 +157,17 @@ def get_file_and_labels(file_and_labels_file):
 
 def _post_process_dataset(dataset,
                           batch_size,
-                          is_training=True):
+                          is_training=True,
+                          buffer_size=1000):
+    # Shuffle, repeat, and batch the examples.
     if is_training:
-        dataset = dataset.repeat().batch(batch_size)
+        if buffer_size:
+            dataset = dataset.shuffle(buffer_size=buffer_size).repeat().batch(batch_size)
+        else:
+            dataset = dataset.repeat().batch(batch_size)
     else:
         dataset = dataset.batch(batch_size)
     return dataset
-
 
 def _input_fn_raw(wav_files,
                   labels,
