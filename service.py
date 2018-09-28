@@ -288,11 +288,9 @@ def main(_):
     global model
     global grouped_registerations
     tf.logging.set_verbosity(tf.logging.INFO)
-    filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
         model_dir=FLAGS.model_dir,
         params={
-            'filters': filters,
             **FLAGS.__dict__
         })
     grouped_registerations = dict()
@@ -338,8 +336,9 @@ if __name__ == '__main__':
         help='Kernel size of sinc input feature extractor')
     parser.add_argument(
         '--filters',
-        type=str,
-        default='64,128,256,512',
+        type=int,
+        nargs='+',
+        default=[64, 128, 256, 512],
         help='filters')
     parser.add_argument(
         '--blocks',

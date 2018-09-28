@@ -16,26 +16,11 @@ def main(_):
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
-    filters = map(lambda _: int(_), FLAGS.filters.split(','))
     model = create_model(
         model_dir=FLAGS.model_dir,
         params={
-            'filters': filters,
-            'blocks': FLAGS.blocks,
-            'kernel_size': FLAGS.kernel_size,
-            'strides': FLAGS.strides,
-            'embedding_size': FLAGS.embedding_size,
-            'triplet_strategy': FLAGS.triplet_strategy,
-            'margin': FLAGS.margin,
-            'squared': FLAGS.squared,
-            'learning_rate': FLAGS.learning_rate,
-            'learning_rate_decay_rate': FLAGS.learning_rate_decay_rate,
-            'learning_rate_decay_steps': FLAGS.learning_rate_decay_steps,
-            'l2_regularization_weight': FLAGS.l2_regularization_weight,
-            'triplet_loss_weight': FLAGS.triplet_loss_weight,
-            'cross_entropy_loss_weight': FLAGS.cross_entropy_loss_weight,
             'num_classes': train_num_classes,
-            'encoder': FLAGS.encoder
+            **FLAGS.__dict__
         })
     train_input_fn = get_input_function(
         wav_files=wav_files,
@@ -84,8 +69,9 @@ if __name__ == '__main__':
         help='The kernel size of the filter for sinc input feature encoder')
     parser.add_argument(
         '--filters',
-        type=str,
-        default='64,128,256,512',
+        type=int,
+        nargs='+',
+        default=[64, 128, 256, 512],
         help='filters')
     parser.add_argument(
         '--blocks',
