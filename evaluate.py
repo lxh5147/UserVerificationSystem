@@ -9,13 +9,13 @@ from model.voice_dataset import get_file_and_labels, from_ms_to_samples
 from predict import get_registerations, get_max_sim, get_max_sim_and_id, get_embeddings, get_enrollments
 
 
-def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
+
+def _verfication_fa_fr(sims, true_a, true_r, threshold=0.7):
     '''
     Compute the embeddings falsely accepted and rejected for a verification evaluation.
-    :param to_be_verified: a list of tuple (embedding index, claimed user id)
     :param sims: a list of float which represents the similarity between the embedding to be verified and the claimed user
-    :param true_a: a list of embedding indexes, each of which comes from the corresponded claimed user.
-    :param true_r: a list of embedding indexes, each of which does not come from the corresponded claimed user.
+    :param true_a: a list of indexes of sims, each of which comes from the corresponded claimed user.
+    :param true_r: a list of indexes of sims, each of which does not come from the corresponded claimed user.
     :param threshold: float, if the similarity between the embedding and the claimed user is no less than this threshold, the embedding
             will be believed to come from the claimed user.
     :return: two lists of embedding indexes, representing the enbeddings which are falsely accepted and rejected, respectively.
@@ -23,13 +23,12 @@ def _verfication_fa_fr(to_be_verified, sims, true_a, true_r, threshold=0.7):
     fa = []  # false accept
     fr = []  # false reject
     for i, sim in enumerate(sims):
-        embedding_index = to_be_verified[i][0]
         if sim >= threshold:  # we believe we should accept
-            if embedding_index in true_r:
-                fa.append(embedding_index)
+            if i in true_r:
+                fa.append(i)
         else:  # we believe we should reject
-            if embedding_index in true_a:
-                fr.append(embedding_index)
+            if i in true_a:
+                fr.append(i)
     return fa, fr
 
 
@@ -54,13 +53,12 @@ def _eer(fa_rates, fr_rates, error_rates, thresholds):
     return fa_rate, fr_rate, error_rate, eer_threshold
 
 
-def _verification_eer(to_be_verified, verification_sim, true_a, true_r, number_of_thresholds=200):
+def _verification_eer( verification_sim, true_a, true_r, number_of_thresholds=200):
     '''
     Compute the nearly equal error rate for verification.
-    :param to_be_verified: a list of tuple (embedding index, claimed user id)
     :param verification_sim: a list of float which represents the similarity between the embedding to be verified and the claimed user
-    :param true_a: a list of embedding indexes, each of which comes from the corresponded claimed user.
-    :param true_r: a list of embedding indexes, each of which does not come from the corresponded claimed user.
+    :param true_a: a list of indexes of verification_sim, each of which comes from the corresponded claimed user.
+    :param true_r: a list of indexes of verification_sim, each of which does not come from the corresponded claimed user.
     :param threshold: float, if the similarity between the embedding and the claimed user is no less than this threshold, the embedding
             will be believed to come from the claimed user.
     :return: float, the equaly error rate.
@@ -77,7 +75,7 @@ def _verification_eer(to_be_verified, verification_sim, true_a, true_r, number_o
     # the total number of error cases is len(fa)+len(fr) and error rate is #errors/#verification cases
     # roughly speaking, error rate = (fa_rate+fr_rate)/2
     for threshold in [threshold_step * i - 1.0 for i in range(number_of_thresholds)]:
-        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
+        fa, fr = _verfication_fa_fr(verification_sim, true_a, true_r, threshold)
         fa_rate = len(fa) / total_true_r if total_true_r else 0.
         fr_rate = len(fr) / total_true_a if total_true_a else 0.
         error_rate = (len(fa) + len(fr)) / total if total else 0.
@@ -105,27 +103,27 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
     verification_sim = []
     true_a = []  # true accept
     true_r = []  # true reject
-    for embedding_index, claim_id in to_be_verified:
+    for i,(embedding_index, claim_id) in enumerate(to_be_verified):
         embeddings_target = registerations[claim_id]
         embedding_unknown = embeddings[embedding_index]
         sim = get_max_sim(embedding_unknown, embeddings_target)
         verification_sim.append(sim)
         true_id = label_ids[embedding_index]
         if true_id == claim_id:
-            true_a.append(embedding_index)
+            true_a.append(i)
         else:
-            true_r.append(embedding_index)
+            true_r.append(i)
     total_true_a = len(true_a)
     total_true_r = len(true_r)
     total = total_true_a + total_true_r
     if threshold:
-        fa, fr = _verfication_fa_fr(to_be_verified, verification_sim, true_a, true_r, threshold)
+        fa, fr = _verfication_fa_fr(verification_sim, true_a, true_r, threshold)
         fa_rate = len(fa) / total_true_r if total_true_r else 0.
         fr_rate = len(fr) / total_true_a if total_true_a else 0.
         error_rate = (len(fa) + len(fr)) / total if total else 0.
         return fa_rate, fr_rate, error_rate, threshold
     else:
-        return _verification_eer(to_be_verified, verification_sim, true_a, true_r)
+        return _verification_eer( verification_sim, true_a, true_r)
 
 
 def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
@@ -142,10 +140,10 @@ def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
         sim, id = j
         if true_id == id:
             if sim < threshold:
-                fr.append(embedding_index)
+                fr.append(i)
         else:
             if sim >= threshold:
-                fa.append(embedding_index)
+                fa.append(i)
     return fa, fr
 
 
