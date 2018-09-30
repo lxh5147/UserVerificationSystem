@@ -180,6 +180,12 @@ def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
     _items, _labels = tuple(zip(*zipped))
     return _rearrange_with_same_label(_items, _labels, n)
 
+def _shuffle_debug(items, labels):
+    # re-shuffle the items and try to put every two items with the same label
+    zipped = list(zip(items, labels))
+    shuffle(zipped)
+    _items, _labels = tuple(zip(*zipped))
+    return _items,_labels
 
 def _create_feature_generator(wav_files, labels, **kwargs):
     window_size_ms = kwargs['window_size_ms']
@@ -190,7 +196,7 @@ def _create_feature_generator(wav_files, labels, **kwargs):
     assert input_feature in ['mfcc', 'fbank', 'logfbank', 'raw']
 
     def generator():
-        _wav_files, _labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
+        _wav_files, _labels = _shuffle_debug(wav_files, labels)
         for wav_file, label in zip(_wav_files, _labels):
             signal, sample_rate, _ = read_audio(wav_file, desired_ms)
             if input_feature == 'fbank':

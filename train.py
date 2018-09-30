@@ -51,12 +51,12 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_feature',
         type=str,
-        default='raw',
+        default='fbank',
         help='Input feature: Use raw|mfcc|fbank|logfbank. Only raw is valid if the encoder is sinc_*')
     parser.add_argument(
         '--encoder',
         type=str,
-        default='sinc_cnn',
+        default='cnn',
         help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet')
     parser.add_argument(
         '--sinc_freq_scale',
