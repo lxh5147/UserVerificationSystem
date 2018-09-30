@@ -12,9 +12,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 """tf.data.Dataset interface to the Voice dataset."""
-import collections
 import os
 from random import shuffle, randint
+
 import audioread
 import numpy as np
 import scipy.io.wavfile as wav
@@ -126,59 +126,12 @@ def convert_audio_with_PMX(input_wav, output_wav):
     write(output_wav, sample_rate, data)
 
 
-def _group_by_labels(items, labels):
-    '''
-    Group items by labels. Both the label and item are in the same order as they occur.
-    :param items: a list of Objects to be grouped
-    :param labels: the corresponding item labels
-    :return: an ordered dictionary, representing the grouped items
-    '''
-    groups = collections.OrderedDict()
-    for item, label in zip(items, labels):
-        if label in groups:
-            groups[label].append(item)
-        else:
-            groups[label] = [item]
-    return groups
-
-
-def _rearrange_with_same_label(items, labels, n=2):
-    '''
-    Re-arrange items so that n items have the same label and the next n with different label.
-    :param items: a list of items to arrange
-    :param labels: item labels
-    :param n: int, the expected number of items with the same label
-    :return: a list of items re-arranged
-    '''
-    groups = _group_by_labels(items, labels)
-    items_updated = []
-    labels_updated = []
-    labels_ordered = groups.keys()
-    counts_readed = dict()
-    for label in labels_ordered:
-        counts_readed[label] = 0
-    while len(items_updated) < len(items):
-        # rearrange all items
-        for label in labels_ordered:
-            group = groups[label]
-            count = len(group)
-            count_readed = counts_readed[label]
-            # try to read a pair of items from a group
-            for i in range(n):
-                if count_readed < count:
-                    items_updated.append(group[count_readed])
-                    labels_updated.append(label)
-                    count_readed += 1
-            counts_readed[label] = count_readed
-    return items_updated, labels_updated
-
-
-def _shuffle_and_rearrange_with_same_label(items, labels, n=2):
-    # re-shuffle the items and try to put every two items with the same label
+def _shuffle(items, labels):
+    # re-shuffle the items and labels
     zipped = list(zip(items, labels))
     shuffle(zipped)
     _items, _labels = tuple(zip(*zipped))
-    return _rearrange_with_same_label(_items, _labels, n)
+    return _items, _labels
 
 
 def _create_feature_generator(wav_files, labels, **kwargs):
@@ -190,7 +143,7 @@ def _create_feature_generator(wav_files, labels, **kwargs):
     assert input_feature in ['mfcc', 'fbank', 'logfbank', 'raw']
 
     def generator():
-        _wav_files, _labels = _shuffle_and_rearrange_with_same_label(wav_files, labels)
+        _wav_files, _labels = _shuffle(wav_files, labels)
         for wav_file, label in zip(_wav_files, _labels):
             signal, sample_rate, _ = read_audio(wav_file, desired_ms)
             if input_feature == 'fbank':
