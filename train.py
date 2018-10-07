@@ -184,8 +184,9 @@ if __name__ == '__main__':
         type=float,
         default=1.,
         help='Weight of cross entropy loss.')
-    # use CUDA_VISIBLE_DEVICES to specify the GPUs,
+    # use CUDA_VISIBLE_DEVICES to specify the GPUs used for training,
     # e.g., CUDA_VISIBLE_DEVICES=0,3 will make two GPUs visible to the training.
+    # Then we can set num_gpus to 2 to use those two GPUs.
     parser.add_argument(
         '--num_gpus',
         type=int,
