@@ -359,6 +359,12 @@ if __name__ == '__main__':
         type=int,
         default=128,
         help='embedding_size')
+    # if memory_cells > 0, the memory network will be enabled, and the output will be the weighted memory cells.
+    parser.add_argument(
+        '--memory_cells',
+        type=int,
+        default=0,
+        help='number of memory cells.')
     parser.add_argument(
         '--window_size_ms',
         type=float,

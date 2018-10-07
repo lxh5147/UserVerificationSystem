@@ -1,6 +1,7 @@
 import tensorflow as tf
 
 from model.attention import attention
+from model.memory import read_memory
 
 
 def encoder(inputs,
@@ -14,6 +15,7 @@ def encoder(inputs,
     is_training = is_training
     strides = params['strides']
     embedding_size = params['embedding_size']
+    memory_cells = params['memory_cells']
 
     output = inputs
     with tf.variable_scope("encoder"):
@@ -35,5 +37,9 @@ def encoder(inputs,
         output = attention(output)
         with tf.variable_scope('output_transformer'):
             output = tf.layers.dense(output, embedding_size)
+
+        # apply memory
+        if memory_cells > 0:
+            output = read_memory(output)
 
     return output

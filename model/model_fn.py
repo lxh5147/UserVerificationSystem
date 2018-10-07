@@ -6,7 +6,6 @@ from model.cross_entropy_loss import cross_entropy_loss
 from model.triplet_loss import batch_all_triplet_loss
 from model.triplet_loss import batch_hard_triplet_loss
 
-
 def _get_encoder(encoder_name):
     assert encoder_name in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
     if encoder_name == 'cnn':
