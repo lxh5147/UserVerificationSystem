@@ -2,48 +2,27 @@
 
 import tensorflow as tf
 
+from model.cross_entropy_loss import cross_entropy_loss
 from model.triplet_loss import batch_all_triplet_loss
 from model.triplet_loss import batch_hard_triplet_loss
 
+def _get_encoder(encoder_name):
+    assert encoder_name in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
+    if encoder_name == 'cnn':
+        from model.encoder_cnn import encoder as encoder_cnn
+        return encoder_cnn
+    elif encoder_name == 'resnet':
+        from model.encoder_resnet import encoder as encoder_resnet
+        return encoder_resnet
+    elif encoder_name == 'sinc_cnn':
+        from model.encoder_cnn import encoder as encoder_cnn
+        from model.encoder_sinc_conv import SincEncoder as sinc_encoder
+        return sinc_encoder(encoder_cnn)
+    elif encoder_name == 'sinc_resnet':
+        from model.encoder_resnet import encoder as encoder_resnet
+        from model.encoder_sinc_conv import SincEncoder as sinc_encoder
+        return sinc_encoder(encoder_resnet)
 
-def _attention(inputs):
-    # input: batch_size, time_steps, dim
-    # output: batch_size, dim
-    with tf.variable_scope("attention"):
-        w = tf.get_variable("hidden", tf.zeros_initializer(inputs.shape[-1:]))
-        # batch_size, time_steps
-        logits = tf.tensordot(w, tf.nn.tanh(inputs), axes=[0, 2])
-        p = tf.nn.softmax(logits)
-        # batch_size, time_steps,1
-        p = tf.expand_dims(p, -1)
-        # batch_size, dim
-        # p*w element wise production
-        a = tf.reduce_sum(p * w, axis=1)
-        return a
-
-def _encoder(inputs,
-             num_channels,
-             blocks=3, kernel_size=3,
-             use_batch_norm=True, is_training=True,
-             pool_size=2, pool_strides=2, embedding_size=128):
-    # inputs: batch_size, time steps, channel
-    output = inputs
-    with tf.variable_scope("encoder"):
-        for l in range(blocks):
-            with tf.variable_scope('block_{}'.format(l + 1)):
-                output = tf.layers.conv1d(output, filters=num_channels, kernel_size=kernel_size, padding='same')
-                if use_batch_norm:
-                    output = tf.layers.batch_normalization(output, training=is_training)
-                output = tf.nn.relu(output)
-                output = tf.layers.max_pooling1d(output, pool_size=pool_size, strides=pool_strides)
-
-        # to one fixed length: batch_size, num_channels, by using the attention mechanism
-        output = _attention(output)
-
-        with tf.variable_scope('output_transformer'):
-            output = tf.layers.dense(output, embedding_size)
-
-    return output
 
 def model_fn(features, labels, mode, params):
     """Model function for tf.estimator
@@ -58,21 +37,12 @@ def model_fn(features, labels, mode, params):
     is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
     inputs = features
-    # -----------------------------------------------------------
-    # MODEL: define the layers of the model
-    with tf.variable_scope('model'):
-        # Compute the embeddings with the model
+    encoder = _get_encoder(params['encoder'])
 
-        embeddings = _encoder(inputs,
-                              num_channels=params.num_channels,
-                              blocks=params.blocks,
-                              kernel_size=params.kernel_size,
-                              use_batch_norm=params.use_batch_norm,
-                              is_training=is_training,
-                              pool_size=params.pool_size,
-                              pool_strides=params.pool_strides,
-                              embedding_size=params.embedding_size)
-
+    embeddings = encoder(inputs,
+                         params=params,
+                         is_training=is_training,
+                         )
     embedding_mean_norm = tf.reduce_mean(tf.norm(embeddings, axis=1))
     tf.summary.scalar("embedding_mean_norm", embedding_mean_norm)
 
@@ -83,12 +53,16 @@ def model_fn(features, labels, mode, params):
     labels = tf.cast(labels, tf.int64)
 
     # Define triplet loss
-    if params.triplet_strategy == "batch_all":
-        loss, fraction = batch_all_triplet_loss(labels, embeddings, margin=params.margin,
-                                                squared=params.squared)
-    elif params.triplet_strategy == "batch_hard":
-        loss = batch_hard_triplet_loss(labels, embeddings, margin=params.margin,
-                                       squared=params.squared)
+    if params['triplet_strategy'] == "batch_all":
+        loss_triplet, fraction = batch_all_triplet_loss(labels,
+                                                        embeddings,
+                                                        margin=params['margin'],
+                                                        squared=params['squared'])
+    elif params['triplet_strategy'] == "batch_hard":
+        loss_triplet = batch_hard_triplet_loss(labels,
+                                               embeddings,
+                                               margin=params['margin'],
+                                               squared=params['squared'])
     else:
         raise ValueError("Triplet strategy not recognized: {}".format(params.triplet_strategy))
 
@@ -99,25 +73,63 @@ def model_fn(features, labels, mode, params):
     with tf.variable_scope("metrics"):
         eval_metric_ops = {"embedding_mean_norm": tf.metrics.mean(embedding_mean_norm)}
 
-        if params.triplet_strategy == "batch_all":
+        if params['triplet_strategy'] == "batch_all":
             eval_metric_ops['fraction_positive_triplets'] = tf.metrics.mean(fraction)
 
     if mode == tf.estimator.ModeKeys.EVAL:
-        return tf.estimator.EstimatorSpec(mode, loss=loss, eval_metric_ops=eval_metric_ops)
+        return tf.estimator.EstimatorSpec(mode, loss=loss_triplet, eval_metric_ops=eval_metric_ops)
 
-    # Summaries for training
-    tf.summary.scalar('loss', loss)
-    if params.triplet_strategy == "batch_all":
-        tf.summary.scalar('fraction_positive_triplets', fraction)
+    # Build loss
+    loss = 0
+
+    # Apply triplet loss
+    triplet_loss_weight = params['triplet_loss_weight']
+    if triplet_loss_weight > 0:
+        if params['triplet_strategy'] == "batch_all":
+            tf.summary.scalar('fraction_positive_triplets', fraction)
+        tf.summary.scalar('loss_triplet', loss_triplet)
+        loss += triplet_loss_weight * loss_triplet
+
+    # Apply cross entropy loss
+    cross_entropy_loss_weight = params['cross_entropy_loss_weight']
+    if cross_entropy_loss_weight > 0:
+        loss_cross_entropy = cross_entropy_loss(labels=labels,
+                                                embeddings=embeddings,
+                                                num_classes=params['num_classes'])
+        tf.summary.scalar('loss_cross_entropy', loss_cross_entropy)
+        loss += cross_entropy_loss_weight * loss_cross_entropy
+
+    # Finally, apply weight regularization
+    l2_regularization_weight = params['l2_regularization_weight']
+    if l2_regularization_weight > 0:
+        loss_reg = l2_regularization_weight * tf.add_n([tf.reduce_sum(tf.square(w)) for w in tf.trainable_variables()])
+        tf.summary.scalar('loss_reg', loss_reg)
+        loss += loss_reg
 
     # Define training step that minimizes the loss with the Adam optimizer
-    optimizer = tf.train.AdamOptimizer(params.learning_rate)
     global_step = tf.train.get_global_step()
-    if params.use_batch_norm:
-        # Add a dependency to update the moving mean and variance for batch normalization
-        with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
-            train_op = optimizer.minimize(loss, global_step=global_step)
-    else:
+    lr_decay_rate = params['learning_rate_decay_rate']
+    lr_decay_steps = params['learning_rate_decay_steps']
+    lr_start = params['learning_rate']
+    learning_rate = tf.train.exponential_decay(learning_rate=lr_start,
+                                               global_step=global_step,
+                                               decay_rate=lr_decay_rate,
+                                               decay_steps=lr_decay_steps)
+    tf.summary.scalar('learning_rate', learning_rate)
+    optimizer = tf.train.AdamOptimizer(learning_rate)
+
+    # Add a dependency to update the moving mean and variance for batch normalization
+    with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
         train_op = optimizer.minimize(loss, global_step=global_step)
 
     return tf.estimator.EstimatorSpec(mode, loss=loss, train_op=train_op)
+
+
+def create_model(model_dir=None,
+                 config=None,
+                 params=None):
+    return tf.estimator.Estimator(model_fn,
+                                  model_dir=model_dir,
+                                  config=config,
+                                  params=params,
+                                  )
