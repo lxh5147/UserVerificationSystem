@@ -71,7 +71,9 @@ def _post_process_dataset(dataset,
                           batch_size,
                           is_training=True):
     if is_training:
-        dataset = dataset.repeat().batch(batch_size)
+        # we found using map_and_batch and dataset.prefetch in the input function gives a solid boost in performance.
+        # When using dataset.prefetch, use buffer_size=None to let it detect optimal buffer size.
+        dataset = dataset.repeat().batch(batch_size).prefetch(buffer_size=None)
     else:
         dataset = dataset.batch(batch_size)
     return dataset
@@ -100,6 +102,7 @@ def get_input_function(
 
 
 def read_audio_int16(path):
+    # read 16-bits signed int wav data
     fmt = '<i{:d}'.format(2)
     dtype = 'int16'
     y = []

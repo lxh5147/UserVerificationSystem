@@ -9,15 +9,25 @@ from model.voice_dataset import get_file_and_labels, get_input_function
 
 
 def main(_):
-    # We want to see all the logging messages for this tutorial.
     tf.logging.set_verbosity(tf.logging.INFO)
     # Define the input function for training
     wav_files, labels, label_to_id = get_file_and_labels(os.path.join(FLAGS.data_dir, 'train_labels'))
     wav_files = [os.path.join(FLAGS.data_dir, 'train', wav_file) for wav_file in wav_files]
 
     train_num_classes = len(label_to_id)
+    if FLAGS.num_gpus > 1:
+        # MirroredStrategy: This does in-graph replication with synchronous training on many GPUs on one machine.
+        # Essentially, we create copies of all variables in the model's layers on each device.
+        # We then use all-reduce to combine gradients across the devices
+        # before applying them to the variables to keep them in sync.
+        # Reference: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/distribute
+        train_distribute = tf.contrib.distribute.MirroredStrategy()
+        run_config = tf.estimator.RunConfig(train_distribute=train_distribute)
+    else:
+        run_config = None
 
     model = create_model(
+        config=run_config,
         model_dir=FLAGS.model_dir,
         params={
             'num_classes': train_num_classes,
@@ -174,6 +184,13 @@ if __name__ == '__main__':
         type=float,
         default=1.,
         help='Weight of cross entropy loss.')
+    # use CUDA_VISIBLE_DEVICES to specify the GPUs,
+    # e.g., CUDA_VISIBLE_DEVICES=0,3 will make two GPUs visible to the training.
+    parser.add_argument(
+        '--num_gpus',
+        type=int,
+        default=1,
+        help='Number of gpus in this host used for training.')
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)
