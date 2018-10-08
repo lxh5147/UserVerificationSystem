@@ -44,7 +44,8 @@ def main(_):
 
 if __name__ == '__main__':
     '''
-    CUDA_VISIBLE_DEVICES=1 python train.py --model_dir='../puffer_515' --data_dir='../../UserVerificationSystem/data/TRAIN/puffer515' --encoder='resnet' --input_feature='fbank' --input_feature_dim=40 --filters=64 128 256 512 --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --feature=40 --batch_size=160 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=126000 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
+    # the bottle-neck is not on GPU
+    CUDA_VISIBLE_DEVICES=0,1 python train.py --num_gpus=2 --model_dir='../puffer_515' --data_dir='../../UserVerificationSystem/data/TRAIN/puffer515' --encoder='resnet' --input_feature='fbank' --input_feature_dim=40 --filters=64 128 256 512 --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --feature=40 --batch_size=160 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=126000 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
     tensorboard --logdir=../puffer_515/
     '''
     parser = argparse.ArgumentParser()
