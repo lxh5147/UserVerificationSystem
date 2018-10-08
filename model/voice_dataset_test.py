@@ -1,11 +1,11 @@
 import os
 import unittest
-
+import numpy as np
 import tensorflow as tf
 from scipy.io.wavfile import read
 
 from model.voice_dataset import read_audio, get_input_function, convert_audio_with_PMX, read_audio_int16, \
-    _create_feature_generator
+    _create_feature_generator,_post_process_dataset
 
 
 class VoiceDatasetTestCase(unittest.TestCase):
@@ -80,6 +80,39 @@ class VoiceDatasetTestCase(unittest.TestCase):
         self.assertEqual(labels_readed, labels, 'labels')
         self.assertEqual(len(feats_readed), 1, 'features')
         self.assertEqual(len(feats_readed[0][0]), 40, 'feature dim')
+    def test_dataset_in_out(self):
+        wav_files = ['../data/train/121624931534904112937-0.wav']
+        labels = [0]
+        generator, output_shapes = _create_feature_generator(wav_files, labels,
+                                                 window_size_ms=25,
+                                                 window_stride_ms=10,
+                                                 desired_ms=1000,
+                                                 input_feature_dim=40,
+                                                 input_feature='fbank')
+        feats_readed = []
+        labels_readed = []
+        for feat_before, label_before in generator():
+            label_before=np.array(label_before)
+            feats_readed.append(feat_before)
+            labels_readed.append(label_before)
+        voice_dataset = tf.data.Dataset.from_generator(
+            generator,
+            (tf.float32, tf.int64),
+            output_shapes=output_shapes
+        )
+        voice_dataset = _post_process_dataset(voice_dataset,
+                                              batch_size=1,
+                                              is_training=True)
+        features_after, labels_after = voice_dataset.make_one_shot_iterator().get_next()
+        with tf.Session() as sess:
+            features_after, labels_after = sess.run([features_after, labels_after])
+            features_after_remove=tf.squeeze(features_after)
+            features_after_remove=sess.run(features_after_remove)
+        feats_readed.append(features_after_remove)
+        labels_readed.append(labels_after)
+        print("before:{}\n after:{}\n".format(feats_readed[0],feats_readed[1]))
+        print("before:{}\n after:{}\n".format(feats_readed[0].dtype, feats_readed[1].dtype))
+        print("before:{}\n after:{}\n".format(feats_readed[0].shape, feats_readed[1].shape))
 
 
 if __name__ == '__main__':
