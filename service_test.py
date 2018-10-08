@@ -37,7 +37,8 @@ class ServiceTestCase(unittest.TestCase):
             'magnitude_squared': True,
             'dct_coefficient_count': 40,
             'batch_size': 10,
-            'threshold': 0.2
+            'threshold': 0.2,
+            'average_embedding':True
         })
 
         service.model = create_model(
