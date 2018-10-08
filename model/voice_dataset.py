@@ -66,6 +66,20 @@ def get_file_and_labels(file_and_labels_file):
 
     return files, label_ids, label_to_id
 
+'''
+TODO: optimize the performance: https://www.tensorflow.org/performance/datasets_performance
+Here is a summary of the best practices for designing input pipelines:
+
+    Use the prefetch transformation to overlap the work of a producer and consumer. In particular, we recommend adding prefetch(n) (where n is the number of elements / batches consumed by a training step) to the end of your input pipeline to overlap the transformations performed on the CPU with the training done on the accelerator.
+    Parallelize the map transformation by setting the num_parallel_calls argument. We recommend using the number of available CPU cores for its value.
+    If you are combining pre-processed elements into a batch using the batch transformation, we recommend using the fused map_and_batch transformation; especially if you are using large batch sizes.
+    If you are working with data stored remotely and / or requiring deserialization, we recommend using the parallel_interleave transformation to overlap the reading (and deserialization) of data from different files.
+    Vectorize cheap user-defined functions passed in to the map transformation to amortize the overhead associated with scheduling and executing the function.
+    If your data can fit into memory, use the cache transformation to cache it in memory during the first epoch, so that subsequent epochs can avoid the overhead associated with reading, parsing, and transforming it.
+    If your pre-processing increases the size of your data, we recommend applying the interleave, prefetch, and shuffle first (if possible) to reduce memory usage.
+    We recommend applying the shuffle transformation before the repeat transformation, ideally using the fused shuffle_and_repeat transformation.
+
+'''
 
 def _post_process_dataset(dataset,
                           batch_size,
