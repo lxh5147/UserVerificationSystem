@@ -106,10 +106,13 @@ class VoiceDatasetTestCase(unittest.TestCase):
         features_after, labels_after = voice_dataset.make_one_shot_iterator().get_next()
         with tf.Session() as sess:
             features_after, labels_after = sess.run([features_after, labels_after])
-        feats_readed.append(features_after)
+            features_after_remove=tf.squeeze(features_after)
+            features_after_remove=sess.run(features_after_remove)
+        feats_readed.append(features_after_remove)
         labels_readed.append(labels_after)
-        print(feats_readed[0]==feats_readed[1])
-        print(labels_readed[0]==labels_readed[1])
+        print("before:{}\n after:{}\n".format(feats_readed[0],feats_readed[1]))
+        print("before:{}\n after:{}\n".format(feats_readed[0].dtype, feats_readed[1].dtype))
+        print("before:{}\n after:{}\n".format(feats_readed[0].shape, feats_readed[1].shape))
 
 
 if __name__ == '__main__':
