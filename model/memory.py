@@ -11,7 +11,7 @@ def read_memory(inputs, num_cells=10):
         # num_cells, dim
         # TODO: other proper initializer
         cells = tf.get_variable("cells",
-                            initializer=tf.zeros_initializer(),
+                            initializer=tf.truncated_normal_initializer(stddev=0.1),
                             shape=tf.TensorShape([num_cells, inputs.shape[-1]]))
         # batch_size, num_cells
         logits = tf.tensordot(inputs, cells, axes=[1, 1])

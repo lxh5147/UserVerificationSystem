@@ -3,6 +3,7 @@ import tensorflow as tf
 from model.attention import attention
 from model.memory import read_memory
 
+
 def clipped_relu(inputs):
     return tf.minimum(tf.maximum(inputs, 0), 20)
 
@@ -94,8 +95,10 @@ def encoder(inputs,
         with tf.variable_scope('output_transformer'):
             output = tf.layers.dense(output, embedding_size)
 
-     # apply memory
+        # apply memory
         if memory_cells > 0:
             output = read_memory(output)
 
+        # apply l2 norm
+        output = tf.nn.l2_normalize(output, 1, name="l2_embedding")
     return output

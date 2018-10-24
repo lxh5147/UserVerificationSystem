@@ -316,12 +316,17 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_feature',
         type=str,
-        default='raw',
+        default='fbank',
         help='Input feature: Use raw|mfcc|fbank|logfbank. Only raw is valid if the encoder is sinc_*')
+    parser.add_argument(
+        '--normalize_frames',
+        type=bool,
+        default=False,
+        help='If the features should be normalized across all frames for each dimension')
     parser.add_argument(
         '--encoder',
         type=str,
-        default='sinc_cnn',
+        default='rescnn',
         help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet')
     parser.add_argument(
         '--sinc_freq_scale',
@@ -357,7 +362,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--embedding_size',
         type=int,
-        default=128,
+        default=512,
         help='embedding_size')
     # if memory_cells > 0, the memory network will be enabled, and the output will be the weighted memory cells.
     parser.add_argument(
@@ -388,7 +393,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_feature_dim',
         type=int,
-        default=40,
+        default=64,
         help='Dimension of input feature')
     parser.add_argument(
         '--batch_size',

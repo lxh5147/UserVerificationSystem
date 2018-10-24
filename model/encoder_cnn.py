@@ -42,4 +42,6 @@ def encoder(inputs,
         if memory_cells > 0:
             output = read_memory(output)
 
+        # apply l2 norm
+        output = tf.nn.l2_normalize(output, 1, name="l2_embedding")
     return output
