@@ -28,16 +28,17 @@ class ServiceTestCase(unittest.TestCase):
             'blocks': 3,
             'kernel_size': 3,
             'strides': 2,
-            'embedding_size': 128,
-            'encoder': 'cnn',
+            'embedding_size': 512,
+            'encoder': 'rescnn',
             'sample_rate': 16000,
             'desired_samples': from_ms_to_samples(16000, 1000),
             'window_size_samples': from_ms_to_samples(16000, 30.0),
             'window_stride_samples': from_ms_to_samples(16000, 10.0),
             'magnitude_squared': True,
-            'dct_coefficient_count': 40,
+            'dct_coefficient_count': 64,
             'batch_size': 10,
-            'threshold': 0.2
+            'threshold': 0.2,
+            'normalize_frames':False
         })
 
         service.model = create_model(

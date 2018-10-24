@@ -3,15 +3,6 @@ import numpy as np
 from model.voice_dataset import get_input_function
 
 
-def l2_norm(embeddings):
-    '''
-    Apply L2 normalization to the embeddings
-    :param embeddings: numpy ndarray, (batch, dim)
-    :return: the normed embeddings, numpy ndarray, (batch,dim)
-    '''
-    return embeddings / np.linalg.norm(embeddings, ord=2, axis=1, keepdims=True)
-
-
 def get_registerations(embeddings, label_ids):
     '''
     Group the embeddings by their labels, since one label may have multiple embeddings.
@@ -71,8 +62,7 @@ def get_embeddings(model,
     for prediction in model.predict(predict_input_fn, yield_single_examples=False):
         embeddings.extend(prediction['embeddings'])
 
-    embeddings_normed = l2_norm(embeddings)
-    return embeddings_normed
+    return embeddings
 
 
 def get_enrollments(enrollment_config):

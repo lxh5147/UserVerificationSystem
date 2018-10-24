@@ -317,7 +317,7 @@ def main(_):
 
 if __name__ == '__main__':
     '''
-    CUDA_VISIBLE_DEVICES=1 python evaluate.py --model_dir='../puffer_515' --data_dir='../../UserVerificationSystem/data/EVAL/100familyeval' --encoder='resnet' --input_feature='fbank' --input_feature_dim=40 --filters=64 128 256 512 --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --feature=40 --batch_size=160 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=126000 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
+    CUDA_VISIBLE_DEVICES=1 python evaluate.py --normalize_frames False --model_dir='../puffer_515_v2' --data_dir='../../UserVerificationSystem/data/EVAL/100familyeval' --encoder='rescnn' --input_feature='fbank' --input_feature_dim=64 --filters 64 128 256 512 --blocks=3 --kernel_size=3 --strides=2 --embedding_size=512 --window_size_ms=25 --desired_ms=1200 --window_stride_ms=10 --magnitude_squared=True --feature=40 --batch_size=160 --triplet_strategy='batch_hard' --margin=0.2 --squared=True --num_steps=126000 --learning_rate=0.01 --learning_rate_decay_rate=0.5 --learning_rate_decay_steps=2520 --l2_regularization_weight=0.00001 --triplet_loss_weight=1 --cross_entropy_loss_weight=0
     '''
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -333,13 +333,18 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_feature',
         type=str,
-        default='raw',
+        default='fbank',
         help='Input feature: Use raw|mfcc|fbank|logfbank. Only raw is valid if the encoder is sinc_*')
+    parser.add_argument(
+        '--normalize_frames',
+        type=bool,
+        default=False,
+        help='If the features should be normalized across all frames for each dimension')
     parser.add_argument(
         '--encoder',
         type=str,
-        default='sinc_cnn',
-        help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet')
+        default='rescnn',
+        help='Encoder that encodes a wav to a vector. Use cnn|resnet|sinc_cnn|sinc_resnet|rescnn')
     parser.add_argument(
         '--sinc_freq_scale',
         type=float,
@@ -374,7 +379,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--embedding_size',
         type=int,
-        default=128,
+        default=512,
         help='embedding_size')
     # if memory_cells > 0, the memory network will be enabled, and the output will be the weighted memory cells.
     parser.add_argument(
@@ -405,7 +410,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--input_feature_dim',
         type=int,
-        default=40,
+        default=64,
         help='Dimension of input feature')
     parser.add_argument(
         '--batch_size',

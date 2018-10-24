@@ -6,8 +6,10 @@ from model.cross_entropy_loss import cross_entropy_loss
 from model.triplet_loss import batch_all_triplet_loss
 from model.triplet_loss import batch_hard_triplet_loss
 
+
 def _get_encoder(encoder_name):
-    assert encoder_name in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet']
+    # rescnn is adhoc impl
+    assert encoder_name in ['cnn', 'resnet', 'sinc_cnn', 'sinc_resnet', 'rescnn']
     if encoder_name == 'cnn':
         from model.encoder_cnn import encoder as encoder_cnn
         return encoder_cnn
@@ -22,6 +24,9 @@ def _get_encoder(encoder_name):
         from model.encoder_resnet import encoder as encoder_resnet
         from model.encoder_sinc_conv import SincEncoder as sinc_encoder
         return sinc_encoder(encoder_resnet)
+    elif encoder_name == 'rescnn':
+        from model.encoder_rescnn import encoder as encoder_rescnn
+        return encoder_rescnn
 
 
 def model_fn(features, labels, mode, params):
@@ -43,8 +48,6 @@ def model_fn(features, labels, mode, params):
                          params=params,
                          is_training=is_training,
                          )
-    embedding_mean_norm = tf.reduce_mean(tf.norm(embeddings, axis=1))
-    tf.summary.scalar("embedding_mean_norm", embedding_mean_norm)
 
     if mode == tf.estimator.ModeKeys.PREDICT:
         predictions = {'embeddings': embeddings}
@@ -71,8 +74,7 @@ def model_fn(features, labels, mode, params):
     # Metrics for evaluation using tf.metrics (average over whole dataset)
     # TODO: some other metrics like rank-1 accuracy?
     with tf.variable_scope("metrics"):
-        eval_metric_ops = {"embedding_mean_norm": tf.metrics.mean(embedding_mean_norm)}
-
+        eval_metric_ops = dict()
         if params['triplet_strategy'] == "batch_all":
             eval_metric_ops['fraction_positive_triplets'] = tf.metrics.mean(fraction)
 
@@ -99,10 +101,11 @@ def model_fn(features, labels, mode, params):
         tf.summary.scalar('loss_cross_entropy', loss_cross_entropy)
         loss += cross_entropy_loss_weight * loss_cross_entropy
 
+
     # Finally, apply weight regularization
-    l2_regularization_weight = params['l2_regularization_weight']
-    if l2_regularization_weight > 0:
-        loss_reg = l2_regularization_weight * tf.add_n([tf.reduce_sum(tf.square(w)) for w in tf.trainable_variables()])
+    losses_reg = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
+    if losses_reg:
+        loss_reg = tf.add_n(losses_reg)
         tf.summary.scalar('loss_reg', loss_reg)
         loss += loss_reg
 
@@ -117,6 +120,7 @@ def model_fn(features, labels, mode, params):
                                                decay_steps=lr_decay_steps)
     tf.summary.scalar('learning_rate', learning_rate)
     optimizer = tf.train.AdamOptimizer(learning_rate)
+    optimizer = tf.contrib.opt.MovingAverageOptimizer(optimizer)
 
     # Add a dependency to update the moving mean and variance for batch normalization
     with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
