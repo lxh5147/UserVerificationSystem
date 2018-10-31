@@ -171,7 +171,11 @@ def _load_registerations(device_id):
             embedding_file = os.path.join(user_root_path, file + '.npy')
             embedding = np.load(embedding_file)
             embeddings.append(embedding)
-        registerations[user_id] = embeddings
+        if FLAGS.average_embedding:
+            average_embedding=sum(embeddings)/len(embeddings)
+            registerations[user_id]=[average_embedding]
+        else:
+            registerations[user_id] = embeddings
     return registerations
 
 
@@ -405,6 +409,11 @@ if __name__ == '__main__':
         type=float,
         default=-1.,
         help='If the similarity between two wav files is no less than this threshold, they are considered from the same person.')
+    parser.add_argument(
+        '--average_embedding',
+        type=bool,
+        default=True,
+        help='Whether to use the average of the registered embeddings to represent a person.')
 
     FLAGS, _ = parser.parse_known_args()
     tf.app.run(main=main, argv=[sys.argv[0]] + _)

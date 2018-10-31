@@ -52,7 +52,7 @@ def _eer(fa_rates, fr_rates, error_rates, thresholds):
     return fa_rate, fr_rate, error_rate, eer_threshold
 
 
-def _verification_eer( verification_sim, true_a, true_r, number_of_thresholds=200):
+def _verification_eer(verification_sim, true_a, true_r, number_of_thresholds=200):
     '''
     Compute the nearly equal error rate for verification.
     :param verification_sim: a list of float which represents the similarity between the embedding to be verified and the claimed user
@@ -102,7 +102,7 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
     verification_sim = []
     true_a = []  # true accept
     true_r = []  # true reject
-    for i,(embedding_index, claim_id) in enumerate(to_be_verified):
+    for i, (embedding_index, claim_id) in enumerate(to_be_verified):
         embeddings_target = registerations[claim_id]
         embedding_unknown = embeddings[embedding_index]
         sim = get_max_sim(embedding_unknown, embeddings_target)
@@ -122,7 +122,7 @@ def _evaluate_verification(embeddings, label_ids, registerations, to_be_verified
         error_rate = (len(fa) + len(fr)) / total if total else 0.
         return fa_rate, fr_rate, error_rate, threshold
     else:
-        return _verification_eer( verification_sim, true_a, true_r)
+        return _verification_eer(verification_sim, true_a, true_r)
 
 
 def _identification_fa_fr(to_be_identified, sims, label_ids, threshold=0.7):
@@ -295,7 +295,9 @@ def main(_):
                                 **FLAGS.__dict__)
 
     registerations = get_registerations([embeddings[i] for i in enrollments],
-                                        [label_ids[i] for i in enrollments])
+                                        [label_ids[i] for i in enrollments],
+                                        average_embedding=FLAGS.average_embedding)
+
     fa_rate, fr_rate, error_rate, threshold = _evaluate_verification(embeddings, label_ids, registerations,
                                                                      to_be_verified,
                                                                      FLAGS.threshold)
@@ -422,6 +424,11 @@ if __name__ == '__main__':
         type=float,
         default=None,
         help='If the similarity between two wav files is no less than this threshold, they are considered from the same person.')
+    parser.add_argument(
+        '--average_embedding',
+        type=bool,
+        default=True,
+        help='Whether to use the average of the registered embeddings to represent a person.')
 
     FLAGS, _ = parser.parse_known_args()
 

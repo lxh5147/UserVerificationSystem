@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="02dafdf2-0986-46af-a6a9-0c441b352f7f" name="Default Changelist" comment="">
+    <list default="true" id="02dafdf2-0986-46af-a6a9-0c441b352f7f" name="Default Changelist" comment="Merge remote-tracking branch 'remotes/origin/dev_more_features'&#10;&#10;# Conflicts:&#10;#&#9;predict.py&#10;#&#9;service_test.py">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluate.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluate.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluate_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluate_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/encoder_cnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/encoder_cnn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/encoder_rescnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/encoder_rescnn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/encoder_rescnn_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/encoder_rescnn_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/encoder_resnet.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/encoder_resnet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/encoder_sinc_conv.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/encoder_sinc_conv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/encoder_sinc_conv_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/encoder_sinc_conv_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/memory.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/memory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/memory_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/memory_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/model_fn.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/model_fn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/voice_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/voice_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/voice_dataset_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/model/voice_dataset_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predict.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/predict_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/predict_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service.py" beforeDir="false" afterPath="$PROJECT_DIR$/service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/service_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,7 +50,7 @@
           <entry key="eval_labels" value="3" />
           <entry key="groups_config" value="3" />
           <entry key="identification_config" value="4" />
-          <entry key="py" value="192" />
+          <entry key="py" value="199" />
           <entry key="train_labels" value="5" />
           <entry key="txt" value="1" />
           <entry key="verification_config" value="4" />
@@ -43,7 +60,7 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="23" />
-          <entry key="Python" value="192" />
+          <entry key="Python" value="199" />
           <entry key="XML" value="1" />
         </counts>
       </usages-collector>
@@ -53,7 +70,7 @@
           <entry key="enrollment_config" value="20" />
           <entry key="eval_labels" value="16" />
           <entry key="identification_config" value="8" />
-          <entry key="py" value="21134" />
+          <entry key="py" value="21146" />
           <entry key="train_labels" value="120" />
           <entry key="txt" value="1831" />
           <entry key="verification_config" value="13" />
@@ -62,7 +79,7 @@
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="2039" />
-          <entry key="Python" value="21134" />
+          <entry key="Python" value="21146" />
         </counts>
       </usages-collector>
     </session>
@@ -92,92 +109,51 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="36" column="45" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="49" />
+            <state relative-caret-position="281">
+              <caret line="231" column="51" selection-start-line="231" selection-start-column="51" selection-end-line="231" selection-end-column="51" />
               <folding>
-                <element signature="e#653#662#0" expanded="true" />
-                <marker date="1537336161855" expanded="true" signature="2490:3244" ph="..." />
-                <marker date="1537336161855" expanded="true" signature="2762:3244" ph="..." />
+                <element signature="e#653#671#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/ops/gen_audio_ops.py">
+        <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/model/encoder_rescnn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="142" column="21" selection-start-line="142" selection-start-column="16" selection-end-line="142" selection-end-column="21" />
+            <state relative-caret-position="189">
+              <caret line="24" column="39" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
             </state>
           </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/lib/python3.6/random.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="277">
+              <caret line="751" selection-start-line="751" selection-end-line="751" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/predict.py">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/evaluate.py">
+        <entry file="file://$PROJECT_DIR$/model/model_fn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-197">
-              <caret line="62" column="7" selection-start-line="62" selection-start-column="7" selection-end-line="62" selection-end-column="7" />
+            <state relative-caret-position="-2016">
+              <caret line="9" column="16" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="16" />
               <folding>
-                <element signature="e#0#15#0" expanded="true" />
+                <element signature="e#25#48#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/librosa/core/audio.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2401">
-              <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
-              <folding>
-                <element signature="e#89#98#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/service.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7098">
-              <caret line="392" column="20" selection-start-line="392" selection-start-column="11" selection-end-line="392" selection-end-column="20" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-                <marker date="1537275700548" expanded="true" signature="8044:8154" ph="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/evaluate_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="33" column="51" selection-start-line="33" selection-start-column="51" selection-end-line="33" selection-end-column="51" />
-              <folding>
-                <element signature="e#0#15#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-549">
-              <caret line="31" column="65" selection-start-line="31" selection-start-column="65" selection-end-line="31" selection-end-column="65" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/test.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -185,20 +161,20 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/service_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-234">
-              <caret line="72" column="11" selection-start-line="72" selection-start-column="11" selection-end-line="72" selection-end-column="11" />
-              <folding>
-                <element signature="e#0#9#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="181">
+              <caret line="40" column="37" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$USER_HOME$/.PyCharmCE2018.2/system/python_stubs/-767077732/numpy/core/umath.py">
+        <entry file="file://$PROJECT_DIR$/evaluate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-608">
-              <caret line="52" column="4" selection-start-line="52" selection-start-column="4" selection-end-line="52" selection-end-column="4" />
+            <state relative-caret-position="-5113">
+              <caret line="62" column="7" selection-start-line="62" selection-start-column="7" selection-end-line="62" selection-end-column="7" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -256,15 +232,16 @@
         <option value="$PROJECT_DIR$/data/eval_labels" />
         <option value="$PROJECT_DIR$/data/train_labels" />
         <option value="$PROJECT_DIR$/train.py" />
-        <option value="$PROJECT_DIR$/predict.py" />
         <option value="$PROJECT_DIR$/service.py" />
-        <option value="$PROJECT_DIR$/service_test.py" />
         <option value="$PROJECT_DIR$/model/cross_entropy_loss.py" />
-        <option value="$PROJECT_DIR$/model/voice_dataset.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/model/voice_dataset_test.py" />
         <option value="$PROJECT_DIR$/evaluate_test.py" />
+        <option value="$PROJECT_DIR$/service_test.py" />
+        <option value="$PROJECT_DIR$/predict.py" />
         <option value="$PROJECT_DIR$/evaluate.py" />
+        <option value="$PROJECT_DIR$/model/voice_dataset.py" />
+        <option value="$PROJECT_DIR$/model/encoder_rescnn.py" />
       </list>
     </option>
   </component>
@@ -282,7 +259,17 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="UserVerificationSystem" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="" type="442cc68d:ScopeViewTreeModel$RootNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -294,6 +281,11 @@
               <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
               <item name="UserVerificationSystem" type="462c0819:PsiDirectoryNode" />
               <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
+              <item name="UserVerificationSystem" type="462c0819:PsiDirectoryNode" />
+              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="UserVerificationSystem" type="b2602c69:ProjectViewProjectNode" />
@@ -337,7 +329,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.Unittests in evaluate_test.py">
+  <component name="RunManager" selected="Python tests.Unittests in service_test.py">
     <configuration name="evaluate" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="UserVerificationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -359,7 +351,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="train" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="UserVerificationSystem" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -371,7 +363,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/train.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -423,19 +415,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.test" />
       <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
       <item itemvalue="Python.evaluate" />
-      <item itemvalue="Python tests.Unittests in service_test.py" />
       <item itemvalue="Python tests.Unittests in evaluate_test.py" />
+      <item itemvalue="Python.train" />
+      <item itemvalue="Python tests.Unittests in service_test.py" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python tests.Unittests in evaluate_test.py" />
-        <item itemvalue="Python.evaluate" />
-        <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
-        <item itemvalue="Python.test" />
         <item itemvalue="Python tests.Unittests in service_test.py" />
+        <item itemvalue="Python.evaluate" />
+        <item itemvalue="Python.train" />
+        <item itemvalue="Python tests.Unittests in evaluate_test.py" />
+        <item itemvalue="Python tests.Unittests in voice_dataset_test.py" />
       </list>
     </recent_temporary>
   </component>
@@ -797,9 +789,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.19 at 14h 16m 33s.xml">
-      <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
-    </history-entry>
     <history-entry file="Unittests_in_voice_dataset_test_py - 2018.09.19 at 14h 30m 15s.xml">
       <configuration name="Unittests in voice_dataset_test.py" configurationId="tests" />
     </history-entry>
@@ -827,6 +816,9 @@
     <history-entry file="Unittests_in_evaluate_test_py - 2018.09.19 at 14h 57m 15s.xml">
       <configuration name="Unittests in evaluate_test.py" configurationId="tests" />
     </history-entry>
+    <history-entry file="Unittests_in_service_test_py - 2018.10.31 at 16h 33m 49s.xml">
+      <configuration name="Unittests in service_test.py" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -838,14 +830,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1853" height="920" extended-state="6" />
+    <frame x="67" y="25" width="1853" height="925" extended-state="6" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24590164" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32658228" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3227848" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32201257" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -918,34 +910,10 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/client/session.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="62">
-          <caret line="766" column="34" selection-start-line="766" selection-start-column="25" selection-end-line="766" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python3.6/unittest/case.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="823" column="44" selection-start-line="823" selection-start-column="41" selection-end-line="823" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/tensorflow/python/estimator/training.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="363">
           <caret line="440" column="31" selection-start-line="440" selection-start-column="31" selection-end-line="440" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="94" column="17" selection-start-line="94" selection-start-column="17" selection-end-line="94" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1068,13 +1036,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/encoder_cnn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="5" column="7" selection-start-line="5" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/model/encoder_cnn.py" />
     <entry file="file://$PROJECT_DIR$/model/triplet_loss.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3381">
@@ -1082,20 +1044,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/data/enrollment_config">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="27" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/enrollment_config" />
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="21">
           <caret line="8" selection-start-line="8" selection-end-line="8" />
-          <folding>
-            <marker date="1537275700552" expanded="true" signature="185:187" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1108,75 +1061,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/predict.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/eval_labels">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="31" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/groups_config">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="6" selection-start-line="1" selection-end-line="1" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/verification_config">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/train_labels">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="54" column="27" selection-start-line="54" selection-start-column="27" selection-end-line="54" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/identification_config">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="28" selection-start-line="1" selection-start-column="28" selection-end-line="1" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/data/eval_labels" />
+    <entry file="file://$PROJECT_DIR$/data/groups_config" />
+    <entry file="file://$PROJECT_DIR$/data/verification_config" />
+    <entry file="file://$PROJECT_DIR$/data/train_labels" />
+    <entry file="file://$PROJECT_DIR$/data/identification_config" />
     <entry file="file://$PROJECT_DIR$/requirements.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/model_fn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="9" column="16" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/attention_test.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/attention.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="6" column="60" selection-start-line="6" selection-start-column="60" selection-end-line="6" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/cross_entropy_loss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/model/attention_test.py" />
+    <entry file="file://$PROJECT_DIR$/model/attention.py" />
+    <entry file="file://$PROJECT_DIR$/model/cross_entropy_loss.py" />
     <entry file="file://$USER_HOME$/envs3/demo/lib/python3.6/site-packages/audioread/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1212,9 +1107,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-2401">
           <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
-          <folding>
-            <element signature="e#89#98#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1225,42 +1117,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="36" column="45" lean-forward="true" selection-start-line="36" selection-start-column="39" selection-end-line="36" selection-end-column="49" />
-          <folding>
-            <element signature="e#653#662#0" expanded="true" />
-            <marker date="1537336161855" expanded="true" signature="2490:3244" ph="..." />
-            <marker date="1537336161855" expanded="true" signature="2762:3244" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-549">
-          <caret line="31" column="65" selection-start-line="31" selection-start-column="65" selection-end-line="31" selection-end-column="65" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/model/voice_dataset_test.py" />
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
           <caret line="4" column="13" selection-start-line="4" selection-start-column="13" selection-end-line="4" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/service_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-234">
-          <caret line="72" column="11" selection-start-line="72" selection-start-column="11" selection-end-line="72" selection-end-column="11" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1270,7 +1131,6 @@
           <caret line="392" column="20" selection-start-line="392" selection-start-column="11" selection-end-line="392" selection-end-column="20" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
-            <marker date="1537275700548" expanded="true" signature="8044:8154" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1285,12 +1145,59 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/lib/python3.6/random.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="751" selection-start-line="751" selection-end-line="751" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/predict.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/service_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="181">
+          <caret line="40" column="37" selection-start-line="40" selection-start-column="37" selection-end-line="40" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/evaluate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-197">
+        <state relative-caret-position="-5113">
           <caret line="62" column="7" selection-start-line="62" selection-start-column="7" selection-end-line="62" selection-end-column="7" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/encoder_resnet.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/encoder_rescnn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="24" column="39" selection-start-line="24" selection-start-column="39" selection-end-line="24" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/voice_dataset.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="231" column="51" selection-start-line="231" selection-start-column="51" selection-end-line="231" selection-end-column="51" />
+          <folding>
+            <element signature="e#653#671#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model/model_fn.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2016">
+          <caret line="9" column="16" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="16" />
+          <folding>
+            <element signature="e#25#48#0" expanded="true" />
           </folding>
         </state>
       </provider>
