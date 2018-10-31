@@ -34,15 +34,12 @@ class EncoderTestCase(unittest.TestCase):
         with tf.Session() as sess:
             sess.run(init_op)
             inputs_val = np.asarray([[[1], [2]], [[3], [4]], [[5], [6]]], dtype='float32')
-            labels_val = np.asarray([1, 2, 2], dtype='int64')
-            embeddings_val, loss_triplet_val, loss_reg_val = sess.run([embeddings, loss_triplet, loss_reg],
-                                                                      feed_dict={inputs: inputs_val,
-                                                                                 labels: labels_val})
+            labels_val = np.asarray([1,2,2], dtype='int64')
+            embeddings_val, loss_triplet_val, loss_reg_val = sess.run([embeddings,loss_triplet,loss_reg], feed_dict={inputs:inputs_val, labels: labels_val} )
 
             print(embeddings_val)
             print(loss_triplet_val)
             print(loss_reg_val)
-
 
 if __name__ == '__main__':
     unittest.main()

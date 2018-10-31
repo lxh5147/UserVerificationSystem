@@ -37,8 +37,8 @@ def _random_select(samples, num_to_select):
     num_samples = len(samples)
     if num_samples < num_to_select:
         pad_width = [(0, num_to_select - num_samples)]
-        for _ in range(samples.ndim - 1):
-            pad_width.append((0, 0))
+        for _ in range(samples.ndim-1):
+            pad_width.append((0,0))
         samples_selected = np.pad(samples,
                                   pad_width,
                                   mode='wrap'
@@ -47,7 +47,6 @@ def _random_select(samples, num_to_select):
         offset = randint(0, num_samples - num_to_select)
         samples_selected = samples[offset:offset + num_to_select]
     return samples_selected
-
 
 def from_ms_to_samples(sample_rate, duration_ms):
     return int(sample_rate * duration_ms / 1000)
@@ -73,7 +72,6 @@ def get_file_and_labels(file_and_labels_file):
 
     return files, label_ids, label_to_id
 
-
 '''
 TODO: optimize the performance: https://www.tensorflow.org/performance/datasets_performance
 Here is a summary of the best practices for designing input pipelines:
@@ -88,7 +86,6 @@ Here is a summary of the best practices for designing input pipelines:
     We recommend applying the shuffle transformation before the repeat transformation, ideally using the fused shuffle_and_repeat transformation.
 
 '''
-
 
 def _post_process_dataset(dataset,
                           batch_size,
@@ -187,7 +184,7 @@ def _rearrange_with_same_label(items, labels, n=2):
         counts_readed[label] = 0
     while len(items_updated) < len(items):
         # choose a label
-        label_index = randint(0, len(labels_ordered) - 1)
+        label_index=randint(0, len(labels_ordered)-1)
         label = labels_ordered[label_index]
         group = groups[label]
         count = len(group)
@@ -231,7 +228,7 @@ def _create_feature_generator(wav_files, labels, is_training=True, **kwargs):
     desired_ms = kwargs['desired_ms']
     input_feature_dim = kwargs['input_feature_dim']
     input_feature = kwargs['input_feature']
-    normalize_frames = kwargs.get('normalize_frames', True)
+    normalize_frames = kwargs.get('normalize_frames', False)
     assert input_feature in ['mfcc', 'fbank', 'logfbank', 'raw']
 
     def generator():

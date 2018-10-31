@@ -101,6 +101,7 @@ def model_fn(features, labels, mode, params):
         tf.summary.scalar('loss_cross_entropy', loss_cross_entropy)
         loss += cross_entropy_loss_weight * loss_cross_entropy
 
+
     # Finally, apply weight regularization
     losses_reg = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
     if losses_reg:
@@ -118,7 +119,7 @@ def model_fn(features, labels, mode, params):
                                                decay_rate=lr_decay_rate,
                                                decay_steps=lr_decay_steps)
     tf.summary.scalar('learning_rate', learning_rate)
-    optimizer = tf.train.AdamOptimizer(learning_rate, epsilon=0.1)
+    optimizer = tf.train.AdamOptimizer(learning_rate,epsilon=0.1)
 
     # Add a dependency to update the moving mean and variance for batch normalization
     with tf.control_dependencies(tf.get_collection(tf.GraphKeys.UPDATE_OPS)):
