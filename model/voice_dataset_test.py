@@ -129,5 +129,7 @@ class VoiceDatasetTestCase(unittest.TestCase):
         feat_normed = _normalize_frames(feat)
         print('==========================================')
         print(feat_normed)
+
+
 if __name__ == '__main__':
     unittest.main()

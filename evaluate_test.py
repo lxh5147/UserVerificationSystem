@@ -33,7 +33,7 @@ class EvaluateTestCase(unittest.TestCase):
         sims = [0.6, 0.7, 0.8]
         true_a = [0, 2]
         true_r = [1]
-        fa_rate, fr_rate, error_rate, threshold = _verification_eer( sims, true_a, true_r)
+        fa_rate, fr_rate, error_rate, threshold = _verification_eer(sims, true_a, true_r)
         self.assertEqual(fa_rate, 1.0, 'false acceptance rate')
         self.assertEqual(fr_rate, 0.5, 'false rejection rate')
         self.assertTrue(almost_equal(error_rate, 0.66666), 'error rate')

@@ -21,7 +21,7 @@ def encoder(inputs,
             ):
     embedding_size = params['embedding_size']
     input_feature_dim = params['input_feature_dim']
-    l2_regularization_weight = params['l2_regularization_weight']
+    l2_regularization_weight = params.get('l2_regularization_weight',0)
     # adhoc fix, append the C dimension
     inputs = tf.expand_dims(inputs, 3)
 

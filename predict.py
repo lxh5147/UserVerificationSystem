@@ -3,12 +3,14 @@ import numpy as np
 from model.voice_dataset import get_input_function
 
 
-def get_registerations(embeddings, label_ids):
+def get_registerations(embeddings, label_ids, average_embedding=True):
     '''
     Group the embeddings by their labels, since one label may have multiple embeddings.
     :param embeddings: numpy ndarray,
-    :param label_ids:
-    :return:
+    :param label_ids:label ids of each embedding
+    :param average_embedding: bool, True to use the average of all the embeddings to represent an label
+        False to use the list of all the embeddings to represent an label
+    :return: dict of representative embeddings for each label
     '''
     # each person has a list of embeddings as his/her registeration
     registerations = dict()
@@ -18,7 +20,15 @@ def get_registerations(embeddings, label_ids):
             registerations[label_id].append(embedding)
         else:
             registerations[label_id] = [embedding]
-    return registerations
+    if average_embedding:
+        registerations_average=dict()
+        for label_id in registerations:
+            cur_embeddings = registerations[label_id]
+            average_embedding = sum(cur_embeddings)/len(cur_embeddings)
+            registerations_average[label_id]=[average_embedding]
+        return registerations_average
+    else:
+        return registerations
 
 
 def _sim(embedding_1, embedding_2):

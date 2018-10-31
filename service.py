@@ -172,8 +172,8 @@ def _load_registerations(device_id):
             embedding = np.load(embedding_file)
             embeddings.append(embedding)
         if FLAGS.average_embedding:
-            average_embedding=sum(embeddings)/len(embeddings)
-            registerations[user_id]=[average_embedding]
+            average_embedding = sum(embeddings) / len(embeddings)
+            registerations[user_id] = [average_embedding]
         else:
             registerations[user_id] = embeddings
     return registerations
